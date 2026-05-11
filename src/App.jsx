@@ -3,19 +3,14 @@ import { Shield, BarChart3 } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { en } from './locales/en';
-import { vi } from './locales/vi'; // Ngóc nhớ tạo thêm file vi.js và ru.js nhé
+import { vi } from './locales/vi'; 
 import { ru } from './locales/ru'; 
 import './App.css';
 
 function App() {
   const [currentLang, setCurrentLang] = useState('en');
   
-  const translations = {
-    en: en,
-    vi: vi,
-    ru: ru
-  };
-
+  const translations = { en, vi, ru };
   const t = translations[currentLang];
 
   return (
@@ -27,10 +22,26 @@ function App() {
       />
 
       <header className="metsafe-hero">
-        <div className="hero-content">
-          <h1>{t.hero.title}</h1>
-          <p>{t.hero.subtitle}</p>
-          <button className="cta-button">{t.hero.cta}</button>
+        <div className="hero-container">
+          <div className="hero-text">
+            <span className="hero-tag">Safety First • Innovation Always</span>
+            <h1>{t.hero.title}</h1>
+            <p>{t.hero.subtitle}</p>
+            <br></br>
+            <div className="hero-btns">
+              <button className="cta-button primary">{t.hero.cta}</button>
+              <button className="cta-button secondary">Learn More</button>
+            </div>
+          </div>
+          
+          <div className="hero-visual">
+            <div className="abstract-shape-1"></div>
+            <img 
+              src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1000" 
+              alt="Metallurgy" 
+              className="hero-img"
+            />
+          </div>
         </div>
       </header>
 
