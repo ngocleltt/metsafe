@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Shield, BarChart3, Newspaper, Menu, X, Globe, UserCircle } from 'lucide-react';
+import { Shield, BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown } from 'lucide-react';
 
 const Navbar = ({ t, currentLang, changeLanguage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   const languages = [
-    { code: 'vi', label: 'VN', flag: '🇻🇳' },
-    { code: 'en', label: 'EN', flag: '🇺🇸' },
-    { code: 'ru', label: 'RU', flag: '🇷🇺' }
+    { code: 'vi', flag: '🇻🇳', label: 'Tiếng Việt' },
+    { code: 'en', flag: '🇺🇸', label: 'English' },
+    { code: 'ru', flag: '🇷🇺', label: 'Русский' }
   ];
+
+  const currentFlag = languages.find(l => l.code === currentLang)?.flag;
 
   return (
     <nav className="metsafe-navbar">
@@ -38,23 +41,38 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
             </li>
           </ul>
 
-          <div className="nav-actions">
-            <div className="lang-switcher">
-              {languages.map((lang) => (
-                <button
-                  key={lang.code}
-                  className={`lang-btn ${currentLang === lang.code ? 'active' : ''}`}
-                  onClick={() => changeLanguage(lang.code)}
-                  title={lang.label}
-                >
-                  <span className="flag-icon">{lang.flag}</span>
-                </button>
-              ))}
+          <div className="nav-right-group">
+            <div className="lang-dropdown-container">
+              <button 
+                className="lang-dropdown-btn" 
+                onClick={() => setIsLangOpen(!isLangOpen)}
+              >
+                <span className="current-flag">{currentFlag}</span>
+                <ChevronDown size={14} className={`arrow ${isLangOpen ? 'rotate' : ''}`} />
+              </button>
+
+              {isLangOpen && (
+                <div className="lang-dropdown-menu">
+                  {languages.map((lang) => (
+                    <div 
+                      key={lang.code}
+                      className={`lang-option ${currentLang === lang.code ? 'selected' : ''}`}
+                      onClick={() => {
+                        changeLanguage(lang.code);
+                        setIsLangOpen(false);
+                      }}
+                    >
+                      <span>{lang.flag}</span>
+                      <span>{lang.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button className="login-btn">
               <UserCircle size={20} />
-              <span>Login / Signup</span>
+              <span>{t.nav.login}</span>
             </button>
           </div>
         </div>
