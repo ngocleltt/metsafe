@@ -2,8 +2,8 @@ export const en = {
   nav: {
     home: "Home",
     assessment: "CI Assessment",
-    weather: "Weather",
-    seminars: "News & Seminars"
+    seminars: "News & Seminars",
+    login: "Login / Signup"
   },
   hero: {
     title: "METSAFE",
@@ -19,6 +19,21 @@ export const en = {
     card2: {
       title: "Digitalization in Metallurgy",
       desc: "Replacing traditional training and testing methods with advanced digital technologies."
+    },
+    card3: {
+      title: "AI in Risk Prediction",
+      desc: "Leveraging machine learning to identify high-risk personnel and prevent accidents."
     }
+  },
+  assessment: {
+    title: "Competence Index (CI) Assessment",
+    description: "Please fill in the information below to calculate the safety competence index.",
+    submit: "Calculate Score",
+    reset: "Reset Form"
+  },
+  footer: {
+    about: "METSAFE - Digital solution for industrial safety in the metallurgical sector.",
+    contact: "Contact",
+    rights: "© 2024 METSAFE Project. All rights reserved."
   }
 };

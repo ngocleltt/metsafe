@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { Shield, BarChart3, CloudSun, Newspaper, Menu, X } from 'lucide-react';
+import { Shield, BarChart3, Newspaper, Menu, X, Globe, UserCircle } from 'lucide-react';
 
-const Navbar = ({ t }) => {
+const Navbar = ({ t, currentLang, changeLanguage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const languages = [
+    { code: 'vi', label: 'VN', flag: '🇻🇳' },
+    { code: 'en', label: 'EN', flag: '🇺🇸' },
+    { code: 'ru', label: 'RU', flag: '🇷🇺' }
+  ];
 
   return (
     <nav className="metsafe-navbar">
@@ -16,26 +22,42 @@ const Navbar = ({ t }) => {
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </div>
 
-        <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-          <li>
-            <a href="#news" className="nav-item">
-              <Newspaper size={20} />
-              <span>{t.nav.home}</span>
-            </a>
-          </li>
-          <li>
-            <a href="#assessment" className="nav-item active-link">
-              <BarChart3 size={20} />
-              <span>{t.nav.assessment}</span>
-            </a>
-          </li>
-          <li>
-            <a href="#weather" className="nav-item">
-              <CloudSun size={20} />
-              <span>{t.nav.weather}</span>
-            </a>
-          </li>
-        </ul>
+        <div className={`nav-menu-wrapper ${isMenuOpen ? 'active' : ''}`}>
+          <ul className="nav-links">
+            <li>
+              <a href="#news" className="nav-item">
+                <Newspaper size={18} />
+                <span>{t.nav.home}</span>
+              </a>
+            </li>
+            <li>
+              <a href="#assessment" className="nav-item">
+                <BarChart3 size={18} />
+                <span>{t.nav.assessment}</span>
+              </a>
+            </li>
+          </ul>
+
+          <div className="nav-actions">
+            <div className="lang-switcher">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  className={`lang-btn ${currentLang === lang.code ? 'active' : ''}`}
+                  onClick={() => changeLanguage(lang.code)}
+                  title={lang.label}
+                >
+                  <span className="flag-icon">{lang.flag}</span>
+                </button>
+              ))}
+            </div>
+
+            <button className="login-btn">
+              <UserCircle size={20} />
+              <span>Login / Signup</span>
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
   );

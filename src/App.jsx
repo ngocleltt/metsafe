@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Shield, BarChart3 } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { en } from './locales/en';
+import { vi } from './locales/vi'; // Ngóc nhớ tạo thêm file vi.js và ru.js nhé
+import { ru } from './locales/ru'; 
 import './App.css';
 
 function App() {
-  const t = en;
+  const [currentLang, setCurrentLang] = useState('en');
+  
+  const translations = {
+    en: en,
+    vi: vi,
+    ru: ru
+  };
+
+  const t = translations[currentLang];
 
   return (
     <div className="metsafe-app">
-      <Navbar t={t} />
+      <Navbar 
+        t={t} 
+        currentLang={currentLang} 
+        changeLanguage={setCurrentLang} 
+      />
 
       <header className="metsafe-hero">
         <div className="hero-content">
