@@ -35,5 +35,17 @@ export const en = {
     about: "METSAFE - Digital solution for industrial safety in the metallurgical sector.",
     contact: "Contact",
     rights: "© 2024 METSAFE Project. All rights reserved."
+  },
+  assessment: {
+    title: "CI_ASSESSMENT_TITLE",
+    subtitle: "CI_ASSESSMENT_SUBTITLE",
+    input_label: "CI_INPUT_LABEL",
+    calculate_btn: "CI_CALCULATE_BTN",
+    result_title: "CI_RESULT_TITLE",
+    categories: {
+      workplace: "CI_CAT_WORKPLACE",
+      equipment: "CI_CAT_EQUIPMENT",
+      human: "CI_CAT_HUMAN"
+    }
   }
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Shield, BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown } from 'lucide-react';
 
 const Navbar = ({ t, currentLang, changeLanguage }) => {
@@ -16,10 +17,10 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
   return (
     <nav className="metsafe-navbar">
       <div className="nav-container">
-        <div className="nav-logo">
+        <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>
           <Shield size={32} color="#2e7d32" strokeWidth={2.5} />
           <span className="logo-text">METSAFE</span>
-        </div>
+        </Link>
 
         <div className="mobile-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -28,16 +29,16 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
         <div className={`nav-menu-wrapper ${isMenuOpen ? 'active' : ''}`}>
           <ul className="nav-links">
             <li>
-              <a href="#news" className="nav-item">
+              <Link to="/" className="nav-item">
                 <Newspaper size={18} />
                 <span>{t.nav.home}</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#assessment" className="nav-item">
+              <Link to="/assessment" className="nav-item">
                 <BarChart3 size={18} />
                 <span>{t.nav.assessment}</span>
-              </a>
+              </Link>
             </li>
           </ul>
 
