@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "./styles/Assessment.css"
 import { Activity, CheckCircle2 } from 'lucide-react';
 
 const Assessment = ({ t }) => {
