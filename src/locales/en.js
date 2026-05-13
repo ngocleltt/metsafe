@@ -25,20 +25,23 @@ export const en = {
       desc: "Leveraging machine learning to identify high-risk personnel and prevent accidents."
     }
   },
+  footer: {
+    description: "Enhancing personnel safety through digital competency evaluation",
+    quickLinks: "Quick Links",
+    about: "About the Project",
+    assessment: "Start Assessment",
+    contact: "Contact Us",
+    support: "Support",
+    faq: "FAQ",
+    privacy: "Privacy Policy",
+    copyright: "METSAFE Project - Metallurgy Competence Digital Assessment. All rights reserved."
+  },
   assessment: {
     title: "Competence Index (CI) Assessment",
+    subtitle: "CI_ASSESSMENT_SUBTITLE",
     description: "Please fill in the information below to calculate the safety competence index.",
     submit: "Calculate Score",
-    reset: "Reset Form"
-  },
-  footer: {
-    about: "METSAFE - Digital solution for industrial safety in the metallurgical sector.",
-    contact: "Contact",
-    rights: "© 2024 METSAFE Project. All rights reserved."
-  },
-  assessment: {
-    title: "CI_ASSESSMENT_TITLE",
-    subtitle: "CI_ASSESSMENT_SUBTITLE",
+    reset: "Reset Form",
     input_label: "CI_INPUT_LABEL",
     calculate_btn: "CI_CALCULATE_BTN",
     result_title: "CI_RESULT_TITLE",
