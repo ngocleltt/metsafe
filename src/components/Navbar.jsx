@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Navbar.css';
+import './styles/Navbar.css';
 import { Link } from 'react-router-dom';
 import { Shield, BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown } from 'lucide-react';
 
