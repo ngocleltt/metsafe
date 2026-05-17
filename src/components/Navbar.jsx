@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './styles/Navbar.css';
 import { Link } from 'react-router-dom';
-import { Shield, BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown } from 'lucide-react';
+import logo from '../assets/logo.png'; 
+import { BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown } from 'lucide-react';
 
 const Navbar = ({ t, currentLang, changeLanguage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,8 +20,8 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
     <nav className="metsafe-navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>
-          <Shield size={32} color="#2e7d32" strokeWidth={2.5} />
-          <span className="logo-text">METSAFE</span>
+          <img src={logo} alt="METSAFE Logo" className="nav-logo-img" />
+          
         </Link>
 
         <div className="mobile-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>

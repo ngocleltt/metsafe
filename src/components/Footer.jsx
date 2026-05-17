@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/Footer.css';
+import logo from '../assets/logo.png';
 import { en } from '../locales/en.js'; 
 
 const Footer = () => {
@@ -9,8 +10,12 @@ const Footer = () => {
     <footer className="metsafe-footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <h3 className="footer-logo">METSAFE</h3>
-          <p className="footer-description">{t.description}</p>
+          <div className="footer-logo-wrapper">
+            <img src={logo} alt="METSAFE Logo" className="footer-logo-img" />
+            <br></br>
+            <p className="footer-description">{t.description}</p>
+          </div>
+          
         </div>
 
         <div className="footer-links">

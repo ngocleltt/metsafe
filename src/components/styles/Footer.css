@@ -105,3 +105,21 @@
     max-width: 100%;
   }
 }
+.footer-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.footer-logo-img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.footer-logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+}

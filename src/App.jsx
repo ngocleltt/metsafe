@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Shield, BarChart3 } from 'lucide-react';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero'; // <--- Thêm dòng này
+import Hero from './components/Hero'; 
 import Footer from './components/Footer';
 import Assessment from './components/Assessment';
 import { en } from './locales/en';
@@ -28,7 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-              {/* Thay toàn bộ thẻ header cũ bằng Component này */}
+              {}
               <Hero t={t} /> 
 
               <main className="metsafe-main">
