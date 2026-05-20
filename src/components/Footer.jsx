@@ -26,6 +26,7 @@ const Footer = () => {
             <li><a href="/contact">{t.contact}</a></li>
           </ul>
         </div>
+        
 
         <div className="footer-support">
           <h4>{t.support}</h4>
