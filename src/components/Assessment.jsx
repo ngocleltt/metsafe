@@ -6,11 +6,16 @@ import "./styles/Assessment.css";
 const Assessment = ({ t }) => {
   const [selectedCandidate, setSelectedCandidate] = useState(candidates[0]);
 
-  const calculateCI = (scores) => {
-    const values = Object.values(scores);
-    if (values.length === 0) return 0;
-    const average = values.reduce((a, b) => a + b, 0) / values.length;
-    return average.toFixed(1);
+  const calculateCI = (candidateScores) => {
+    let total = 0;
+    let count = 0;
+    Object.values(candidateScores).forEach(category => {
+      Object.values(category).forEach(score => {
+        total += score;
+        count++;
+      });
+    });
+    return count > 0 ? (total / count).toFixed(1) : 0;
   };
 
   const getLevel = (ci) => {
@@ -85,37 +90,56 @@ const Assessment = ({ t }) => {
             </div>
 
             <div className="metrics-section">
-              <h4><ShieldAlert size={18} className="inline-icon" /> Chi tiết tiêu chí năng lực</h4>
+              <h4><ShieldAlert size={18} className="inline-icon" /> Bảng điểm chỉ tiêu chi tiết</h4>
               
-              <div className="metric-row">
-                <div className="metric-info">
-                  <span>{t.assessment.categories?.workplace || "An toàn Nơi làm việc"}</span>
-                  <span className="metric-score">{selectedCandidate.scores.workplace}/100</span>
+              <div className="category-group">
+                <h5>{t.assessment.categories?.workplace || "An toàn Nơi làm việc"}</h5>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Nhận diện rủi ro</span><span>{selectedCandidate.scores.workplace.risk}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace.risk}%` }}></div></div>
                 </div>
-                <div className="progress-bar-bg">
-                  <div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace}%` }}></div>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Ứng phó khẩn cấp</span><span>{selectedCandidate.scores.workplace.emergency}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace.emergency}%` }}></div></div>
                 </div>
-              </div>
-
-              <div className="metric-row">
-                <div className="metric-info">
-                  <span>{t.assessment.categories?.equipment || "Vận hành Thiết bị"}</span>
-                  <span className="metric-score">{selectedCandidate.scores.equipment}/100</span>
-                </div>
-                <div className="progress-bar-bg">
-                  <div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment}%` }}></div>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Vệ sinh công nghiệp</span><span>{selectedCandidate.scores.workplace.hygiene}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace.hygiene}%` }}></div></div>
                 </div>
               </div>
 
-              <div className="metric-row">
-                <div className="metric-info">
-                  <span>{t.assessment.categories?.human || "Yếu tố Con người"}</span>
-                  <span className="metric-score">{selectedCandidate.scores.human}/100</span>
+              <div className="category-group">
+                <h5>{t.assessment.categories?.equipment || "Vận hành Thiết bị"}</h5>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Vận hành lò đúc</span><span>{selectedCandidate.scores.equipment.operation}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment.operation}%` }}></div></div>
                 </div>
-                <div className="progress-bar-bg">
-                  <div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human}%` }}></div>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Sử dụng trang bị PPE</span><span>{selectedCandidate.scores.equipment.ppe}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment.ppe}%` }}></div></div>
+                </div>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Bảo trì thiết bị</span><span>{selectedCandidate.scores.equipment.maintenance}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment.maintenance}%` }}></div></div>
                 </div>
               </div>
+
+              <div className="category-group">
+                <h5>{t.assessment.categories?.human || "Yếu tố Con người"}</h5>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Sức khỏe thể chất</span><span>{selectedCandidate.scores.human.health}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human.health}%` }}></div></div>
+                </div>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Mức độ tập trung</span><span>{selectedCandidate.scores.human.focus}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human.focus}%` }}></div></div>
+                </div>
+                <div className="metric-row">
+                  <div className="metric-info"><span>Phối hợp đồng đội</span><span>{selectedCandidate.scores.human.teamwork}/100</span></div>
+                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human.teamwork}%` }}></div></div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
