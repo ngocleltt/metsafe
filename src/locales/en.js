@@ -39,7 +39,7 @@ export const en = {
   assessment: {
     title: "Competence Index (CI) Assessment",
     subtitle: "Real-time quantitative calculation of personnel competence and safety risk layers",
-    description: "Please fill in the information below to calculate the safety competence index.",
+    description: "Detailed profiles, evaluation of metrics, and competence classification based on mathematical weighting model.",
     submit: "Calculate Score",
     reset: "Reset Form",
     input_label: "Score Input",
@@ -47,18 +47,22 @@ export const en = {
     result_title: "Calculated Competence Index",
     selectCandidate: "Select Candidate Profile",
     candidateProfile: "Candidate Core Metrics Data",
+    sidebarTitle: "Candidate List",
+    yearsExp: "years of experience",
+    classification: "Competence Classification",
+    metricsTitle: "Detailed Metric Scores",
     categories: {
-      workplace: "Workplace Experience & Records",
-      equipment: "Practical & Operational Skills",
-      human: "Psychological & Behavior Competence"
+      workplace: "Workplace Safety",
+      equipment: "Equipment Operation",
+      human: "Human Factors"
     },
     levels: {
-      l0: "Non-Compliant",
-      l1: "Beginner / Reactive",
-      l2: "Basic / Dependent",
-      l3: "Competent / Independent",
-      l4: "Advanced / Proactive",
-      l5: "Expert / Safety Leader"
+      l0: "Level 0 (Unqualified)",
+      l1: "Level 1 (Novice)",
+      l2: "Level 2 (Basic)",
+      l3: "Level 3 (Intermediate)",
+      l4: "Level 4 (Advanced)",
+      l5: "Level 5 (Expert)"
     },
     fields: {
       experience: "Years of Experience",
@@ -72,12 +76,15 @@ export const en = {
       coreMetrics: "Core Competency Metrics Matrix Breakdown"
     },
     metrics: {
-      k1: "K1: Process Technology",
-      k3: "K3: Hazard Knowledge",
-      s1: "S1: Equipment Operation",
-      s3: "S3: LOTO Skill",
-      b1: "B1: Risk Reports",
-      b6: "B6: PPE Compliance"
+      risk: "Risk Assessment",
+      emergency: "Emergency Response",
+      hygiene: "Industrial Hygiene",
+      operation: "Furnace Operation",
+      ppe: "PPE Compliance",
+      maintenance: "Equipment Maintenance",
+      health: "Physical Health",
+      focus: "Attention & Focus",
+      teamwork: "Team Coordination"
     }
   }
 };
