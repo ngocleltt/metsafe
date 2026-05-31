@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/Hero.css';
+import heroImg from '../assets/hero.jpg';
 
 const Hero = ({ t }) => {
   return (
@@ -19,7 +20,7 @@ const Hero = ({ t }) => {
         <div className="hero-visual">
           <div className="abstract-shape-1"></div>
           <img 
-            src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1000" 
+            src= {heroImg}
             alt="Metallurgy" 
             className="hero-img"
           />
