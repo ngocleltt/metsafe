@@ -8,7 +8,8 @@ export const vi = {
   hero: {
     title: "METSAFE",
     subtitle: "Ứng dụng mô hình kỹ thuật số để tối ưu hóa an toàn và giảm thiểu tai nạn lao động trong ngành luyện kim",
-    cta: "Bắt đầu đánh giá"
+    cta: "Bắt đầu đánh giá",
+    learnMore: "Tìm hiểu thêm"
   },
   news: {
     title: "Tin tức & Hội thảo",

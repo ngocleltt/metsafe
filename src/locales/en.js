@@ -8,7 +8,8 @@ export const en = {
   hero: {
     title: "METSAFE",
     subtitle: "Digital model application for safety optimization and labor accident reduction in metallurgy",
-    cta: "Start Assessment"
+    cta: "Start Assessment",
+    learnMore: "Learn More"
   },
   news: {
     title: "News & Seminars",
