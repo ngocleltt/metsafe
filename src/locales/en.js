@@ -86,5 +86,15 @@ export const en = {
       focus: "Attention & Focus",
       teamwork: "Team Coordination"
     }
+  },
+  auth: {
+    signIn: "Sign In",
+    register: "Register",
+    fullName: "Full Name",
+    emailAddress: "Email Address",
+    password: "Password",
+    rememberMe: "Remember me",
+    forgotPassword: "Forgot password?",
+    createAccount: "Create Account"
   }
 };

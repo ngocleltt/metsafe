@@ -7,68 +7,68 @@ export const vi = {
   },
   hero: {
     title: "METSAFE",
-    subtitle: "Ứng dụng mô hình kỹ thuật số nhằm tối ưu hóa an toàn và giảm thiểu tai nạn lao động trong ngành luyện kim",
-    cta: "Bắt đầu Đánh giá"
+    subtitle: "Ứng dụng mô hình kỹ thuật số để tối ưu hóa an toàn và giảm thiểu tai nạn lao động trong ngành luyện kim",
+    cta: "Bắt đầu đánh giá"
   },
   news: {
     title: "Tin tức & Hội thảo",
     card1: {
       title: "Mối tương quan giữa Năng lực & An toàn",
-      desc: "Phân tích mối quan hệ giữa mức độ sẵn sàng chuyên môn và tỷ lệ sự cố trong sản xuất."
+      desc: "Phân tích mối quan hệ giữa sự sẵn sàng chuyên môn và tỷ lệ sự cố trong sản xuất."
     },
     card2: {
       title: "Số hóa trong ngành Luyện kim",
       desc: "Thay thế các phương pháp đào tạo và kiểm tra truyền thống bằng công nghệ kỹ thuật số tiên tiến."
     },
     card3: {
-      title: "AI trong Dự báo Rủi ro",
-      desc: "Ứng dụng học máy để nhận diện nhân sự có nguy cơ rủi ro cao và ngăn ngừa tai nạn xảy ra."
+      title: "AI trong dự đoán rủi ro",
+      desc: "Tận dụng học máy để xác định nhân sự có nguy cơ cao và ngăn ngừa tai nạn."
     }
   },
   footer: {
-    description: "Nâng cao an toàn cho nhân sự thông qua việc đánh giá năng lực kỹ thuật số",
+    description: "Nâng cao an toàn nhân sự thông qua đánh giá năng lực kỹ thuật số",
     quickLinks: "Liên kết nhanh",
     about: "Về dự án",
-    assessment: "Bắt đầu Đánh giá",
-    contact: "Liên hệ với chúng tôi",
+    assessment: "Bắt đầu đánh giá",
+    contact: "Liên hệ",
     support: "Hỗ trợ",
     faq: "Câu hỏi thường gặp",
     privacy: "Chính sách bảo mật",
-    copyright: "Dự án METSAFE - Đánh giá Kỹ thuật số Năng lực Luyện kim. Bảo lưu mọi quyền."
+    copyright: "Dự án METSAFE - Đánh giá kỹ thuật số năng lực luyện kim. Bảo lưu mọi quyền."
   },
   assessment: {
-    title: "Hệ thống Đánh giá Năng lực An toàn",
-    subtitle: "Tính toán định lượng theo thời gian thực về năng lực nhân sự và các phân lớp rủi ro an toàn",
-    description: "Xem chi tiết hồ sơ, bảng điểm chỉ số và phân loại cấp độ năng lực dựa trên mô hình trọng số toán học.",
+    title: "Đánh giá Chỉ số Năng lực (CI)",
+    subtitle: "Tính toán định lượng theo thời gian thực về năng lực nhân sự và các tầng rủi ro an toàn",
+    description: "Hồ sơ chi tiết, đánh giá các chỉ số và phân loại năng lực dựa trên mô hình toán học tính toán trọng số.",
     submit: "Tính điểm",
     reset: "Đặt lại biểu mẫu",
     input_label: "Nhập điểm số",
     calculate_btn: "Tính toán điểm số CI",
-    result_title: "Chỉ số năng lực đã tính toán",
+    result_title: "Chỉ số năng lực được tính toán",
     selectCandidate: "Chọn hồ sơ ứng viên",
-    candidateProfile: "Dữ liệu chỉ tiêu cốt lõi của ứng viên",
+    candidateProfile: "Dữ liệu chỉ số cốt lõi của ứng viên",
     sidebarTitle: "Danh sách ứng viên",
     yearsExp: "năm kinh nghiệm",
-    classification: "Phân loại Cấp độ",
-    metricsTitle: "Bảng điểm chỉ tiêu chi tiết",
+    classification: "Phân loại năng lực",
+    metricsTitle: "Điểm số các chỉ tiêu chi tiết",
     categories: {
-      workplace: "An toàn Nơi làm việc",
-      equipment: "Vận hành Thiết bị",
-      human: "Yếu tố Con người"
+      workplace: "An toàn nơi làm việc",
+      equipment: "Vận hành thiết bị",
+      human: "Yếu tố con người"
     },
     levels: {
-      l0: "Cấp độ 0 (Không đạt)",
-      l1: "Cấp độ 1 (Sơ cấp)",
+      l0: "Cấp độ 0 (Không đạt tiêu chuẩn)",
+      l1: "Cấp độ 1 (Tập sự)",
       l2: "Cấp độ 2 (Cơ bản)",
       l3: "Cấp độ 3 (Trung cấp)",
-      l4: "Cấp độ 4 (Cao cấp)",
+      l4: "Cấp độ 4 (Tiên tiến)",
       l5: "Cấp độ 5 (Chuyên gia)"
     },
     fields: {
       experience: "Số năm kinh nghiệm",
       years: "năm",
       certificates: "Số lượng chứng chỉ",
-      testScore: "Điểm bài kiểm tra",
+      testScore: "Điểm bài thi kiểm tra",
       incidents: "Số lần liên quan sự cố",
       majorViolation: "Vi phạm an toàn nghiêm trọng",
       yes: "CÓ",
@@ -76,15 +76,25 @@ export const vi = {
       coreMetrics: "Phân rã ma trận chỉ tiêu năng lực cốt lõi"
     },
     metrics: {
-      risk: "Nhận diện rủi ro",
+      risk: "Đánh giá rủi ro",
       emergency: "Ứng phó khẩn cấp",
       hygiene: "Vệ sinh công nghiệp",
-      operation: "Vận hành lò đúc",
-      ppe: "Sử dụng trang bị PPE",
+      operation: "Vận hành lò luyện",
+      ppe: "Tuân thủ thiết bị bảo hộ",
       maintenance: "Bảo trì thiết bị",
       health: "Sức khỏe thể chất",
-      focus: "Mức độ tập trung",
-      teamwork: "Phối hợp đồng đội"
+      focus: "Sự chú ý & Tập trung",
+      teamwork: "Phối hợp đội ngũ"
     }
+  },
+  auth: {
+    signIn: "Đăng nhập",
+    register: "Đăng ký",
+    fullName: "Họ và tên",
+    emailAddress: "Địa chỉ Email",
+    password: "Mật khẩu",
+    rememberMe: "Ghi nhớ đăng nhập",
+    forgotPassword: "Quên mật khẩu?",
+    createAccount: "Tạo tài khoản"
   }
 };
