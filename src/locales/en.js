@@ -13,15 +13,22 @@ export const en = {
   },
   news: {
     title: "News & Seminars",
+    readMore: "Read More",
     card1: {
+      category: "Research",
+      date: "May 28, 2026",
       title: "Competency & Safety Correlation",
       desc: "Analysis of the relationship between professional readiness and production incident rates."
     },
     card2: {
+      category: "Innovation",
+      date: "May 15, 2026",
       title: "Digitalization in Metallurgy",
       desc: "Replacing traditional training and testing methods with advanced digital technologies."
     },
     card3: {
+      category: "Technology",
+      date: "May 02, 2026",
       title: "AI in Risk Prediction",
       desc: "Leveraging machine learning to identify high-risk personnel and prevent accidents."
     }

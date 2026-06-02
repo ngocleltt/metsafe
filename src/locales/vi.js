@@ -7,27 +7,34 @@ export const vi = {
   },
   hero: {
     title: "METSAFE",
-    subtitle: "Ứng dụng mô hình kỹ thuật số để tối ưu hóa an toàn và giảm thiểu tai nạn lao động trong ngành luyện kim",
+    subtitle: "Ứng dụng mô hình số nhằm tối ưu hóa an toàn và giảm thiểu tai nạn lao động trong ngành luyện kim",
     cta: "Bắt đầu đánh giá",
     learnMore: "Tìm hiểu thêm"
   },
   news: {
     title: "Tin tức & Hội thảo",
+    readMore: "Xem thêm",
     card1: {
-      title: "Mối tương quan giữa Năng lực & An toàn",
-      desc: "Phân tích mối quan hệ giữa sự sẵn sàng chuyên môn và tỷ lệ sự cố trong sản xuất."
+      category: "Nghiên cứu",
+      date: "28 tháng 5, 2026",
+      title: "Mối tương quan giữa năng lực và an toàn",
+      desc: "Phân tích mối quan hệ giữa mức độ sẵn sàng nghề nghiệp và tỷ lệ sự cố trong sản xuất."
     },
     card2: {
-      title: "Số hóa trong ngành Luyện kim",
-      desc: "Thay thế các phương pháp đào tạo và kiểm tra truyền thống bằng công nghệ kỹ thuật số tiên tiến."
+      category: "Đổi mới",
+      date: "15 tháng 5, 2026",
+      title: "Chuyển đổi số trong ngành luyện kim",
+      desc: "Thay thế các phương pháp đào tạo và kiểm tra truyền thống bằng công nghệ số tiên tiến."
     },
     card3: {
-      title: "AI trong dự đoán rủi ro",
-      desc: "Tận dụng học máy để xác định nhân sự có nguy cơ cao và ngăn ngừa tai nạn."
+      category: "Công nghệ",
+      date: "02 tháng 5, 2026",
+      title: "AI trong dự báo rủi ro",
+      desc: "Ứng dụng học máy để nhận diện nhân sự có nguy cơ cao và phòng ngừa tai nạn."
     }
   },
   footer: {
-    description: "Nâng cao an toàn nhân sự thông qua đánh giá năng lực kỹ thuật số",
+    description: "Nâng cao an toàn nhân sự thông qua đánh giá năng lực số",
     quickLinks: "Liên kết nhanh",
     about: "Về dự án",
     assessment: "Bắt đầu đánh giá",
@@ -35,66 +42,66 @@ export const vi = {
     support: "Hỗ trợ",
     faq: "Câu hỏi thường gặp",
     privacy: "Chính sách bảo mật",
-    copyright: "Dự án METSAFE - Đánh giá kỹ thuật số năng lực luyện kim. Bảo lưu mọi quyền."
+    copyright: "Dự án METSAFE - Đánh giá năng lực số trong ngành luyện kim. Bảo lưu mọi quyền."
   },
   assessment: {
     title: "Đánh giá Chỉ số Năng lực (CI)",
-    subtitle: "Tính toán định lượng theo thời gian thực về năng lực nhân sự và các tầng rủi ro an toàn",
-    description: "Hồ sơ chi tiết, đánh giá các chỉ số và phân loại năng lực dựa trên mô hình toán học tính toán trọng số.",
+    subtitle: "Tính toán định lượng theo thời gian thực về năng lực nhân sự và các lớp rủi ro an toàn",
+    description: "Hồ sơ chi tiết, đánh giá các chỉ số và phân loại năng lực dựa trên mô hình trọng số toán học.",
     submit: "Tính điểm",
     reset: "Đặt lại biểu mẫu",
-    input_label: "Nhập điểm số",
-    calculate_btn: "Tính toán điểm số CI",
-    result_title: "Chỉ số năng lực được tính toán",
+    input_label: "Nhập điểm",
+    calculate_btn: "Tính điểm CI",
+    result_title: "Chỉ số năng lực đã tính",
     selectCandidate: "Chọn hồ sơ ứng viên",
     candidateProfile: "Dữ liệu chỉ số cốt lõi của ứng viên",
     sidebarTitle: "Danh sách ứng viên",
     yearsExp: "năm kinh nghiệm",
     classification: "Phân loại năng lực",
-    metricsTitle: "Điểm số các chỉ tiêu chi tiết",
+    metricsTitle: "Điểm chi tiết các chỉ số",
     categories: {
       workplace: "An toàn nơi làm việc",
       equipment: "Vận hành thiết bị",
       human: "Yếu tố con người"
     },
     levels: {
-      l0: "Cấp độ 0 (Không đạt tiêu chuẩn)",
-      l1: "Cấp độ 1 (Tập sự)",
-      l2: "Cấp độ 2 (Cơ bản)",
-      l3: "Cấp độ 3 (Trung cấp)",
-      l4: "Cấp độ 4 (Tiên tiến)",
-      l5: "Cấp độ 5 (Chuyên gia)"
+      l0: "Cấp 0 (Không đạt)",
+      l1: "Cấp 1 (Mới bắt đầu)",
+      l2: "Cấp 2 (Cơ bản)",
+      l3: "Cấp 3 (Trung bình)",
+      l4: "Cấp 4 (Nâng cao)",
+      l5: "Cấp 5 (Chuyên gia)"
     },
     fields: {
       experience: "Số năm kinh nghiệm",
       years: "năm",
       certificates: "Số lượng chứng chỉ",
-      testScore: "Điểm bài thi kiểm tra",
-      incidents: "Số lần liên quan sự cố",
+      testScore: "Điểm bài kiểm tra",
+      incidents: "Số sự cố liên quan",
       majorViolation: "Vi phạm an toàn nghiêm trọng",
       yes: "CÓ",
       no: "KHÔNG",
-      coreMetrics: "Phân rã ma trận chỉ tiêu năng lực cốt lõi"
+      coreMetrics: "Ma trận phân tích chỉ số năng lực cốt lõi"
     },
     metrics: {
       risk: "Đánh giá rủi ro",
       emergency: "Ứng phó khẩn cấp",
       hygiene: "Vệ sinh công nghiệp",
-      operation: "Vận hành lò luyện",
-      ppe: "Tuân thủ thiết bị bảo hộ",
+      operation: "Vận hành lò",
+      ppe: "Tuân thủ PPE",
       maintenance: "Bảo trì thiết bị",
-      health: "Sức khỏe thể chất",
-      focus: "Sự chú ý & Tập trung",
-      teamwork: "Phối hợp đội ngũ"
+      health: "Thể chất",
+      focus: "Sự tập trung",
+      teamwork: "Phối hợp nhóm"
     }
   },
   auth: {
     signIn: "Đăng nhập",
     register: "Đăng ký",
     fullName: "Họ và tên",
-    emailAddress: "Địa chỉ Email",
+    emailAddress: "Địa chỉ email",
     password: "Mật khẩu",
-    rememberMe: "Ghi nhớ đăng nhập",
+    rememberMe: "Ghi nhớ tôi",
     forgotPassword: "Quên mật khẩu?",
     createAccount: "Tạo tài khoản"
   }
