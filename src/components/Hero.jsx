@@ -2,6 +2,7 @@ import React from 'react';
 import './styles/Hero.css';
 import { useNavigate } from 'react-router-dom';
 import heroImg from '../assets/hero.jpg';
+import './styles/theme.css';
 
 const Hero = ({ t }) => {
   const navigate = useNavigate();

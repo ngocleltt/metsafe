@@ -1,91 +1,65 @@
 import React from 'react';
 import './styles/AboutProject.css';
-import { ShieldCheck, Cpu, BarChart3, ArrowUpRight } from 'lucide-react';
+import './styles/theme.css';
 
 const AboutProject = ({ t }) => {
-  return (
-    <section id="about" className="about-project-section">
-      <div className="about-project-container">
-        <div className="about-project-shell">
-          <div className="about-project-intro">
-            <span className="about-project-tag">
-              {t?.aboutProject?.tag || 'About the Project'}
-            </span>
+  const manifestoItems = [
+    {
+      number: '01',
+      title: t?.aboutProject?.card1?.title || 'Evaluate real readiness',
+      desc:
+        t?.aboutProject?.card1?.desc ||
+        'METSAFE helps reveal how prepared personnel are for safe operation before risk turns into incident.',
+    },
+    {
+      number: '02',
+      title: t?.aboutProject?.card2?.title || 'Replace fragmented checks',
+      desc:
+        t?.aboutProject?.card2?.desc ||
+        'The project turns manual, inconsistent assessment practices into a more structured and measurable digital workflow.',
+    },
+    {
+      number: '03',
+      title: t?.aboutProject?.card3?.title || 'Support safer decisions',
+      desc:
+        t?.aboutProject?.card3?.desc ||
+        'By combining competence indicators and weighted metrics, METSAFE supports clearer training, monitoring, and risk-control decisions.',
+    },
+  ];
 
-            <h2 className="about-project-title">
-              {t?.aboutProject?.title || 'Why METSAFE matters'}
+  return (
+    <section id="about" className="about-manifesto-section">
+      <div className="about-manifesto-container">
+        <div className="about-manifesto-top">
+          <span className="about-manifesto-tag">
+            {t?.aboutProject?.tag || 'About the Project'}
+          </span>
+
+          <div className="about-manifesto-headline-wrap">
+            <h2 className="about-manifesto-title">
+              {t?.aboutProject?.title || 'Safer decisions start with clearer competence signals.'}
             </h2>
 
-            <p className="about-project-description">
+            <p className="about-manifesto-description">
               {t?.aboutProject?.description ||
-                'METSAFE is designed to improve workplace safety in metallurgy through digital competency assessment, data-driven evaluation, and smarter risk prevention.'}
+                'METSAFE is a digital-first framework for evaluating workplace competence, improving risk visibility, and supporting safer decision-making in metallurgy.'}
             </p>
-
-            <div className="about-project-accent-line"></div>
-
-            <div className="about-project-note">
-              <span className="about-note-label">METSAFE</span>
-              <p>
-                A digital-first approach to competence evaluation, risk visibility,
-                and safer industrial decision-making.
-              </p>
-            </div>
           </div>
+        </div>
 
-          <div className="about-project-panel">
-            <div className="about-feature-item">
-              <div className="about-feature-top">
-                <span className="about-feature-number">01</span>
-                <div className="about-feature-icon green">
-                  <ShieldCheck size={18} />
-                </div>
+        <div className="about-manifesto-divider"></div>
+
+        <div className="about-manifesto-list">
+          {manifestoItems.map((item) => (
+            <article className="manifesto-row" key={item.number}>
+              <span className="manifesto-number">{item.number}</span>
+
+              <div className="manifesto-content">
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
               </div>
-              <h3>
-                {t?.aboutProject?.card1?.title || 'Safety-focused evaluation'}
-              </h3>
-              <p>
-                {t?.aboutProject?.card1?.desc ||
-                  'The system helps identify how prepared personnel are for safe operation and highlights potential safety gaps before incidents occur.'}
-              </p>
-            </div>
-
-            <div className="about-feature-item">
-              <div className="about-feature-top">
-                <span className="about-feature-number">02</span>
-                <div className="about-feature-icon orange">
-                  <Cpu size={18} />
-                </div>
-              </div>
-              <h3>
-                {t?.aboutProject?.card2?.title || 'Digital transformation'}
-              </h3>
-              <p>
-                {t?.aboutProject?.card2?.desc ||
-                  'METSAFE replaces manual and fragmented assessment methods with a more structured, measurable, and modern digital model.'}
-              </p>
-            </div>
-
-            <div className="about-feature-item">
-              <div className="about-feature-top">
-                <span className="about-feature-number">03</span>
-                <div className="about-feature-icon blue">
-                  <BarChart3 size={18} />
-                </div>
-              </div>
-              <h3>
-                {t?.aboutProject?.card3?.title || 'Data-driven decision making'}
-              </h3>
-              <p>
-                {t?.aboutProject?.card3?.desc ||
-                  'By combining competence indicators and weighted metrics, the project supports clearer decisions in training, monitoring, and risk control.'}
-              </p>
-            </div>
-
-            <div className="about-panel-footer">
-              <span>Project vision</span>
-              <ArrowUpRight size={18} />
-            </div>
-          </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

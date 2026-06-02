@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles/Footer.css';
 import logo from '../assets/logo.png';
+import './styles/theme.css';
 
 const Footer = ({ t }) => {
   const footer = t?.footer || {};

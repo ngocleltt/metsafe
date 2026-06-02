@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png'; 
 import { BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown, LogOut } from 'lucide-react';
 import AuthModal from './AuthModal';
+import './styles/theme.css';
 
 const Navbar = ({ t, currentLang, changeLanguage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

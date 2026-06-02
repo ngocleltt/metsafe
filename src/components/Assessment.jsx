@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { candidates } from '../data/candidates';
 import { User, ShieldAlert, Award, Briefcase, ChevronRight } from 'lucide-react';
 import "./styles/Assessment.css";
+import './styles/theme.css';
 
 const weights = {
   workplace: { risk: 0.4, emergency: 0.4, hygiene: 0.2 },
