@@ -38,7 +38,7 @@ function App() {
           <Route path="/assessment" element={<Assessment t={t} />} />
         </Routes>
 
-        <Footer />
+        <Footer t = {t}/>
       </div>
     </Router>
   );
