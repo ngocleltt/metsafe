@@ -1,8 +1,8 @@
 import React from 'react';
 import './styles/Hero.css';
+import './styles/theme.css';
 import { useNavigate } from 'react-router-dom';
 import heroImg from '../assets/hero.jpg';
-import './styles/theme.css';
 
 const Hero = ({ t }) => {
   const navigate = useNavigate();
@@ -11,49 +11,49 @@ const Hero = ({ t }) => {
     navigate('/assessment');
   };
 
-const handleLearnMore = () => {
-  const aboutSection = document.getElementById('about');
-  if (aboutSection) {
-    aboutSection.scrollIntoView({ behavior: 'smooth' });
-  }
-};
+  const handleLearnMore = () => {
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header className="metsafe-hero">
-      <div className="hero-container">
-        <div className="hero-text">
-          <span className="hero-tag hero-reveal hero-delay-1">
-            Safety First • Innovation Always
-          </span>
+      <div className="hero-shell">
+        <div className="hero-editorial-grid">
+          <div className="hero-panel hero-copy-panel">
+            <span className="hero-tag hero-reveal hero-delay-1">
+              {t?.hero?.tag || 'Safety First • Digital Insight'}
+            </span>
 
-          <h1 className="hero-reveal hero-delay-2">
-            {t?.hero?.title || 'METSAFE'}
-          </h1>
+            <h1 className="hero-reveal hero-delay-2">
+              {t?.hero?.title || 'METSAFE'}
+            </h1>
 
-          <p className="hero-reveal hero-delay-3">
-            {t?.hero?.subtitle || 'Digital model application for safety optimization and labor accident reduction'}
-          </p>
+            <p className="hero-reveal hero-delay-3">
+              {t?.hero?.subtitle ||
+                'Digital model application for safety optimization and labor accident reduction in metallurgy'}
+            </p>
 
-          <br />
+            <div className="hero-btns hero-reveal hero-delay-4">
+              <button className="cta-button primary" onClick={handleStartAssessment}>
+                {t?.hero?.cta || 'Start Assessment'}
+              </button>
 
-          <div className="hero-btns hero-reveal hero-delay-4">
-            <button className="cta-button primary" onClick={handleStartAssessment}>
-              {t?.hero?.cta || 'Start Assessment'}
-            </button>
-
-            <button className="cta-button secondary" onClick={handleLearnMore}>
-              {t?.hero?.learnMore || 'Learn More'}
-            </button>
+              <button className="cta-button secondary" onClick={handleLearnMore}>
+                {t?.hero?.learnMore || 'Learn More'}
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div className="hero-visual hero-reveal hero-delay-3">
-          <div className="abstract-shape-1"></div>
-          <img
-            src={heroImg}
-            alt="Metallurgy Industry"
-            className="hero-img"
-          />
+          <div className="hero-panel hero-image-panel hero-reveal hero-delay-3">
+            <img
+              src={heroImg}
+              alt={t?.hero?.imageAlt || 'Metallurgy industry working environment'}
+              className="hero-img"
+            />
+          </div>
         </div>
       </div>
     </header>

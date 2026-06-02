@@ -33,8 +33,8 @@ function App() {
               <>
                 <Hero t={t} />
                 <main className="metsafe-main">
-                  <News t={t} />
                   <AboutProject t={t} />
+                  <News t={t} />
                 </main>
               </>
             }
