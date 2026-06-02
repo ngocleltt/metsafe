@@ -33,6 +33,24 @@ export const en = {
       desc: "Leveraging machine learning to identify high-risk personnel and prevent accidents."
     }
   },
+  aboutProject: {
+    tag: "About the Project",
+    title: "Why METSAFE matters",
+    description:
+      "METSAFE is designed to improve workplace safety in metallurgy through digital competency assessment, data-driven evaluation, and smarter risk prevention.",
+    card1: {
+      title: "Safety-focused evaluation",
+      desc: "The system helps identify how prepared personnel are for safe operation and highlights potential safety gaps before incidents occur."
+    },
+    card2: {
+      title: "Digital transformation",
+      desc: "METSAFE replaces manual and fragmented assessment methods with a more structured, measurable, and modern digital model."
+    },
+    card3: {
+      title: "Data-driven decision making",
+      desc: "By combining competence indicators and weighted metrics, the project supports clearer decisions in training, monitoring, and risk control."
+    }
+  },
   footer: {
     description: "Enhancing personnel safety through digital competency evaluation",
     quickLinks: "Quick Links",

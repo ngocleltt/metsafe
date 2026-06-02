@@ -1,0 +1,130 @@
+.about-project-section {
+  padding: 90px 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fcf6 100%);
+}
+
+.about-project-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-project-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 48px;
+}
+
+.about-project-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+.about-project-header h2 {
+  font-size: 2.4rem;
+  color: var(--secondary-color);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.about-project-header p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #4c5b4f;
+}
+
+.about-project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(46, 125, 50, 0.08);
+  border-radius: 24px;
+  padding: 28px 24px;
+  box-shadow: 0 10px 28px rgba(46, 125, 50, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 34px rgba(46, 125, 50, 0.1);
+}
+
+.about-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.about-card-icon.green {
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+}
+
+.about-card-icon.orange {
+  background: rgba(247, 148, 29, 0.14);
+  color: #f7941d;
+}
+
+.about-card-icon.blue {
+  background: rgba(21, 101, 192, 0.12);
+  color: #1565c0;
+}
+
+.about-card h3 {
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  margin-bottom: 12px;
+}
+
+.about-card p {
+  color: #55645a;
+  line-height: 1.75;
+  font-size: 0.98rem;
+}
+
+@media (max-width: 992px) {
+  .about-project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-project-header h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-project-section {
+    padding: 70px 20px;
+  }
+
+  .about-project-header {
+    margin-bottom: 36px;
+  }
+
+  .about-project-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .about-project-header p {
+    font-size: 1rem;
+  }
+
+  .about-card {
+    padding: 24px 20px;
+  }
+}

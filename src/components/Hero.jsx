@@ -10,12 +10,12 @@ const Hero = ({ t }) => {
     navigate('/assessment');
   };
 
-  const handleLearnMore = () => {
-    const newsSection = document.getElementById('news');
-    if (newsSection) {
-      newsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+const handleLearnMore = () => {
+  const aboutSection = document.getElementById('about');
+  if (aboutSection) {
+    aboutSection.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
   return (
     <header className="metsafe-hero">

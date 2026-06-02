@@ -33,6 +33,24 @@ export const vi = {
       desc: "Ứng dụng học máy để nhận diện nhân sự có nguy cơ cao và phòng ngừa tai nạn."
     }
   },
+  aboutProject: {
+    tag: "Về dự án",
+    title: "Vì sao METSAFE quan trọng",
+    description:
+      "METSAFE được thiết kế nhằm nâng cao an toàn lao động trong ngành luyện kim thông qua đánh giá năng lực số, phân tích dựa trên dữ liệu và phòng ngừa rủi ro hiệu quả hơn.",
+    card1: {
+      title: "Đánh giá tập trung vào an toàn",
+      desc: "Hệ thống giúp xác định mức độ sẵn sàng của nhân sự trong vận hành an toàn và chỉ ra các khoảng trống an toàn tiềm ẩn trước khi sự cố xảy ra."
+    },
+    card2: {
+      title: "Chuyển đổi số",
+      desc: "METSAFE thay thế các phương pháp đánh giá thủ công và rời rạc bằng một mô hình số hiện đại, có cấu trúc và dễ đo lường hơn."
+    },
+    card3: {
+      title: "Ra quyết định dựa trên dữ liệu",
+      desc: "Bằng cách kết hợp các chỉ số năng lực và hệ thống trọng số, dự án hỗ trợ đưa ra quyết định rõ ràng hơn trong đào tạo, giám sát và kiểm soát rủi ro."
+    }
+  },
   footer: {
     description: "Nâng cao an toàn nhân sự thông qua đánh giá năng lực số",
     quickLinks: "Liên kết nhanh",
