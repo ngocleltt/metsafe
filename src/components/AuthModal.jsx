@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/AuthModal.css';
 import { X, UserCircle, Lock, Mail, Eye, EyeOff } from 'lucide-react';
 
 const AuthModal = ({ 
