@@ -35,21 +35,15 @@ export const en = {
   },
   aboutProject: {
     tag: "About the Project",
-    title: "Why METSAFE matters",
+    title: "Safer metallurgy starts with clearer human insight",
     description:
-      "METSAFE is designed to improve workplace safety in metallurgy through digital competency assessment, data-driven evaluation, and smarter risk prevention.",
-    card1: {
-      title: "Safety-focused evaluation",
-      desc: "The system helps identify how prepared personnel are for safe operation and highlights potential safety gaps before incidents occur."
-    },
-    card2: {
-      title: "Digital transformation",
-      desc: "METSAFE replaces manual and fragmented assessment methods with a more structured, measurable, and modern digital model."
-    },
-    card3: {
-      title: "Data-driven decision making",
-      desc: "By combining competence indicators and weighted metrics, the project supports clearer decisions in training, monitoring, and risk control."
-    }
+      "METSAFE helps industrial teams evaluate competence more clearly, reduce fragmented safety checks, and support better risk prevention through digital assessment.",
+    sideLabel: "About Us",
+    imageAlt: "Industrial team working in a metallurgy environment",
+    body1:
+      "METSAFE was created to make competence evaluation more structured, visible, and practical in real metallurgical settings. Instead of depending on isolated checks and manual interpretation, the project brings key readiness indicators into one clearer digital framework.",
+    body2:
+      "By combining weighted metrics, operational criteria, and human-factor signals, the platform supports smarter training priorities, stronger supervision, and safer day-to-day decisions across high-risk workplaces."
   },
   footer: {
     description: "Enhancing personnel safety through digital competency evaluation",
