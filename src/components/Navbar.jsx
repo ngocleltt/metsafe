@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import './styles/Navbar.css';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -9,7 +9,15 @@ import {
   X,
   UserCircle,
   ChevronDown,
-  LogOut
+  LogOut,
+  LayoutDashboard,
+  Users,
+  UserRoundSearch,
+  ClipboardCheck,
+  Award,
+  FileText,
+  UserRound,
+  BookOpen
 } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
@@ -29,20 +37,118 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
     { code: 'ru', flag: '🇷🇺', label: 'Русский' }
   ];
 
-  const handleLanguageChange = (languageCode) => {
-    changeLanguage(languageCode);
-    setIsLangOpen(false);
-    setIsMenuOpen(false);
-  };
+  const currentRole = user ? profile?.role || 'candidate' : 'guest';
+
+  const menuItems = useMemo(() => {
+    const commonItems = [
+      {
+        key: 'home',
+        path: '/',
+        label: t?.nav?.home || 'Home',
+        icon: Newspaper,
+        roles: ['guest', 'admin', 'employee', 'candidate']
+      }
+    ];
+
+    const roleItems = {
+      admin: [
+        {
+          key: 'admin-dashboard',
+          path: '/admin',
+          label: t?.nav?.dashboard || 'Dashboard',
+          icon: LayoutDashboard
+        },
+        {
+          key: 'admin-assessments',
+          path: '/assessment',
+          label: t?.nav?.assessment || 'Assessments',
+          icon: BarChart3
+        },
+        {
+          key: 'admin-employees',
+          path: '/admin/employees',
+          label: t?.nav?.employees || 'Employees',
+          icon: Users
+        },
+        {
+          key: 'admin-candidates',
+          path: '/admin/candidates',
+          label: t?.nav?.candidates || 'Candidates',
+          icon: UserRoundSearch
+        }
+      ],
+      employee: [
+        {
+          key: 'employee-dashboard',
+          path: '/employee',
+          label: t?.nav?.myDashboard || 'My Dashboard',
+          icon: LayoutDashboard
+        },
+        {
+          key: 'employee-competence',
+          path: '/employee/competence',
+          label: t?.nav?.myCompetence || 'My Competence',
+          icon: Award
+        },
+        {
+          key: 'employee-tests',
+          path: '/employee/tests',
+          label: t?.nav?.myTests || 'My Tests',
+          icon: ClipboardCheck
+        },
+        {
+          key: 'employee-training',
+          path: '/employee/training',
+          label: t?.nav?.training || 'Training',
+          icon: BookOpen
+        }
+      ],
+      candidate: [
+        {
+          key: 'candidate-dashboard',
+          path: '/candidate',
+          label: t?.nav?.myDashboard || 'My Dashboard',
+          icon: LayoutDashboard
+        },
+        {
+          key: 'candidate-application',
+          path: '/candidate/application',
+          label: t?.nav?.myApplication || 'My Application',
+          icon: FileText
+        },
+        {
+          key: 'candidate-tests',
+          path: '/candidate/tests',
+          label: t?.nav?.recruitmentTests || 'Recruitment Tests',
+          icon: ClipboardCheck
+        },
+        {
+          key: 'candidate-results',
+          path: '/candidate/results',
+          label: t?.nav?.myResults || 'My Results',
+          icon: Award
+        }
+      ]
+    };
+
+    const selectedRoleItems = (roleItems[currentRole] || []).map(
+      (item) => ({
+        ...item,
+        roles: [currentRole]
+      })
+    );
+
+    return [...commonItems, ...selectedRoleItems];
+  }, [currentRole, t]);
 
   const handleNavClick = () => {
     setIsMenuOpen(false);
     setIsLangOpen(false);
   };
 
-  const handleLogout = async () => {
-    await logout();
-    setIsMenuOpen(false);
+  const handleLanguageChange = (languageCode) => {
+    changeLanguage(languageCode);
+    handleNavClick();
   };
 
   const openLoginModal = () => {
@@ -51,11 +157,23 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
     setIsMenuOpen(false);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    handleNavClick();
+  };
+
   const displayName =
     profile?.full_name ||
     user?.user_metadata?.full_name ||
     user?.email ||
     'User';
+
+  const roleLabel = {
+    admin: 'Admin',
+    employee: 'Employee',
+    candidate: 'Candidate',
+    guest: 'Guest'
+  }[currentRole];
 
   return (
     <nav className="metsafe-navbar">
@@ -89,29 +207,22 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
           }`}
         >
           <ul className="nav-links">
-            <li>
-              <Link
-                to="/"
-                className="nav-item"
-                onClick={handleNavClick}
-              >
-                <Newspaper size={18} />
-                <span>{t?.nav?.home || 'Home'}</span>
-              </Link>
-            </li>
+            {menuItems.map((item) => {
+              const Icon = item.icon;
 
-            <li>
-              <Link
-                to="/assessment"
-                className="nav-item"
-                onClick={handleNavClick}
-              >
-                <BarChart3 size={18} />
-                <span>
-                  {t?.nav?.assessment || 'CI Assessment'}
-                </span>
-              </Link>
-            </li>
+              return (
+                <li key={item.key}>
+                  <Link
+                    to={item.path}
+                    className="nav-item"
+                    onClick={handleNavClick}
+                  >
+                    <Icon size={18} />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="nav-right-group">
@@ -180,11 +291,9 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
                       {displayName}
                     </span>
 
-                    {profile?.role && (
-                      <small className="user-role-text">
-                        {profile.role}
-                      </small>
-                    )}
+                    <small className="user-role-text">
+                      {roleLabel || profile?.role || 'User'}
+                    </small>
                   </div>
                 </div>
 

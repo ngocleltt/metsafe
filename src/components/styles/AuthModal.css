@@ -16,10 +16,10 @@
 }
 
 .auth-modal {
-  width: min(420px, 100%);
+  width: min(500px, 100%);
   margin: auto;
   background: var(--color-surface);
-  padding: 40px;
+  padding: 50px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   position: relative;

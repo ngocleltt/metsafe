@@ -1,9 +1,10 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const { user, profile, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -14,13 +15,19 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   if (!user) {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+        state={{ from: location.pathname }}
+      />
+    );
   }
 
   if (!profile || !profile.is_active) {
     return (
       <div className="protected-error">
-        Your account is not active.
+        Your account is not active or the profile is missing.
       </div>
     );
   }
@@ -29,7 +36,13 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     allowedRoles.length > 0 &&
     !allowedRoles.includes(profile.role)
   ) {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+        state={{ from: location.pathname }}
+      />
+    );
   }
 
   return children;

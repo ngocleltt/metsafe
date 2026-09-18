@@ -27,29 +27,57 @@ function App() {
           currentLang={currentLang}
           changeLanguage={setCurrentLang}
         />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero t={t} />
-                <main className="metsafe-main">
-                  <AboutProject t={t} />
-                  <News t={t} />
-                </main>
-              </>
-            }
-          />
+          <Routes>
+      <Route
+        path="/"
+        element={
+          <>
+            <Hero t={t} />
 
-          <Route
-            path="/assessment"
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <Assessment t={t} />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+            <main className="metsafe-main">
+              <AboutProject t={t} />
+              <News t={t} />
+            </main>
+          </>
+        }
+      />
+
+      <Route
+        path="/assessment"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Assessment t={t} />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <div>Admin Dashboard coming soon...</div>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/employee"
+        element={
+          <ProtectedRoute allowedRoles={['employee']}>
+            <div>Employee Dashboard coming soon...</div>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/candidate"
+        element={
+          <ProtectedRoute allowedRoles={['candidate']}>
+            <div>Candidate Dashboard coming soon...</div>
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
 
         <Footer t={t} />
       </div>
