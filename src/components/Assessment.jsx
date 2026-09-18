@@ -1,160 +1,354 @@
-import React, { useState } from 'react';
-import { candidates } from '../data/candidates';
+import React, { useEffect, useMemo, useState } from 'react';
 import { User, ShieldAlert, Award, Briefcase, ChevronRight } from 'lucide-react';
-import "./styles/Assessment.css";
+import { supabase } from '../lib/supabase';
+import './styles/Assessment.css';
 import './styles/theme.css';
 
-const weights = {
-  workplace: { risk: 0.4, emergency: 0.4, hygiene: 0.2 },
-  equipment: { operation: 0.5, ppe: 0.3, maintenance: 0.2 },
-  human: { health: 0.3, focus: 0.4, teamwork: 0.3 },
-  categories: { workplace: 0.35, equipment: 0.4, human: 0.25 }
+const FALLBACK_LEVELS = {
+  l0: 'Level 0',
+  l1: 'Level 1',
+  l2: 'Level 2',
+  l3: 'Level 3',
+  l4: 'Level 4',
+  l5: 'Level 5'
+};
+
+const getLevel = (score, t) => {
+  const levels = t?.assessment?.levels || FALLBACK_LEVELS;
+  const value = Number(score) || 0;
+
+  if (value >= 86) return { lv: 5, label: levels.l5 };
+  if (value >= 71) return { lv: 4, label: levels.l4 };
+  if (value >= 56) return { lv: 3, label: levels.l3 };
+  if (value >= 41) return { lv: 2, label: levels.l2 };
+  if (value >= 21) return { lv: 1, label: levels.l1 };
+  return { lv: 0, label: levels.l0 };
+};
+
+const formatScore = (value) => {
+  const score = Number(value);
+  return Number.isFinite(score) ? score.toFixed(1) : '--';
+};
+
+const getGroupColor = (groupCode) => {
+  if (groupCode === 'K' || groupCode === 'E') return 'bg-green';
+  if (groupCode === 'S' || groupCode === 'Q') return 'bg-blue';
+  if (groupCode === 'B' || groupCode === 'P') return 'bg-orange';
+  return 'bg-purple';
 };
 
 const Assessment = ({ t }) => {
-  const [selectedCandidate, setSelectedCandidate] = useState(candidates[0]);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
+  const [loadingEmployees, setLoadingEmployees] = useState(true);
+  const [loadingAssessment, setLoadingAssessment] = useState(false);
+  const [error, setError] = useState('');
 
-  const calculateCI = (candidateScores) => {
-    let finalScore = 0;
-    Object.keys(candidateScores).forEach(categoryKey => {
-      let categorySum = 0;
-      const categoryScores = candidateScores[categoryKey];
-      const categoryWeights = weights[categoryKey];
-      Object.keys(categoryScores).forEach(metricKey => {
-        categorySum += categoryScores[metricKey] * categoryWeights[metricKey];
+  const assessmentText = t?.assessment || {};
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadEmployees() {
+      setLoadingEmployees(true);
+      setError('');
+
+      const { data, error: queryError } = await supabase
+        .from('employee_latest_assessment')
+        .select('*')
+        .order('employee_code', { ascending: true });
+
+      if (!mounted) return;
+
+      if (queryError) {
+        console.error('Load employees error:', queryError);
+        setError(queryError.message);
+        setLoadingEmployees(false);
+        return;
+      }
+
+      setEmployees(data || []);
+      setSelectedEmployeeId(data?.[0]?.employee_id || null);
+      setLoadingEmployees(false);
+    }
+
+    loadEmployees();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadAssessment() {
+      if (!selectedEmployeeId) {
+        setSelectedAssessment(null);
+        return;
+      }
+
+      setLoadingAssessment(true);
+      setError('');
+
+      const { data, error: queryError } = await supabase
+        .from('assessments')
+        .select(`
+          id,
+          employee_id,
+          assessment_date,
+          total_score,
+          level,
+          status,
+          model_version_id,
+          employees (
+            id,
+            employee_code,
+            full_name,
+            position_text,
+            experience_years
+          ),
+          assessment_scores (
+            id,
+            raw_value,
+            normalized_score,
+            comment,
+            indicator_id,
+            indicators (
+              id,
+              code,
+              name,
+              name_vi,
+              name_ru,
+              description,
+              weight,
+              data_type,
+              direction,
+              group_id,
+              competency_groups (
+                code,
+                name,
+                name_vi,
+                name_ru,
+                weight,
+                sort_order
+              )
+            )
+          )
+        `)
+        .eq('employee_id', selectedEmployeeId)
+        .eq('status', 'completed')
+        .order('assessment_date', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!mounted) return;
+
+      if (queryError) {
+        console.error('Load assessment error:', queryError);
+        setError(queryError.message);
+        setSelectedAssessment(null);
+        setLoadingAssessment(false);
+        return;
+      }
+
+      setSelectedAssessment(data || null);
+      setLoadingAssessment(false);
+    }
+
+    loadAssessment();
+    return () => {
+      mounted = false;
+    };
+  }, [selectedEmployeeId]);
+
+  const groupedScores = useMemo(() => {
+    const scores = selectedAssessment?.assessment_scores || [];
+    const groups = new Map();
+
+    scores.forEach((score) => {
+      const indicator = score.indicators;
+      const group = indicator?.competency_groups;
+      if (!indicator || !group) return;
+
+      const groupCode = group.code;
+      if (!groups.has(groupCode)) {
+        groups.set(groupCode, {
+          code: groupCode,
+          name: group.name,
+          nameVi: group.name_vi,
+          nameRu: group.name_ru,
+          weight: group.weight,
+          sortOrder: group.sort_order,
+          scores: []
+        });
+      }
+
+      groups.get(groupCode).scores.push({
+        ...score,
+        indicator
       });
-      finalScore += categorySum * weights.categories[categoryKey];
     });
-    return finalScore.toFixed(1);
-  };
 
-  const getLevel = (ci) => {
-    const score = parseFloat(ci);
-    if (score >= 90) return { lv: 5, label: t.assessment.levels?.l5 || "Level 5" };
-    if (score >= 80) return { lv: 4, label: t.assessment.levels?.l4 || "Level 4" };
-    if (score >= 70) return { lv: 3, label: t.assessment.levels?.l3 || "Level 3" };
-    if (score >= 60) return { lv: 2, label: t.assessment.levels?.l2 || "Level 2" };
-    if (score >= 50) return { lv: 1, label: t.assessment.levels?.l1 || "Level 1" };
-    return { lv: 0, label: t.assessment.levels?.l0 || "Level 0" };
-  };
+    return [...groups.values()].sort((a, b) => a.sortOrder - b.sortOrder);
+  }, [selectedAssessment]);
 
-  const currentCI = calculateCI(selectedCandidate.scores);
-  const currentLevel = getLevel(currentCI);
+  const selectedEmployee = selectedAssessment?.employees;
+  const currentCI = Number(selectedAssessment?.total_score || 0);
+  const currentLevel = getLevel(currentCI, t);
+
+  if (loadingEmployees) {
+    return (
+      <div className="assessment-container">
+        <div className="assessment-header">
+          <h2>{assessmentText.title || 'Assessment'}</h2>
+          <p>Loading employee data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="assessment-container">
       <div className="assessment-header">
-        <h2>{t.assessment.title}</h2>
-        <p>{t.assessment.description}</p>
+        <h2>{assessmentText.title || 'Competence Assessment'}</h2>
+        <p>{assessmentText.description || 'Review employee competence and safety indicators.'}</p>
       </div>
+
+      {error && (
+        <div className="assessment-error" role="alert">
+          {error}
+        </div>
+      )}
 
       <div className="assessment-dashboard">
         <div className="candidate-sidebar">
-          <h3>{t.assessment.sidebarTitle} ({candidates.length})</h3>
+          <h3>
+            {assessmentText.sidebarTitle || 'Employees'} ({employees.length})
+          </h3>
+
           <div className="candidate-list">
-            {candidates.map((candidate) => {
-              const ci = calculateCI(candidate.scores);
-              const isSelected = selectedCandidate.id === candidate.id;
+            {employees.map((employee) => {
+              const isSelected = selectedEmployeeId === employee.employee_id;
+              const level = getLevel(employee.total_score, t);
+
               return (
-                <div
-                  key={candidate.id}
+                <button
+                  type="button"
+                  key={employee.employee_id}
                   className={`candidate-item ${isSelected ? 'active' : ''}`}
-                  onClick={() => setSelectedCandidate(candidate)}
+                  onClick={() => setSelectedEmployeeId(employee.employee_id)}
                 >
                   <div className="candidate-info-mini">
-                    <span className="candidate-name">{candidate.name}</span>
-                    <span className="candidate-pos">{candidate.position}</span>
+                    <span className="candidate-name">{employee.full_name}</span>
+                    <span className="candidate-pos">
+                      {employee.position_text || '—'}
+                    </span>
                   </div>
+
                   <div className="candidate-badge-mini">
-                    <span className="badge-ci">{ci}</span>
+                    <span className={`badge-ci level-badge-${level.lv}`}>
+                      {formatScore(employee.total_score)}
+                    </span>
                     <ChevronRight size={16} />
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
         </div>
 
         <div className="profile-display">
-          <div className="profile-card">
-            <div className="profile-header">
-              <div className="profile-avatar">
-                <User size={32} />
+          {loadingAssessment ? (
+            <div className="profile-card">
+              <p>Loading assessment...</p>
+            </div>
+          ) : !selectedAssessment || !selectedEmployee ? (
+            <div className="profile-card">
+              <p>No completed assessment found for this employee.</p>
+            </div>
+          ) : (
+            <div className="profile-card">
+              <div className="profile-header">
+                <div className="profile-avatar">
+                  <User size={32} />
+                </div>
+
+                <div className="profile-title">
+                  <h3>{selectedEmployee.full_name}</h3>
+                  <p>
+                    <Briefcase size={14} className="inline-icon" />{' '}
+                    {selectedEmployee.position_text || '—'} •{' '}
+                    {selectedEmployee.experience_years ?? '—'}{' '}
+                    {assessmentText.yearsExp || 'years'}
+                  </p>
+                </div>
               </div>
-              <div className="profile-title">
-                <h3>{selectedCandidate.name}</h3>
-                <p>
-                  <Briefcase size={14} className="inline-icon" /> {selectedCandidate.position} • {selectedCandidate.experience} {t.assessment.yearsExp}
-                </p>
+
+              <div className="score-summary-box">
+                <div className="score-block">
+                  <span className="block-label">Competence Index (CI)</span>
+                  <span className="block-value text-primary">
+                    {formatScore(currentCI)}
+                  </span>
+                </div>
+
+                <div className="score-block">
+                  <span className="block-label">
+                    {assessmentText.classification || 'Classification'}
+                  </span>
+                  <span className={`block-value level-tag lv-${currentLevel.lv}`}>
+                    <Award size={20} className="inline-icon" />{' '}
+                    {currentLevel.label}
+                  </span>
+                </div>
+              </div>
+
+              <div className="metrics-section">
+                <h4>
+                  <ShieldAlert size={18} className="inline-icon" />{' '}
+                  {assessmentText.metricsTitle || 'Competency Indicators'}
+                </h4>
+
+                {groupedScores.map((group) => (
+                  <div className="category-group" key={group.code}>
+                    <h5>
+                      {group.nameVi || group.name} ({group.code})
+                    </h5>
+
+                    {group.scores
+                      .sort((a, b) => a.indicator.sort_order - b.indicator.sort_order)
+                      .map((score) => {
+                        const indicator = score.indicator;
+                        const normalizedScore = Number(score.normalized_score || 0);
+                        const label =
+                          indicator.name_vi ||
+                          indicator.name ||
+                          indicator.code;
+
+                        return (
+                          <div className="metric-row" key={score.id}>
+                            <div className="metric-info">
+                              <span>
+                                {indicator.code}. {label}
+                              </span>
+                              <span>{formatScore(normalizedScore)}/100</span>
+                            </div>
+
+                            <div className="progress-bar-bg">
+                              <div
+                                className={`progress-bar-fill ${getGroupColor(group.code)}`}
+                                style={{ width: `${Math.min(100, Math.max(0, normalizedScore))}%` }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                ))}
               </div>
             </div>
-
-            <div className="score-summary-box">
-              <div className="score-block">
-                <span className="block-label">Competence Index (CI)</span>
-                <span className="block-value text-primary">{currentCI}</span>
-              </div>
-              <div className="score-block">
-                <span className="block-label">{t.assessment.classification}</span>
-                <span className={`block-value level-tag lv-${currentLevel.lv}`}>
-                  <Award size={20} className="inline-icon" /> {currentLevel.label}
-                </span>
-              </div>
-            </div>
-
-            <div className="metrics-section">
-              <h4><ShieldAlert size={18} className="inline-icon" /> {t.assessment.metricsTitle}</h4>
-              
-              <div className="category-group">
-                <h5>{t.assessment.categories.workplace}</h5>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.risk}</span><span>{selectedCandidate.scores.workplace.risk}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace.risk}%` }}></div></div>
-                </div>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.emergency}</span><span>{selectedCandidate.scores.workplace.emergency}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace.emergency}%` }}></div></div>
-                </div>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.hygiene}</span><span>{selectedCandidate.scores.workplace.hygiene}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-green" style={{ width: `${selectedCandidate.scores.workplace.hygiene}%` }}></div></div>
-                </div>
-              </div>
-
-              <div className="category-group">
-                <h5>{t.assessment.categories.equipment}</h5>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.operation}</span><span>{selectedCandidate.scores.equipment.operation}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment.operation}%` }}></div></div>
-                </div>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.ppe}</span><span>{selectedCandidate.scores.equipment.ppe}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment.ppe}%` }}></div></div>
-                </div>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.maintenance}</span><span>{selectedCandidate.scores.equipment.maintenance}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-blue" style={{ width: `${selectedCandidate.scores.equipment.maintenance}%` }}></div></div>
-                </div>
-              </div>
-
-              <div className="category-group">
-                <h5>{t.assessment.categories.human}</h5>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.health}</span><span>{selectedCandidate.scores.human.health}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human.health}%` }}></div></div>
-                </div>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.focus}</span><span>{selectedCandidate.scores.human.focus}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human.focus}%` }}></div></div>
-                </div>
-                <div className="metric-row">
-                  <div className="metric-info"><span>{t.assessment.metrics.teamwork}</span><span>{selectedCandidate.scores.human.teamwork}/100</span></div>
-                  <div className="progress-bar-bg"><div className="progress-bar-fill bg-orange" style={{ width: `${selectedCandidate.scores.human.teamwork}%` }}></div></div>
-                </div>
-              </div>
-
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

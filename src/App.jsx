@@ -9,6 +9,7 @@ import Assessment from './components/Assessment';
 import { en } from './locales/en';
 import { vi } from './locales/vi';
 import { ru } from './locales/ru';
+import SupabaseConnectionTest from './components/SupabaseConnectionTest';
 import './App.css';
 
 function App() {
@@ -25,7 +26,6 @@ function App() {
           currentLang={currentLang}
           changeLanguage={setCurrentLang}
         />
-
         <Routes>
           <Route
             path="/"
