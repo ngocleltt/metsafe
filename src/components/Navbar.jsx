@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import './styles/Navbar.css';
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png'; 
-import { BarChart3, Newspaper, Menu, X, UserCircle, ChevronDown, LogOut } from 'lucide-react';
+import logo from '../assets/logo.png';
+import {
+  BarChart3,
+  Newspaper,
+  Menu,
+  X,
+  UserCircle,
+  ChevronDown,
+  LogOut
+} from 'lucide-react';
 import AuthModal from './AuthModal';
+import { useAuth } from '../context/AuthContext';
 import './styles/theme.css';
 
 const Navbar = ({ t, currentLang, changeLanguage }) => {
@@ -11,9 +20,8 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('An Bình');
+
+  const { user, profile, logout, loading } = useAuth();
 
   const languages = [
     { code: 'vi', flag: '🇻🇳', label: 'Tiếng Việt' },
@@ -21,99 +29,196 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
     { code: 'ru', flag: '🇷🇺', label: 'Русский' }
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoggedIn(true);
-    setIsAuthOpen(false);
+  const handleLanguageChange = (languageCode) => {
+    changeLanguage(languageCode);
+    setIsLangOpen(false);
+    setIsMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleNavClick = () => {
+    setIsMenuOpen(false);
+    setIsLangOpen(false);
   };
+
+  const handleLogout = async () => {
+    await logout();
+    setIsMenuOpen(false);
+  };
+
+  const openLoginModal = () => {
+    setAuthMode('login');
+    setIsAuthOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const displayName =
+    profile?.full_name ||
+    user?.user_metadata?.full_name ||
+    user?.email ||
+    'User';
 
   return (
     <nav className="metsafe-navbar">
       <div className="nav-container">
-        <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>
-          <img src={logo} alt="METSAFE Logo" className="nav-logo-img" />
+        <Link
+          to="/"
+          className="nav-logo"
+          style={{ textDecoration: 'none' }}
+          onClick={handleNavClick}
+        >
+          <img
+            src={logo}
+            alt="METSAFE Logo"
+            className="nav-logo-img"
+          />
         </Link>
 
-        <div className="mobile-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <button
+          type="button"
+          className="mobile-icon"
+          onClick={() => setIsMenuOpen((value) => !value)}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMenuOpen}
+        >
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </div>
+        </button>
 
-        <div className={`nav-menu-wrapper ${isMenuOpen ? 'active' : ''}`}>
+        <div
+          className={`nav-menu-wrapper ${
+            isMenuOpen ? 'active' : ''
+          }`}
+        >
           <ul className="nav-links">
             <li>
-              <Link to="/" className="nav-item">
+              <Link
+                to="/"
+                className="nav-item"
+                onClick={handleNavClick}
+              >
                 <Newspaper size={18} />
                 <span>{t?.nav?.home || 'Home'}</span>
               </Link>
             </li>
+
             <li>
-              <Link to="/assessment" className="nav-item">
+              <Link
+                to="/assessment"
+                className="nav-item"
+                onClick={handleNavClick}
+              >
                 <BarChart3 size={18} />
-                <span>{t?.nav?.assessment || 'CI Assessment'}</span>
+                <span>
+                  {t?.nav?.assessment || 'CI Assessment'}
+                </span>
               </Link>
             </li>
           </ul>
 
           <div className="nav-right-group">
             <div className="lang-dropdown-container">
-              <button className="lang-dropdown-btn" onClick={() => setIsLangOpen(!isLangOpen)}>
-                <span>{languages.find(l => l.code === currentLang)?.flag}</span>
-                <span className={`arrow ${isLangOpen ? 'rotate' : ''}`}>
+              <button
+                type="button"
+                className="lang-dropdown-btn"
+                onClick={() => setIsLangOpen((value) => !value)}
+                aria-label="Select language"
+                aria-expanded={isLangOpen}
+              >
+                <span>
+                  {
+                    languages.find(
+                      (language) => language.code === currentLang
+                    )?.flag
+                  }
+                </span>
+
+                <span
+                  className={`arrow ${
+                    isLangOpen ? 'rotate' : ''
+                  }`}
+                >
                   <ChevronDown size={16} />
                 </span>
               </button>
 
               {isLangOpen && (
                 <div className="lang-dropdown-menu">
-                  {languages.map((lang) => (
-                    <div 
-                      key={lang.code}
-                      className={`lang-option ${currentLang === lang.code ? 'selected' : ''}`}
-                      onClick={() => {
-                        changeLanguage(lang.code);
-                        setIsLangOpen(false);
-                      }}
+                  {languages.map((language) => (
+                    <button
+                      type="button"
+                      key={language.code}
+                      className={`lang-option ${
+                        currentLang === language.code
+                          ? 'selected'
+                          : ''
+                      }`}
+                      onClick={() =>
+                        handleLanguageChange(language.code)
+                      }
                     >
-                      <span>{lang.flag}</span>
-                      <span>{lang.label}</span>
-                    </div>
+                      <span>{language.flag}</span>
+                      <span>{language.label}</span>
+                    </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {isLoggedIn ? (
+            {loading ? (
+              <div className="auth-loading">
+                <span>Loading...</span>
+              </div>
+            ) : user ? (
               <div className="user-profile-group">
                 <div className="user-info">
-                  <UserCircle size={22} className="user-avatar" />
-                  <span className="username-text">{username}</span>
+                  <UserCircle
+                    size={22}
+                    className="user-avatar"
+                  />
+
+                  <div className="user-text-wrapper">
+                    <span className="username-text">
+                      {displayName}
+                    </span>
+
+                    {profile?.role && (
+                      <small className="user-role-text">
+                        {profile.role}
+                      </small>
+                    )}
+                  </div>
                 </div>
-                <button className="logout-btn" onClick={handleLogout}>
+
+                <button
+                  type="button"
+                  className="logout-btn"
+                  onClick={handleLogout}
+                  title="Logout"
+                  aria-label="Logout"
+                >
                   <LogOut size={16} />
                 </button>
               </div>
             ) : (
-              <button className="login-btn" onClick={() => { setIsAuthOpen(true); setAuthMode('login'); }}>
+              <button
+                type="button"
+                className="login-btn"
+                onClick={openLoginModal}
+              >
                 <UserCircle size={20} />
-                <span>{t?.nav?.login || 'Login / Signup'}</span>
+                <span>
+                  {t?.nav?.login || 'Login / Signup'}
+                </span>
               </button>
             )}
           </div>
         </div>
       </div>
 
-      <AuthModal 
+      <AuthModal
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
         authMode={authMode}
         setAuthMode={setAuthMode}
-        showPassword={showPassword}
-        setShowPassword={setShowPassword}
-        onSubmit={handleSubmit}
         t={t}
       />
     </nav>

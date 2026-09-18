@@ -10,6 +10,7 @@ import { en } from './locales/en';
 import { vi } from './locales/vi';
 import { ru } from './locales/ru';
 import SupabaseConnectionTest from './components/SupabaseConnectionTest';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -40,7 +41,14 @@ function App() {
             }
           />
 
-          <Route path="/assessment" element={<Assessment t={t} />} />
+          <Route
+            path="/assessment"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Assessment t={t} />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
 
         <Footer t={t} />
