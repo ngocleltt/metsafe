@@ -1,35 +1,70 @@
 :root {
-  --primary-color: #2e7d32;    
-  --accent-color: #f7941d;     
-  --secondary-color: #1b5e20;  
-  --bg-light: #f1f8e9;
-  --text-dark: #1b5e20;
-  --white: #ffffff;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-width: 260px;
+  --header-height: 76px;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
+  overflow-x: hidden;
+}
+
+.metsafe-app {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.metsafe-content {
+  width: calc(100% - var(--sidebar-width));
+  min-width: 0;
+  min-height: calc(100vh - var(--header-height));
+  margin-left: var(--sidebar-width);
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.metsafe-content > * {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
   margin: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
+  box-sizing: border-box;
 }
 
-.cta-button {
-  padding: 15px 35px;
-  font-size: 1.1rem;
-  background-color: var(--accent-color);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 4px 15px rgba(247, 148, 29, 0.3);
+.hero-shell,
+.about-manifesto-container,
+.news-shell,
+.assessment-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.cta-button:hover {
-  background-color: #e68510;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(247, 148, 29, 0.5);
+.metsafe-footer {
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 72px;
+  }
+
+  .metsafe-content,
+  .metsafe-footer {
+    width: 100%;
+    margin-left: 0;
+  }
 }
