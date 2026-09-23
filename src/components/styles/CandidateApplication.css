@@ -1,0 +1,519 @@
+.candidate-application-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 38px 34px 60px;
+  box-sizing: border-box;
+}
+
+.candidate-application-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 27px;
+}
+
+.candidate-application-eyebrow,
+.candidate-application-card-kicker {
+  display: block;
+  color: var(--color-text-soft);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.candidate-application-eyebrow {
+  margin-bottom: 7px;
+}
+
+.candidate-application-header h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.8rem, 4vw, 2.45rem);
+}
+
+.candidate-application-header p {
+  max-width: 620px;
+  margin: 9px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.candidate-application-refresh-button,
+.candidate-application-primary-button,
+.candidate-application-next-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 41px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.candidate-application-refresh-button {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.candidate-application-refresh-button:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.candidate-application-primary-button,
+.candidate-application-next-button {
+  border: 0;
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.candidate-application-primary-button:hover,
+.candidate-application-next-button:hover {
+  background: var(--color-primary-dark);
+}
+
+.candidate-application-refresh-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.is-spinning {
+  animation: candidate-application-spin 0.9s linear infinite;
+}
+
+@keyframes candidate-application-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.candidate-application-error,
+.candidate-application-error-card {
+  color: #a22a2a;
+}
+
+.candidate-application-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 11px;
+  background: #fff0f0;
+  font-size: 0.84rem;
+}
+
+.candidate-application-error-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  padding: 30px;
+  text-align: center;
+}
+
+.candidate-application-error-card h1 {
+  margin: 15px 0 8px;
+  color: var(--color-text);
+  font-size: 1.3rem;
+}
+
+.candidate-application-error-card p {
+  max-width: 480px;
+  margin: 0 0 20px;
+  color: var(--color-text-muted);
+}
+
+.candidate-application-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  color: var(--color-text-muted);
+}
+
+.candidate-application-status-card {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 21px;
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 27px rgba(27, 94, 32, 0.05);
+}
+
+.candidate-application-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 51px;
+  height: 51px;
+  flex: 0 0 51px;
+  border-radius: 15px;
+  color: #a05a1f;
+  background: #fff0df;
+}
+
+.candidate-application-status-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.candidate-application-status-content > span {
+  color: var(--color-text-soft);
+  font-size: 0.76rem;
+}
+
+.candidate-application-status-content h2 {
+  margin: 4px 0 5px;
+  color: var(--color-text);
+  font-size: 1.35rem;
+}
+
+.candidate-application-status-content p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.candidate-application-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 29px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-pending,
+.status-under_review {
+  color: #9b4d16;
+  background: #fff0df;
+}
+
+.status-approved,
+.status-accepted {
+  color: #176b2a;
+  background: #e5f6e8;
+}
+
+.status-rejected,
+.status-withdrawn {
+  color: #a22a2a;
+  background: #ffe9e9;
+}
+
+.candidate-application-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.candidate-application-card {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid var(--color-border);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 11px 28px rgba(27, 94, 32, 0.05);
+}
+
+.candidate-application-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 21px;
+}
+
+.candidate-application-card-heading > svg {
+  color: var(--color-primary);
+}
+
+.candidate-application-card-kicker {
+  margin-bottom: 6px;
+}
+
+.candidate-application-card-heading h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.1rem;
+}
+
+.candidate-application-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.candidate-application-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 77px;
+  color: var(--color-text-soft);
+}
+
+.candidate-application-step-marker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  color: #ffffff;
+  background: #ffffff;
+}
+
+.candidate-application-step-marker > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+}
+
+.candidate-application-step.is-complete
+  .candidate-application-step-marker {
+  border-color: var(--color-primary);
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.candidate-application-step.is-current
+  .candidate-application-step-marker {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.1);
+}
+
+.candidate-application-step-content {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.candidate-application-step-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.candidate-application-step-title strong {
+  color: var(--color-text);
+  font-size: 0.87rem;
+}
+
+.candidate-application-step-title small {
+  color: var(--color-text-soft);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.candidate-application-step-content p {
+  max-width: 440px;
+  margin: 5px 0 0;
+  color: var(--color-text-soft);
+  font-size: 0.77rem;
+  line-height: 1.45;
+}
+
+.candidate-application-step-line {
+  position: absolute;
+  top: 29px;
+  bottom: -10px;
+  left: 13px;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.candidate-application-step.is-complete
+  .candidate-application-step-line {
+  background: var(--color-primary);
+}
+
+.candidate-application-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.candidate-application-detail {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(27, 94, 32, 0.09);
+}
+
+.candidate-application-detail:last-child {
+  border-bottom: 0;
+}
+
+.candidate-application-detail-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 9px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.candidate-application-detail > div:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.candidate-application-detail span {
+  color: var(--color-text-soft);
+  font-size: 0.72rem;
+}
+
+.candidate-application-detail strong {
+  color: var(--color-text);
+  font-size: 0.83rem;
+  overflow-wrap: anywhere;
+}
+
+.candidate-application-next-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 21px 23px;
+  border: 1px solid rgba(27, 94, 32, 0.16);
+  border-radius: 19px;
+  background: var(--color-primary-soft);
+}
+
+.candidate-application-next-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.candidate-application-next-step > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+
+.candidate-application-next-step span {
+  color: var(--color-primary);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.candidate-application-next-step h2 {
+  margin: 5px 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.candidate-application-next-step p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .candidate-application-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .candidate-application-page {
+    padding: 28px 20px 50px;
+  }
+
+  .candidate-application-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .candidate-application-refresh-button {
+    width: fit-content;
+  }
+
+  .candidate-application-status-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .candidate-application-status-badge {
+    margin-left: 68px;
+  }
+
+  .candidate-application-next-step {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .candidate-application-next-button {
+    width: 100%;
+    margin-left: 56px;
+  }
+}
+
+@media (max-width: 520px) {
+  .candidate-application-page {
+    padding: 22px 15px 42px;
+  }
+
+  .candidate-application-card {
+    padding: 19px 16px;
+  }
+
+  .candidate-application-status-card {
+    padding: 18px;
+  }
+
+  .candidate-application-status-badge {
+    margin-left: 0;
+  }
+
+  .candidate-application-next-step {
+    padding: 18px;
+  }
+
+  .candidate-application-next-button {
+    margin-left: 0;
+  }
+
+  .candidate-application-step-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+}

@@ -22,6 +22,7 @@ import AdminCandidates from './pages/admin/AdminCandidates';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
 import CandidateDashboard from './pages/candidate/CandidateDashboard';
+import CandidateApplication from './pages/candidate/CandidateApplication';
 
 import { en } from './locales/en';
 import { vi } from './locales/vi';
@@ -177,6 +178,15 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="candidate/application"
+          element={
+            <ProtectedRoute allowedRoles={['candidate']}>
+              <CandidateApplication />
+            </ProtectedRoute>
+          }
+        />
+        
       </Route>
 
       <Route
