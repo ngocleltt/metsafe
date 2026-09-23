@@ -17,6 +17,8 @@ import DashboardLayout from './layouts/DashboardLayout';
 import WelcomePage from './pages/WelcomePage';
 import Dashboard from './pages/Dashboard';
 
+import AdminEmployees from './pages/admin/AdminEmployees';
+
 import { en } from './locales/en';
 import { vi } from './locales/vi';
 import { ru } from './locales/ru';
@@ -124,6 +126,15 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <AdminPage t={t} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="admin/employees"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminEmployees />
             </ProtectedRoute>
           }
         />
