@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './styles/AuthModal.css';
 import './styles/theme.css';
 import {
@@ -29,6 +30,8 @@ const AuthModal = ({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const navigate = useNavigate();
 
   const authText = t?.auth || {};
   const isLogin = authMode === 'login';
@@ -115,6 +118,7 @@ const AuthModal = ({
 
         resetForm();
         onClose();
+        navigate('/dashboard', { replace: true });
         return;
       }
 
@@ -138,11 +142,9 @@ const AuthModal = ({
       }
 
       if (data.session) {
-        setForm(initialForm);
-        setShowPassword(false);
-        setError('');
-        setSuccess('');
+        resetForm();
         onClose();
+        navigate('/dashboard', { replace: true });
       } else {
         setForm(initialForm);
         setShowPassword(false);

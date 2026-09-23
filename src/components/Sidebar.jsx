@@ -18,11 +18,11 @@ import './styles/Sidebar.css';
 const Sidebar = ({ t, isOpen, onClose }) => {
   const { user, profile } = useAuth();
 
-  const role = user ? profile?.role : 'guest';
+  const role = user ? profile?.role : null;
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && isOpen) {
         onClose();
       }
     };
@@ -32,15 +32,18 @@ const Sidebar = ({ t, isOpen, onClose }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose]);
+  }, [isOpen, onClose]);
+
+  if (!user || !profile?.role) {
+    return null;
+  }
 
   const commonItems = [
     {
       key: 'home',
       path: '/',
       label: t?.nav?.home || 'Home',
-      icon: LayoutDashboard,
-      roles: ['guest', 'admin', 'employee', 'candidate']
+      icon: LayoutDashboard
     }
   ];
 
@@ -71,6 +74,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
         icon: UserRoundSearch
       }
     ],
+
     employee: [
       {
         key: 'dashboard',
@@ -97,6 +101,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
         icon: BookOpen
       }
     ],
+
     candidate: [
       {
         key: 'dashboard',
@@ -191,11 +196,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
 
         <div className="sidebar-footer">
           <UserRound size={16} />
-          <span>
-            {role === 'guest'
-              ? 'Public area'
-              : profile?.role}
-          </span>
+          <span>{role}</span>
         </div>
       </aside>
     </>

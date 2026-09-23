@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/Navbar.css';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -13,8 +13,14 @@ import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
 import './styles/theme.css';
 
-const Navbar = ({ t, currentLang, changeLanguage }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Navbar = ({
+  t,
+  currentLang,
+  changeLanguage,
+  isSidebarOpen,
+  onOpenSidebar,
+  onCloseSidebar
+}) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
@@ -28,8 +34,11 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
   ];
 
   const handleCloseMenus = () => {
-    setIsMenuOpen(false);
     setIsLangOpen(false);
+
+    if (onCloseSidebar) {
+      onCloseSidebar();
+    }
   };
 
   const handleLanguageChange = (languageCode) => {
@@ -74,16 +83,30 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
           />
         </Link>
 
-        <button
-          type="button"
-          className="mobile-icon"
-          onClick={() => setIsMenuOpen((value) => !value)}
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={isMenuOpen}
-          aria-controls="metsafe-sidebar"
-        >
-          {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
-        </button>
+        {user && !loading && (
+          <button
+            type="button"
+            className="mobile-icon"
+            onClick={() => {
+              if (isSidebarOpen) {
+                onCloseSidebar();
+              } else {
+                onOpenSidebar();
+              }
+            }}
+            aria-label={
+              isSidebarOpen ? 'Close menu' : 'Open menu'
+            }
+            aria-expanded={isSidebarOpen}
+            aria-controls="metsafe-sidebar"
+          >
+            {isSidebarOpen ? (
+              <X size={26} />
+            ) : (
+              <Menu size={26} />
+            )}
+          </button>
+        )}
 
         <div className="nav-right-group">
           <div className="lang-dropdown-container">
@@ -95,9 +118,11 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
               aria-expanded={isLangOpen}
             >
               <span>
-                {languages.find(
-                  (language) => language.code === currentLang
-                )?.flag}
+                {
+                  languages.find(
+                    (language) => language.code === currentLang
+                  )?.flag
+                }
               </span>
 
               <span
@@ -174,6 +199,7 @@ const Navbar = ({ t, currentLang, changeLanguage }) => {
               onClick={openLoginModal}
             >
               <UserCircle size={20} />
+
               <span>
                 {t?.nav?.login || 'Login / Signup'}
               </span>

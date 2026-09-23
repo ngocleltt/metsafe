@@ -1,4 +1,9 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
@@ -40,21 +45,33 @@ export function AuthProvider({ children }) {
       if (!mounted) return;
 
       const currentUser = session?.user || null;
+
       setUser(currentUser);
       await loadProfile(currentUser);
-      setLoading(false);
+
+      if (mounted) {
+        setLoading(false);
+      }
     }
 
     initializeAuth();
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       const currentUser = session?.user || null;
 
       setUser(currentUser);
-      await loadProfile(currentUser);
-      setLoading(false);
+
+      window.setTimeout(async () => {
+        if (!mounted) return;
+
+        await loadProfile(currentUser);
+
+        if (mounted) {
+          setLoading(false);
+        }
+      }, 0);
     });
 
     return () => {

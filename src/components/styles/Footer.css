@@ -1,15 +1,18 @@
 .metsafe-footer {
+  width: 100%;
+  margin-left: 0;
+}
+
+.app-authenticated .metsafe-footer {
   width: calc(100% - var(--sidebar-width));
-  margin-top: 64px;
   margin-left: var(--sidebar-width);
+}
 
-  box-sizing: border-box;
-
-  background: var(--surface-color);
-  color: var(--text-main);
-
-  border-top: 1px solid var(--border-color);
-  font-family: inherit;
+@media (max-width: 768px) {
+  .app-authenticated .metsafe-footer {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .footer-container {

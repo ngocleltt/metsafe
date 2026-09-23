@@ -25,10 +25,10 @@ body {
 }
 
 .metsafe-content {
-  width: calc(100% - var(--sidebar-width));
+  width: 100%;
   min-width: 0;
   min-height: calc(100vh - var(--header-height));
-  margin-left: var(--sidebar-width);
+  margin-left: 0;
   padding: 0;
   box-sizing: border-box;
 }
@@ -39,6 +39,29 @@ body {
   min-width: 0;
   margin: 0;
   box-sizing: border-box;
+}
+.app-authenticated .metsafe-content {
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+}
+
+.metsafe-footer {
+  width: 100%;
+  margin-left: 0;
+  box-sizing: border-box;
+}
+
+.app-authenticated .metsafe-footer {
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+}
+
+@media (max-width: 768px) {
+  .app-authenticated .metsafe-content,
+  .app-authenticated .metsafe-footer {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .hero-shell,
@@ -52,19 +75,13 @@ body {
 }
 
 .metsafe-footer {
-  width: calc(100% - var(--sidebar-width));
-  margin-left: var(--sidebar-width);
+  width: 100%;
+  margin-left: 0;
   box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
   :root {
     --header-height: 72px;
-  }
-
-  .metsafe-content,
-  .metsafe-footer {
-    width: 100%;
-    margin-left: 0;
   }
 }

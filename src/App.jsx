@@ -1,105 +1,169 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import News from './components/News';
-import AboutProject from './components/AboutProject';
-import Footer from './components/Footer';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate
+} from 'react-router-dom';
+
+import ProtectedRoute from './components/ProtectedRoute';
 import Assessment from './components/Assessment';
+
+import WelcomeLayout from './layouts/WelcomeLayout';
+import DashboardLayout from './layouts/DashboardLayout';
+
+import WelcomePage from './pages/WelcomePage';
+import Dashboard from './pages/Dashboard';
+
 import { en } from './locales/en';
 import { vi } from './locales/vi';
 import { ru } from './locales/ru';
-import Sidebar from './components/Sidebar';
-import ProtectedRoute from './components/ProtectedRoute';
+
+import { useAuth } from './context/AuthContext';
+
 import './App.css';
 
-function App() {
+const AdminPage = ({ t }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="dashboard-page">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome to the METSAFE administration area.</p>
+
+      <button
+        type="button"
+        onClick={() => navigate('/dashboard/assessment')}
+      >
+        Open Assessment Management
+      </button>
+    </div>
+  );
+};
+
+const EmployeePage = () => {
+  return (
+    <div className="dashboard-page">
+      <h1>Employee Dashboard</h1>
+      <p>
+        Personal competence and safety workspace coming soon.
+      </p>
+    </div>
+  );
+};
+
+const CandidatePage = () => {
+  return (
+    <div className="dashboard-page">
+      <h1>Candidate Dashboard</h1>
+      <p>
+        Recruitment and testing workspace coming soon.
+      </p>
+    </div>
+  );
+};
+
+const AppRoutes = () => {
   const [currentLang, setCurrentLang] = useState('en');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useAuth();
 
   const translations = { en, vi, ru };
   const t = translations[currentLang];
 
   return (
+    <Routes>
+      <Route
+        element={
+          <WelcomeLayout
+            t={t}
+            currentLang={currentLang}
+            changeLanguage={setCurrentLang}
+          />
+        }
+      >
+        <Route
+          path="/"
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <WelcomePage t={t} />
+            )
+          }
+        />
+      </Route>
+
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout
+              t={t}
+              currentLang={currentLang}
+              changeLanguage={setCurrentLang}
+            />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Dashboard t={t} />} />
+
+        <Route
+          path="admin"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPage t={t} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="assessment"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <Assessment t={t} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="employee"
+          element={
+            <ProtectedRoute allowedRoles={['employee']}>
+              <EmployeePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="candidate"
+          element={
+            <ProtectedRoute allowedRoles={['candidate']}>
+              <CandidatePage />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
+
+      <Route
+        path="*"
+        element={
+          <Navigate
+            to={user ? '/dashboard' : '/'}
+            replace
+          />
+        }
+      />
+    </Routes>
+  );
+};
+
+const App = () => {
+  return (
     <Router>
-      <div className="metsafe-app">
-        <Navbar
-          t={t}
-          currentLang={currentLang}
-          changeLanguage={setCurrentLang}
-          onOpenSidebar={() => setIsSidebarOpen(true)}
-        />
-
-        <Sidebar
-          t={t}
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
-
-        <main className="metsafe-content">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <Hero t={t} />
-
-                  <section className="metsafe-main">
-                    <AboutProject t={t} />
-                    <News t={t} />
-                  </section>
-                </>
-              }
-            />
-
-            <Route
-              path="/assessment"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <Assessment t={t} />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <div className="placeholder-page">
-                    Admin Dashboard coming soon...
-                  </div>
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/employee"
-              element={
-                <ProtectedRoute allowedRoles={['employee']}>
-                  <div className="placeholder-page">
-                    Employee Dashboard coming soon...
-                  </div>
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/candidate"
-              element={
-                <ProtectedRoute allowedRoles={['candidate']}>
-                  <div className="placeholder-page">
-                    Candidate Dashboard coming soon...
-                  </div>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </main>
-
-        <Footer t={t} />
-      </div>
+      <AppRoutes />
     </Router>
   );
-}
+};
 
 export default App;
