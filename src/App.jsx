@@ -21,6 +21,8 @@ import AdminEmployees from './pages/admin/AdminEmployees';
 import AdminCandidates from './pages/admin/AdminCandidates';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
+import CandidateDashboard from './pages/candidate/CandidateDashboard';
+
 import { en } from './locales/en';
 import { vi } from './locales/vi';
 import { ru } from './locales/ru';
@@ -171,7 +173,7 @@ const AppRoutes = () => {
           path="candidate"
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
-              <CandidatePage />
+              <CandidateDashboard  />
             </ProtectedRoute>
           }
         />
