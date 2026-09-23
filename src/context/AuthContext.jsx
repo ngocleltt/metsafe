@@ -16,41 +16,80 @@ export function AuthProvider({ children }) {
   async function loadProfile(currentUser) {
     if (!currentUser) {
       setProfile(null);
-      return;
+      return null;
     }
 
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, full_name, email, role, is_active')
+      .select(`
+        id,
+        full_name,
+        email,
+        phone,
+        role,
+        is_active,
+        candidate_id,
+        employee_id
+      `)
       .eq('id', currentUser.id)
       .maybeSingle();
 
     if (error) {
       console.error('Profile loading error:', error);
       setProfile(null);
-      return;
+      return null;
     }
 
     setProfile(data);
+    return data;
+  }
+
+  async function refreshProfile() {
+    const currentUser = user;
+
+    if (!currentUser) {
+      setProfile(null);
+      return null;
+    }
+
+    return loadProfile(currentUser);
   }
 
   useEffect(() => {
     let mounted = true;
 
     async function initializeAuth() {
-      const {
-        data: { session }
-      } = await supabase.auth.getSession();
+      try {
+        const {
+          data: { session },
+          error: sessionError
+        } = await supabase.auth.getSession();
 
-      if (!mounted) return;
+        if (sessionError) {
+          throw sessionError;
+        }
 
-      const currentUser = session?.user || null;
+        if (!mounted) return;
 
-      setUser(currentUser);
-      await loadProfile(currentUser);
+        const currentUser = session?.user || null;
 
-      if (mounted) {
-        setLoading(false);
+        setUser(currentUser);
+        await loadProfile(currentUser);
+
+        if (mounted) {
+          setLoading(false);
+        }
+      } catch (authError) {
+        console.error(
+          'Authentication initialization error:',
+          authError
+        );
+
+        if (mounted) {
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+        }
       }
     }
 
@@ -58,21 +97,23 @@ export function AuthProvider({ children }) {
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      const currentUser = session?.user || null;
+    } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        const currentUser = session?.user || null;
 
-      setUser(currentUser);
+        setUser(currentUser);
 
-      window.setTimeout(async () => {
-        if (!mounted) return;
+        window.setTimeout(async () => {
+          if (!mounted) return;
 
-        await loadProfile(currentUser);
+          await loadProfile(currentUser);
 
-        if (mounted) {
-          setLoading(false);
-        }
-      }, 0);
-    });
+          if (mounted) {
+            setLoading(false);
+          }
+        }, 0);
+      }
+    );
 
     return () => {
       mounted = false;
@@ -87,7 +128,11 @@ export function AuthProvider({ children }) {
 
     if (error) {
       console.error('Logout error:', error);
+      return;
     }
+
+    setUser(null);
+    setProfile(null);
   }
 
   return (
@@ -96,6 +141,7 @@ export function AuthProvider({ children }) {
         user,
         profile,
         loading,
+        refreshProfile,
         isAdmin: profile?.role === 'admin',
         isEmployee: profile?.role === 'employee',
         isCandidate: profile?.role === 'candidate',
