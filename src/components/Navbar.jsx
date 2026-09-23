@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './styles/Navbar.css';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -68,11 +68,13 @@ const Navbar = ({
     candidate: 'Candidate'
   }[profile?.role] || '';
 
+  const homePath = user ? '/dashboard' : '/';
+
   return (
     <header className="metsafe-navbar">
       <div className="nav-container">
         <Link
-          to="/"
+          to={homePath}
           className="nav-logo"
           onClick={handleCloseMenus}
         >
@@ -163,7 +165,11 @@ const Navbar = ({
             </div>
           ) : user ? (
             <div className="user-profile-group">
-              <div className="user-info">
+              <Link
+                to="/dashboard/profile"
+                className="user-info user-info-link"
+                onClick={handleCloseMenus}
+              >
                 <UserCircle
                   size={22}
                   className="user-avatar"
@@ -180,7 +186,7 @@ const Navbar = ({
                     </small>
                   )}
                 </div>
-              </div>
+              </Link>
 
               <button
                 type="button"

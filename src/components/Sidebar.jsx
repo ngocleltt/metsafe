@@ -44,7 +44,13 @@ const Sidebar = ({ t, isOpen, onClose }) => {
       path: '/',
       label: t?.nav?.home || 'Home',
       icon: LayoutDashboard
-    }
+    },
+    {
+    key: 'profile',
+    path: '/dashboard/profile',
+    label: t?.nav?.profile || 'Profile',
+    icon: UserRound
+  }
   ];
 
   const roleItems = {

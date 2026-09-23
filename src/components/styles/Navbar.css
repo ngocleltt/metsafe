@@ -393,3 +393,12 @@
     gap: 5px;
   }
 }
+.user-info-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-info-link:hover .username-text {
+  color: var(--color-primary);
+}

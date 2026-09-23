@@ -9,6 +9,7 @@ import {
 
 import ProtectedRoute from './components/ProtectedRoute';
 import Assessment from './components/Assessment';
+import Profile from './components/Profile';
 
 import WelcomeLayout from './layouts/WelcomeLayout';
 import DashboardLayout from './layouts/DashboardLayout';
@@ -30,7 +31,9 @@ const AdminPage = ({ t }) => {
   return (
     <div className="dashboard-page">
       <h1>Admin Dashboard</h1>
-      <p>Welcome to the METSAFE administration area.</p>
+      <p>
+        Welcome to the METSAFE administration area.
+      </p>
 
       <button
         type="button"
@@ -106,7 +109,15 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Dashboard t={t} />} />
+        <Route
+          index
+          element={<Dashboard t={t} />}
+        />
+
+        <Route
+          path="profile"
+          element={<Profile />}
+        />
 
         <Route
           path="admin"
