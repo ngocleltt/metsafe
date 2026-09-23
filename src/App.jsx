@@ -23,6 +23,8 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 
 import CandidateDashboard from './pages/candidate/CandidateDashboard';
 import CandidateApplication from './pages/candidate/CandidateApplication';
+import CandidateTests from './pages/candidate/CandidateTests';
+import CandidateTestDetail from './pages/candidate/CandidateTestDetail';
 
 import { en } from './locales/en';
 import { vi } from './locales/vi';
@@ -183,6 +185,22 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
               <CandidateApplication />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="candidate/tests"
+          element={
+            <ProtectedRoute allowedRoles={['candidate']}>
+              <CandidateTests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="candidate/tests/:id"
+          element={
+            <ProtectedRoute allowedRoles={['candidate']}>
+              <CandidateTestDetail />
             </ProtectedRoute>
           }
         />

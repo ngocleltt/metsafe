@@ -127,7 +127,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
       {
         key: 'tests',
         path: '/dashboard/candidate/tests',
-        label: t?.nav?.recruitmentTests || 'Recruitment Tests',
+        label: t?.nav?.myTests || 'My Tests',
         icon: ClipboardCheck
       },
       {
