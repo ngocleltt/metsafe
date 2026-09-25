@@ -646,13 +646,11 @@ const loadAssessmentQuestions = async (assessmentId) => {
     .order('sort_order', { ascending: true });
 
   if (error) {
-    if (error.code === '42P01' || error.code === 'PGRST205') {
-      return [];
-    }
+    console.error('Load assessment questions error:', error);
     throw error;
   }
-
-  return data || [];
+  console.log('Assessment:', assessmentId, 'Questions:', data);
+  return data ?? [];
 };
 
 const getQuestionOptions = (question) => {
