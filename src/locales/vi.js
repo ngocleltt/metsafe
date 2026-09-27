@@ -240,4 +240,45 @@ export const vi = {
     years: "năm",
     actionsFor: "Thao tác với {name}"
   },
+  profile: {
+    userFallback: "Người dùng",
+    eyebrow: "Trang cá nhân",
+    description: "Quản lý thông tin tài khoản METSAFE.",
+    editProfile: "Chỉnh sửa hồ sơ",
+
+    accountInformation: "Thông tin tài khoản",
+    accountDescription: "Cập nhật thông tin hiển thị trên hồ sơ.",
+    cancel: "Hủy",
+    saving: "Đang lưu...",
+    saveChanges: "Lưu thay đổi",
+
+    fullName: "Họ và tên",
+    emailAddress: "Email",
+    emailConfirmation: "Đổi email cần được xác nhận.",
+    phoneNumber: "Số điện thoại",
+    phonePlaceholder: "Nhập số điện thoại",
+    accountRole: "Vai trò",
+    accountStatus: "Trạng thái tài khoản",
+    active: "Đang hoạt động",
+    inactive: "Ngừng hoạt động",
+    notAvailable: "Chưa có thông tin",
+    notProvided: "Chưa cung cấp",
+
+    roleInformation: "Thông tin theo vai trò",
+    roleDescription: "Thông tin dành riêng cho vai trò của bạn trên METSAFE.",
+    candidateCode: "Mã ứng viên",
+    applicationStatus: "Trạng thái ứng tuyển",
+    employeeCode: "Mã nhân viên",
+    department: "Bộ phận",
+    accessLevel: "Quyền truy cập",
+    systemAdministrator: "Quản trị hệ thống",
+    notAvailableYet: "Chưa có dữ liệu",
+
+    messages: {
+      nameRequired: "Vui lòng nhập họ và tên.",
+      sessionUnavailable: "Phiên đăng nhập không khả dụng.",
+      updateFailed: "Không thể cập nhật hồ sơ.",
+      updated: "Đã cập nhật hồ sơ."
+    }
+  },
 };

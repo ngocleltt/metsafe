@@ -240,4 +240,45 @@ export const ru = {
     years: "лет",
     actionsFor: "Действия с сотрудником {name}"
   },
+  profile: {
+    userFallback: "Пользователь",
+    eyebrow: "Профиль",
+    description: "Управление данными учётной записи METSAFE.",
+    editProfile: "Изменить профиль",
+
+    accountInformation: "Данные учётной записи",
+    accountDescription: "Обновите данные, отображаемые в профиле.",
+    cancel: "Отмена",
+    saving: "Сохранение...",
+    saveChanges: "Сохранить",
+
+    fullName: "ФИО",
+    emailAddress: "Электронная почта",
+    emailConfirmation: "Смена адреса требует подтверждения.",
+    phoneNumber: "Номер телефона",
+    phonePlaceholder: "Введите номер телефона",
+    accountRole: "Роль",
+    accountStatus: "Статус учётной записи",
+    active: "Активна",
+    inactive: "Неактивна",
+    notAvailable: "Нет данных",
+    notProvided: "Не указан",
+
+    roleInformation: "Данные по роли",
+    roleDescription: "Информация, связанная с вашей ролью в METSAFE.",
+    candidateCode: "Код кандидата",
+    applicationStatus: "Статус заявки",
+    employeeCode: "Код сотрудника",
+    department: "Отдел",
+    accessLevel: "Уровень доступа",
+    systemAdministrator: "Системный администратор",
+    notAvailableYet: "Пока нет данных",
+
+    messages: {
+      nameRequired: "Укажите ФИО.",
+      sessionUnavailable: "Сеанс пользователя недоступен.",
+      updateFailed: "Не удалось обновить профиль.",
+      updated: "Профиль обновлён."
+    }
+  },
 };

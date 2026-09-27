@@ -253,4 +253,43 @@ export const en = {
     years: "years",
     actionsFor: "Actions for {name}"
   },
+  profile: {
+    userFallback: "User",
+    eyebrow: "Personal profile",
+    description: "Manage your METSAFE account information.",
+    editProfile: "Edit profile",
+
+    accountInformation: "Account information",
+    accountDescription: "Update the information shown on your profile.",
+    cancel: "Cancel",
+    saving: "Saving...",
+    saveChanges: "Save changes",
+
+    fullName: "Full name",
+    emailAddress: "Email address",
+    emailConfirmation: "Email changes require confirmation.",
+    phoneNumber: "Phone number",
+    phonePlaceholder: "Enter a phone number",
+    accountRole: "Account role",
+    accountStatus: "Account status",
+    active: "Active",
+    inactive: "Inactive",
+    notAvailable: "Not available",
+    notProvided: "Not provided",
+    roleInformation: "Role information",
+    roleDescription: "Information specific to your METSAFE role.",
+    candidateCode: "Candidate code",
+    applicationStatus: "Application status",
+    employeeCode: "Employee code",
+    department: "Department",
+    accessLevel: "Access level",
+    systemAdministrator: "System administrator",
+    notAvailableYet: "Not available yet",
+    messages: {
+      nameRequired: "Please enter your full name.",
+      sessionUnavailable: "User session is not available.",
+      updateFailed: "Unable to update your profile.",
+      updated: "Your profile has been updated."
+    }
+  },
 };

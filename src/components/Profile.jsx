@@ -11,17 +11,21 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import './styles/Profile.css';
 
-const Profile = () => {
+const Profile = ({ t }) => {
   const {
     user,
     profile,
     refreshProfile
   } = useAuth();
 
+  const text = t.profile;
+
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+
+  // Lưu mã thông báo thay vì lưu câu tiếng Anh để đổi locale ngay khi chuyển ngôn ngữ.
+  const [errorKey, setErrorKey] = useState('');
+  const [successKey, setSuccessKey] = useState('');
 
   const [form, setForm] = useState({
     fullName: '',
@@ -39,13 +43,11 @@ const Profile = () => {
     profile?.full_name ||
     user?.user_metadata?.full_name ||
     user?.email ||
-    'User';
+    text.userFallback;
 
-  const roleLabel = {
-    admin: 'Administrator',
-    employee: 'Employee',
-    candidate: 'Candidate'
-  }[profile?.role] || 'User';
+  const roleLabel =
+    t.sidebar.roles[profile?.role] ||
+    text.userFallback;
 
   const updateField = (field, value) => {
     setForm((currentForm) => ({
@@ -60,8 +62,8 @@ const Profile = () => {
       phone: profile?.phone || ''
     });
 
-    setError('');
-    setSuccess('');
+    setErrorKey('');
+    setSuccessKey('');
     setIsEditing(false);
   };
 
@@ -72,18 +74,18 @@ const Profile = () => {
     const phone = form.phone.trim();
 
     if (!fullName) {
-      setError('Please enter your full name.');
+      setErrorKey('nameRequired');
       return;
     }
 
     if (!user?.id) {
-      setError('User session is not available.');
+      setErrorKey('sessionUnavailable');
       return;
     }
 
     setSaving(true);
-    setError('');
-    setSuccess('');
+    setErrorKey('');
+    setSuccessKey('');
 
     try {
       const {
@@ -158,15 +160,11 @@ const Profile = () => {
         phone: updatedProfile.phone || ''
       });
 
-      setSuccess('Your profile has been updated.');
+      setSuccessKey('updated');
       setIsEditing(false);
     } catch (saveError) {
       console.error('Profile update error:', saveError);
-
-      setError(
-        saveError?.message ||
-          'Unable to update your profile.'
-      );
+      setErrorKey('updateFailed');
     } finally {
       setSaving(false);
     }
@@ -181,32 +179,31 @@ const Profile = () => {
 
         <div className="profile-heading">
           <span className="profile-eyebrow">
-            Personal profile
+            {text.eyebrow}
           </span>
 
           <h1>{displayName}</h1>
 
-          <p>
-            Manage your METSAFE account information.
-          </p>
+          <p>{text.description}</p>
 
           <span className="profile-role-badge">
-            <ShieldCheck size={15} />
+            <ShieldCheck size={15} aria-hidden="true" />
             {roleLabel}
           </span>
         </div>
+
         {!isEditing && (
           <button
             type="button"
             className="profile-edit-button"
             onClick={() => {
-              setError('');
-              setSuccess('');
+              setErrorKey('');
+              setSuccessKey('');
               setIsEditing(true);
             }}
           >
-            <Pencil size={17} />
-            Edit profile
+            <Pencil size={17} aria-hidden="true" />
+            {text.editProfile}
           </button>
         )}
       </section>
@@ -217,10 +214,8 @@ const Profile = () => {
       >
         <div className="profile-card-heading">
           <div>
-            <h2>Account information</h2>
-            <p>
-              Update the information shown on your profile.
-            </p>
+            <h2>{text.accountInformation}</h2>
+            <p>{text.accountDescription}</p>
           </div>
 
           {isEditing && (
@@ -231,8 +226,8 @@ const Profile = () => {
                 onClick={handleCancel}
                 disabled={saving}
               >
-                <X size={16} />
-                Cancel
+                <X size={16} aria-hidden="true" />
+                {text.cancel}
               </button>
 
               <button
@@ -240,8 +235,10 @@ const Profile = () => {
                 className="profile-save-button"
                 disabled={saving}
               >
-                <Save size={16} />
-                {saving ? 'Saving...' : 'Save changes'}
+                <Save size={16} aria-hidden="true" />
+                {saving
+                  ? text.saving
+                  : text.saveChanges}
               </button>
             </div>
           )}
@@ -250,7 +247,7 @@ const Profile = () => {
         <div className="profile-form-grid">
           <div className="profile-field profile-field-wide">
             <label htmlFor="profile-full-name">
-              Full name
+              {text.fullName}
             </label>
 
             {isEditing ? (
@@ -274,25 +271,25 @@ const Profile = () => {
           </div>
 
           <div className="profile-field">
-            <label htmlFor="profile-email">
-              Email address
-            </label>
+            <span className="profile-field-label">
+              {text.emailAddress}
+            </span>
 
             <div className="profile-value profile-value-muted">
-              <Mail size={16} />
+              <Mail size={16} aria-hidden="true" />
               {user?.email ||
                 profile?.email ||
-                'Not available'}
+                text.notAvailable}
             </div>
 
             <small>
-              Email changes require confirmation.
+              {text.emailConfirmation}
             </small>
           </div>
 
           <div className="profile-field">
             <label htmlFor="profile-phone">
-              Phone number
+              {text.phoneNumber}
             </label>
 
             {isEditing ? (
@@ -306,52 +303,64 @@ const Profile = () => {
                     event.target.value
                   )
                 }
-                placeholder="+84 912 345 678"
+                placeholder={text.phonePlaceholder}
                 disabled={saving}
               />
             ) : (
               <div className="profile-value">
-                <Phone size={16} />
-                {profile?.phone || 'Not provided'}
+                <Phone size={16} aria-hidden="true" />
+                {profile?.phone || text.notProvided}
               </div>
             )}
           </div>
 
           <div className="profile-field">
-            <label>Account role</label>
+            <span className="profile-field-label">
+              {text.accountRole}
+            </span>
 
             <div className="profile-value">
-              <ShieldCheck size={16} />
+              <ShieldCheck size={16} aria-hidden="true" />
               {roleLabel}
             </div>
           </div>
 
           <div className="profile-field">
-            <label>Account status</label>
+            <span className="profile-field-label">
+              {text.accountStatus}
+            </span>
 
             <div
               className={`profile-status ${
-                profile?.is_active
+                profile?.is_active === true
                   ? 'is-active'
                   : 'is-inactive'
               }`}
             >
-              {profile?.is_active
-                ? 'Active'
-                : 'Inactive'}
+              {profile?.is_active === true
+                ? text.active
+                : profile?.is_active === false
+                  ? text.inactive
+                  : text.notAvailable}
             </div>
           </div>
         </div>
 
-        {error && (
-          <p className="profile-message profile-message-error">
-            {error}
+        {errorKey && (
+          <p
+            className="profile-message profile-message-error"
+            role="alert"
+          >
+            {text.messages[errorKey]}
           </p>
         )}
 
-        {success && (
-          <p className="profile-message profile-message-success">
-            {success}
+        {successKey && (
+          <p
+            className="profile-message profile-message-success"
+            role="status"
+          >
+            {text.messages[successKey]}
           </p>
         )}
       </form>
@@ -359,23 +368,21 @@ const Profile = () => {
       <section className="profile-card">
         <div className="profile-card-heading">
           <div>
-            <h2>Role information</h2>
-            <p>
-              Information specific to your METSAFE role.
-            </p>
+            <h2>{text.roleInformation}</h2>
+            <p>{text.roleDescription}</p>
           </div>
         </div>
 
         {profile?.role === 'candidate' && (
           <div className="role-info-grid">
             <div>
-              <span>Candidate code</span>
-              <strong>Not available yet</strong>
+              <span>{text.candidateCode}</span>
+              <strong>{text.notAvailableYet}</strong>
             </div>
 
             <div>
-              <span>Application status</span>
-              <strong>Under review</strong>
+              <span>{text.applicationStatus}</span>
+              <strong>{text.notAvailableYet}</strong>
             </div>
           </div>
         )}
@@ -383,13 +390,13 @@ const Profile = () => {
         {profile?.role === 'employee' && (
           <div className="role-info-grid">
             <div>
-              <span>Employee code</span>
-              <strong>Not available yet</strong>
+              <span>{text.employeeCode}</span>
+              <strong>{text.notAvailableYet}</strong>
             </div>
 
             <div>
-              <span>Department</span>
-              <strong>Not available yet</strong>
+              <span>{text.department}</span>
+              <strong>{text.notAvailableYet}</strong>
             </div>
           </div>
         )}
@@ -397,8 +404,8 @@ const Profile = () => {
         {profile?.role === 'admin' && (
           <div className="role-info-grid">
             <div>
-              <span>Access level</span>
-              <strong>System administrator</strong>
+              <span>{text.accessLevel}</span>
+              <strong>{text.systemAdministrator}</strong>
             </div>
           </div>
         )}
