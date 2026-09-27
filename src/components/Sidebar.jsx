@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.png';
+
 import {
   LayoutDashboard,
   BarChart3,
@@ -14,6 +15,7 @@ import {
   UserRound,
   X
 } from 'lucide-react';
+
 import './styles/Sidebar.css';
 
 const Sidebar = ({ t, isOpen, onClose }) => {
@@ -26,7 +28,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose?.();
       }
     };
 
@@ -37,7 +39,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  if (!user || !profile?.role) {
+  if (!user || !role) {
     return null;
   }
 
@@ -45,13 +47,13 @@ const Sidebar = ({ t, isOpen, onClose }) => {
     {
       key: 'home',
       path: '/dashboard',
-      label: t?.nav?.home || 'Home',
+      label: t.sidebar.home,
       icon: LayoutDashboard
     },
     {
       key: 'profile',
       path: '/dashboard/profile',
-      label: t?.nav?.profile || 'Profile',
+      label: t.sidebar.profile,
       icon: UserRound
     }
   ];
@@ -61,25 +63,25 @@ const Sidebar = ({ t, isOpen, onClose }) => {
       {
         key: 'dashboard',
         path: '/dashboard/admin',
-        label: t?.nav?.dashboard || 'Dashboard',
+        label: t.sidebar.dashboard,
         icon: LayoutDashboard
       },
       {
         key: 'assessments',
         path: '/dashboard/assessment',
-        label: t?.nav?.assessment || 'Assessments',
+        label: t.sidebar.assessments,
         icon: BarChart3
       },
       {
         key: 'employees',
         path: '/dashboard/admin/employees',
-        label: t?.nav?.employees || 'Employees',
+        label: t.sidebar.employees,
         icon: Users
       },
       {
         key: 'candidates',
         path: '/dashboard/admin/candidates',
-        label: t?.nav?.candidates || 'Candidates',
+        label: t.sidebar.candidates,
         icon: UserRoundSearch
       }
     ],
@@ -88,25 +90,25 @@ const Sidebar = ({ t, isOpen, onClose }) => {
       {
         key: 'dashboard',
         path: '/dashboard/employee',
-        label: t?.nav?.myDashboard || 'My Dashboard',
+        label: t.sidebar.myDashboard,
         icon: LayoutDashboard
       },
       {
         key: 'competence',
         path: '/dashboard/employee/competence',
-        label: t?.nav?.myCompetence || 'My Competence',
+        label: t.sidebar.myCompetence,
         icon: Award
       },
       {
         key: 'tests',
         path: '/dashboard/employee/tests',
-        label: t?.nav?.myTests || 'My Tests',
+        label: t.sidebar.myTests,
         icon: ClipboardCheck
       },
       {
         key: 'training',
         path: '/dashboard/employee/training',
-        label: t?.nav?.training || 'Training',
+        label: t.sidebar.training,
         icon: BookOpen
       }
     ],
@@ -115,25 +117,25 @@ const Sidebar = ({ t, isOpen, onClose }) => {
       {
         key: 'dashboard',
         path: '/dashboard/candidate',
-        label: t?.nav?.myDashboard || 'My Dashboard',
+        label: t.sidebar.myDashboard,
         icon: LayoutDashboard
       },
       {
         key: 'application',
         path: '/dashboard/candidate/application',
-        label: t?.nav?.myApplication || 'My Application',
+        label: t.sidebar.myApplication,
         icon: FileText
       },
       {
         key: 'tests',
         path: '/dashboard/candidate/tests',
-        label: t?.nav?.myTests || 'My Tests',
+        label: t.sidebar.myTests,
         icon: ClipboardCheck
       },
       {
         key: 'results',
         path: '/dashboard/candidate/results',
-        label: t?.nav?.myResults || 'My Results',
+        label: t.sidebar.myResults,
         icon: Award
       }
     ]
@@ -151,23 +153,21 @@ const Sidebar = ({ t, isOpen, onClose }) => {
           type="button"
           className="sidebar-overlay"
           onClick={onClose}
-          aria-label="Close navigation"
+          aria-label={t.sidebar.closeNavigation}
         />
       )}
 
       <aside
         id="metsafe-sidebar"
-        className={`metsafe-sidebar ${
-          isOpen ? 'is-open' : ''
-        }`}
-        aria-label="Main navigation"
+        className={`metsafe-sidebar ${isOpen ? 'is-open' : ''}`}
+        aria-label={t.sidebar.mainNavigation}
       >
         <div className="sidebar-header">
           <NavLink
             to="/dashboard"
             className="sidebar-logo"
             onClick={onClose}
-            aria-label="Go to dashboard"
+            aria-label={t.sidebar.goToDashboard}
           >
             <img
               src={logo}
@@ -180,7 +180,7 @@ const Sidebar = ({ t, isOpen, onClose }) => {
             type="button"
             className="sidebar-close-btn"
             onClick={onClose}
-            aria-label="Close navigation"
+            aria-label={t.sidebar.closeNavigation}
           >
             <X size={22} />
           </button>
@@ -195,17 +195,13 @@ const Sidebar = ({ t, isOpen, onClose }) => {
                 <li key={item.key}>
                   <NavLink
                     to={item.path}
-                    end={
-                      item.path === '/dashboard'
-                    }
+                    end={item.path === '/dashboard'}
                     className={({ isActive }) =>
-                      `sidebar-item ${
-                        isActive ? 'active' : ''
-                      }`
+                      `sidebar-item ${isActive ? 'active' : ''}`
                     }
                     onClick={onClose}
                   >
-                    <Icon size={19} />
+                    <Icon size={19} aria-hidden="true" />
                     <span>{item.label}</span>
                   </NavLink>
                 </li>
@@ -215,8 +211,8 @@ const Sidebar = ({ t, isOpen, onClose }) => {
         </nav>
 
         <div className="sidebar-footer">
-          <UserRound size={16} />
-          <span>{role}</span>
+          <UserRound size={16} aria-hidden="true" />
+          <span>{t.sidebar.roles[role] || role}</span>
         </div>
       </aside>
     </>

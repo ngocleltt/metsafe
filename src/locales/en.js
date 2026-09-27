@@ -5,6 +5,28 @@ export const en = {
     seminars: "News & Seminars",
     login: "Login / Signup"
   },
+  sidebar: {
+    home: "Home",
+    profile: "Profile",
+    dashboard: "Dashboard",
+    assessments: "Assessments",
+    employees: "Employees",
+    candidates: "Candidates",
+    myDashboard: "My Dashboard",
+    myCompetence: "My Competence",
+    myTests: "My Tests",
+    training: "Training",
+    myApplication: "My Application",
+    myResults: "My Results",
+    closeNavigation: "Close navigation",
+    mainNavigation: "Main navigation",
+    goToDashboard: "Go to dashboard",
+    roles: {
+      admin: "Administrator",
+      employee: "Employee",
+      candidate: "Candidate"
+    }
+  },
   hero: {
     title: "METSAFE",
     subtitle: "Digital model application for safety optimization and labor accident reduction in metallurgy",
@@ -36,14 +58,11 @@ export const en = {
   aboutProject: {
     tag: "About the Project",
     title: "Safer metallurgy starts with clearer human insight",
-    description:
-      "METSAFE helps industrial teams evaluate competence more clearly, reduce fragmented safety checks, and support better risk prevention through digital assessment.",
+    description: "METSAFE helps industrial teams evaluate competence more clearly, reduce fragmented safety checks, and support better risk prevention through digital assessment.",
     sideLabel: "About Us",
     imageAlt: "Industrial team working in a metallurgy environment",
-    body1:
-      "METSAFE was created to make competence evaluation more structured, visible, and practical in real metallurgical settings. Instead of depending on isolated checks and manual interpretation, the project brings key readiness indicators into one clearer digital framework.",
-    body2:
-      "By combining weighted metrics, operational criteria, and human-factor signals, the platform supports smarter training priorities, stronger supervision, and safer day-to-day decisions across high-risk workplaces."
+    body1: "METSAFE was created to make competence evaluation more structured, visible, and practical in real metallurgical settings. Instead of depending on isolated checks and manual interpretation, the project brings key readiness indicators into one clearer digital framework.",
+    body2: "By combining weighted metrics, operational criteria, and human-factor signals, the platform supports smarter training priorities, stronger supervision, and safer day-to-day decisions across high-risk workplaces."
   },
   footer: {
     description: "Enhancing personnel safety through digital competency evaluation",
