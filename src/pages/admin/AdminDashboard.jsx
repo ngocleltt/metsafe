@@ -13,8 +13,16 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/AdminDashboard.css';
 
-const AdminDashboard = () => {
+const dateLocales = {
+  en: 'en-US',
+  vi: 'vi-VN',
+  ru: 'ru-RU'
+};
+
+const AdminDashboard = ({ t, currentLang }) => {
   const navigate = useNavigate();
+  const text = t.adminDashboard;
+  const candidateText = t.adminCandidates;
 
   const [stats, setStats] = useState({
     totalEmployees: 0,
@@ -136,16 +144,13 @@ const AdminDashboard = () => {
           loadError
         );
 
-        setError(
-          loadError?.message ||
-            'Unable to load admin dashboard data.'
-        );
+        setError(text.loadError);
       } finally {
         setLoading(false);
         setRefreshing(false);
       }
     },
-    []
+    [text.loadError]
   );
 
   useEffect(() => {
@@ -153,15 +158,10 @@ const AdminDashboard = () => {
   }, [loadDashboard]);
 
   const formatStatus = (status) => {
-    if (!status) {
-      return 'Unknown';
-    }
-
-    return status
-      .replaceAll('_', ' ')
-      .replace(/\b\w/g, (character) =>
-        character.toUpperCase()
-      );
+    return (
+      candidateText.statuses[status] ??
+      candidateText.statuses.unknown
+    );
   };
 
   const formatDate = (dateValue) => {
@@ -169,18 +169,27 @@ const AdminDashboard = () => {
       return '—';
     }
 
-    return new Intl.DateTimeFormat('en', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    }).format(new Date(dateValue));
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return '—';
+    }
+
+    return new Intl.DateTimeFormat(
+      dateLocales[currentLang] || 'en-US',
+      {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }
+    ).format(date);
   };
 
   if (loading) {
     return (
       <div className="admin-dashboard-page">
         <div className="admin-dashboard-loading">
-          Loading admin dashboard...
+          {text.loading}
         </div>
       </div>
     );
@@ -191,15 +200,12 @@ const AdminDashboard = () => {
       <header className="admin-dashboard-header">
         <div>
           <span className="admin-dashboard-eyebrow">
-            Administration
+            {text.eyebrow}
           </span>
 
-          <h1>Admin overview</h1>
+          <h1>{text.title}</h1>
 
-          <p>
-            Monitor people, assessments and pending actions
-            across METSAFE.
-          </p>
+          <p>{text.description}</p>
         </div>
 
         <button
@@ -213,9 +219,10 @@ const AdminDashboard = () => {
           <RefreshCw
             size={16}
             className={refreshing ? 'is-spinning' : ''}
+            aria-hidden="true"
           />
 
-          {refreshing ? 'Refreshing...' : 'Refresh data'}
+          {refreshing ? text.refreshing : text.refresh}
         </button>
       </header>
 
@@ -224,7 +231,7 @@ const AdminDashboard = () => {
           className="admin-dashboard-error"
           role="alert"
         >
-          <AlertCircle size={18} />
+          <AlertCircle size={18} aria-hidden="true" />
           <span>{error}</span>
         </div>
       )}
@@ -238,20 +245,21 @@ const AdminDashboard = () => {
           }
         >
           <div className="admin-kpi-icon">
-            <Users size={21} />
+            <Users size={21} aria-hidden="true" />
           </div>
 
           <div className="admin-kpi-content">
-            <span>Total employees</span>
+            <span>{text.totalEmployees}</span>
             <strong>{stats.totalEmployees}</strong>
             <small>
-              {stats.activeEmployees} active
+              {stats.activeEmployees} {text.active}
             </small>
           </div>
 
           <ArrowRight
             size={18}
             className="admin-kpi-arrow"
+            aria-hidden="true"
           />
         </button>
 
@@ -263,20 +271,21 @@ const AdminDashboard = () => {
           }
         >
           <div className="admin-kpi-icon is-candidate">
-            <UserRoundSearch size={21} />
+            <UserRoundSearch size={21} aria-hidden="true" />
           </div>
 
           <div className="admin-kpi-content">
-            <span>Total candidates</span>
+            <span>{text.totalCandidates}</span>
             <strong>{stats.totalCandidates}</strong>
             <small>
-              {stats.pendingCandidates} need review
+              {stats.pendingCandidates} {text.needReview}
             </small>
           </div>
 
           <ArrowRight
             size={18}
             className="admin-kpi-arrow"
+            aria-hidden="true"
           />
         </button>
 
@@ -288,20 +297,21 @@ const AdminDashboard = () => {
           }
         >
           <div className="admin-kpi-icon is-assessment">
-            <ClipboardCheck size={21} />
+            <ClipboardCheck size={21} aria-hidden="true" />
           </div>
 
           <div className="admin-kpi-content">
-            <span>Completed assessments</span>
+            <span>{text.completedAssessments}</span>
             <strong>{stats.completedAssessments}</strong>
             <small>
-              {stats.pendingAssessments} in progress
+              {stats.pendingAssessments} {text.inProgress}
             </small>
           </div>
 
           <ArrowRight
             size={18}
             className="admin-kpi-arrow"
+            aria-hidden="true"
           />
         </button>
 
@@ -313,18 +323,19 @@ const AdminDashboard = () => {
           }
         >
           <div className="admin-kpi-icon is-warning">
-            <Clock3 size={21} />
+            <Clock3 size={21} aria-hidden="true" />
           </div>
 
           <div className="admin-kpi-content">
-            <span>Pending actions</span>
+            <span>{text.pendingActions}</span>
             <strong>{stats.pendingCandidates}</strong>
-            <small>Candidate applications</small>
+            <small>{text.candidateApplications}</small>
           </div>
 
           <ArrowRight
             size={18}
             className="admin-kpi-arrow"
+            aria-hidden="true"
           />
         </button>
       </section>
@@ -334,10 +345,10 @@ const AdminDashboard = () => {
           <div className="admin-panel-heading">
             <div>
               <span className="admin-panel-kicker">
-                Needs attention
+                {text.needsAttention}
               </span>
 
-              <h2>Candidate applications</h2>
+              <h2>{text.candidateApplications}</h2>
             </div>
 
             <button
@@ -347,18 +358,16 @@ const AdminDashboard = () => {
                 navigate('/dashboard/admin/candidates')
               }
             >
-              View all
-              <ArrowRight size={15} />
+              {text.viewAll}
+              <ArrowRight size={15} aria-hidden="true" />
             </button>
           </div>
 
           {pendingCandidates.length === 0 ? (
             <div className="admin-empty-state">
-              <ShieldCheck size={30} />
-              <strong>Nothing needs attention</strong>
-              <span>
-                There are no pending candidate applications.
-              </span>
+              <ShieldCheck size={30} aria-hidden="true" />
+              <strong>{text.nothingNeedsAttention}</strong>
+              <span>{text.noPendingApplications}</span>
             </div>
           ) : (
             <div className="admin-attention-list">
@@ -370,19 +379,20 @@ const AdminDashboard = () => {
                   <div className="admin-person-avatar">
                     {candidate.full_name
                       ?.charAt(0)
-                      .toUpperCase() || 'C'}
+                      .toUpperCase() ||
+                      candidateText.candidateInitial}
                   </div>
 
                   <div className="admin-attention-info">
                     <strong>
                       {candidate.full_name ||
-                        'Unnamed candidate'}
+                        candidateText.unnamedCandidate}
                     </strong>
 
                     <span>
                       {candidate.candidate_code ||
                         candidate.email ||
-                        'No candidate code'}
+                        candidateText.noCandidateCode}
                     </span>
                   </div>
 
@@ -409,10 +419,10 @@ const AdminDashboard = () => {
           <div className="admin-panel-heading">
             <div>
               <span className="admin-panel-kicker">
-                Shortcuts
+                {text.shortcuts}
               </span>
 
-              <h2>Quick actions</h2>
+              <h2>{text.quickActions}</h2>
             </div>
           </div>
 
@@ -423,9 +433,9 @@ const AdminDashboard = () => {
                 navigate('/dashboard/admin/employees')
               }
             >
-              <Users size={18} />
-              Manage employees
-              <ArrowRight size={15} />
+              <Users size={18} aria-hidden="true" />
+              {text.manageEmployees}
+              <ArrowRight size={15} aria-hidden="true" />
             </button>
 
             <button
@@ -434,9 +444,9 @@ const AdminDashboard = () => {
                 navigate('/dashboard/admin/candidates')
               }
             >
-              <UserRoundSearch size={18} />
-              Review candidates
-              <ArrowRight size={15} />
+              <UserRoundSearch size={18} aria-hidden="true" />
+              {text.reviewCandidates}
+              <ArrowRight size={15} aria-hidden="true" />
             </button>
 
             <button
@@ -445,9 +455,9 @@ const AdminDashboard = () => {
                 navigate('/dashboard/assessment')
               }
             >
-              <ClipboardCheck size={18} />
-              Open assessments
-              <ArrowRight size={15} />
+              <ClipboardCheck size={18} aria-hidden="true" />
+              {text.openAssessments}
+              <ArrowRight size={15} aria-hidden="true" />
             </button>
           </div>
         </div>

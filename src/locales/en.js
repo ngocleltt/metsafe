@@ -135,5 +135,122 @@ export const en = {
     rememberMe: "Remember me",
     forgotPassword: "Forgot password?",
     createAccount: "Create Account"
-  }
+  },
+  adminCandidates: {
+    eyebrow: "Administration",
+    title: "Candidates",
+    description: "Review candidate accounts and application information.",
+    addCandidate: "Add candidate",
+
+    totalCandidates: "Total candidates",
+    underReview: "Under review",
+    approved: "Approved",
+
+    searchPlaceholder: "Search candidates...",
+    allStatuses: "All statuses",
+
+    loading: "Loading candidates...",
+    emptyTitle: "No candidates found",
+    emptyDescription: "Try changing your search or status filter.",
+    loadError: "Unable to load candidates.",
+
+    columns: {
+      candidate: "Candidate",
+      contact: "Contact",
+      position: "Position",
+      status: "Status",
+      actions: "Actions"
+    },
+
+    unnamedCandidate: "Unnamed candidate",
+    noCandidateCode: "No candidate code",
+    noEmail: "No email",
+    noPhone: "No phone",
+    candidateInitial: "C",
+
+    actionsFor: "Actions for {name}",
+
+    statuses: {
+      unknown: "Unknown",
+      under_review: "Under review",
+      approved: "Approved",
+      rejected: "Rejected",
+      withdrawn: "Withdrawn",
+      pending: "Pending"
+    }
+  },
+  adminDashboard: {
+    loading: "Loading admin dashboard...",
+    loadError: "Unable to load admin dashboard data.",
+
+    eyebrow: "Administration",
+    title: "Admin overview",
+    description: "Monitor people, assessments and pending actions across METSAFE.",
+    refreshing: "Refreshing...",
+    refresh: "Refresh data",
+
+    totalEmployees: "Total employees",
+    active: "active",
+    totalCandidates: "Total candidates",
+    needReview: "need review",
+    completedAssessments: "Completed assessments",
+    inProgress: "in progress",
+    pendingActions: "Pending actions",
+    candidateApplications: "Candidate applications",
+
+    needsAttention: "Needs attention",
+    viewAll: "View all",
+    nothingNeedsAttention: "Nothing needs attention",
+    noPendingApplications: "There are no pending candidate applications.",
+
+    shortcuts: "Shortcuts",
+    quickActions: "Quick actions",
+    manageEmployees: "Manage employees",
+    reviewCandidates: "Review candidates",
+    openAssessments: "Open assessments",
+
+    unnamedCandidate: "Unnamed candidate",
+    noCandidateCode: "No candidate code",
+    candidateInitial: "C",
+
+    statuses: {
+      unknown: "Unknown",
+      pending: "Pending",
+      under_review: "Under review"
+    }
+  },
+  adminEmployees: {
+    eyebrow: "Administration",
+    title: "Employees",
+    description: "Manage employee records and workplace information.",
+    addEmployee: "Add employee",
+
+    totalEmployees: "Total employees",
+    activeEmployees: "Active employees",
+    inactiveEmployees: "Inactive employees",
+
+    searchPlaceholder: "Search employees...",
+    allStatuses: "All statuses",
+    active: "Active",
+    inactive: "Inactive",
+
+    loading: "Loading employees...",
+    emptyTitle: "No employees found",
+    emptyDescription: "Try changing your search or filter.",
+    loadError: "Unable to load employees.",
+
+    columns: {
+      employee: "Employee",
+      position: "Position",
+      experience: "Experience",
+      status: "Status",
+      actions: "Actions"
+    },
+
+    unnamedEmployee: "Unnamed employee",
+    noCode: "No code",
+    employeeInitial: "E",
+    years: "years",
+    actionsFor: "Actions for {name}"
+  },
 };

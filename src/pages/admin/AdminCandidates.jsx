@@ -8,7 +8,25 @@ import {
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/AdminCandidates.css';
 
-const AdminCandidates = () => {
+const getStatusClass = (status) => {
+  if (status === 'approved') {
+    return 'is-approved';
+  }
+
+  if (status === 'rejected' || status === 'withdrawn') {
+    return 'is-rejected';
+  }
+
+  if (status === 'under_review' || status === 'pending') {
+    return 'is-review';
+  }
+
+  return 'is-default';
+};
+
+const AdminCandidates = ({ t }) => {
+  const text = t.adminCandidates;
+
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -22,44 +40,45 @@ const AdminCandidates = () => {
       setLoading(true);
       setError('');
 
-      const {
-        data,
-        error: queryError
-      } = await supabase
-        .from('candidates')
-        .select(`
-          id,
-          candidate_code,
-          full_name,
-          email,
-          phone,
-          application_status,
-          position_id,
-          created_at
-        `)
-        .order('created_at', {
-          ascending: false
-        });
+      try {
+        const {
+          data,
+          error: queryError
+        } = await supabase
+          .from('candidates')
+          .select(`
+            id,
+            candidate_code,
+            full_name,
+            email,
+            phone,
+            application_status,
+            position_id,
+            created_at
+          `)
+          .order('created_at', {
+            ascending: false
+          });
 
-      if (!mounted) {
-        return;
+        if (queryError) {
+          throw queryError;
+        }
+
+        if (mounted) {
+          setCandidates(data || []);
+        }
+      } catch (queryError) {
+        console.error('Load candidates error:', queryError);
+
+        if (mounted) {
+          setError(text.loadError);
+          setCandidates([]);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
-
-      if (queryError) {
-        console.error(
-          'Load candidates error:',
-          queryError
-        );
-        setError(
-          queryError.message ||
-            'Unable to load candidates.'
-        );
-        setCandidates([]);
-      } else {
-        setCandidates(data || []);
-      }
-
-      setLoading(false);
     };
 
     loadCandidates();
@@ -67,11 +86,10 @@ const AdminCandidates = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [text.loadError]);
 
   const filteredCandidates = useMemo(() => {
-    const normalizedSearch =
-      searchTerm.trim().toLowerCase();
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
     return candidates.filter((candidate) => {
       const matchesSearch =
@@ -98,79 +116,76 @@ const AdminCandidates = () => {
   }, [candidates, searchTerm, statusFilter]);
 
   const statusCounts = useMemo(() => {
-    return candidates.reduce(
-      (counts, candidate) => {
-        const status =
-          candidate.application_status || 'unknown';
+    return candidates.reduce((counts, candidate) => {
+      const status =
+        candidate.application_status || 'unknown';
 
-        counts[status] = (counts[status] || 0) + 1;
+      counts[status] = (counts[status] || 0) + 1;
 
-        return counts;
-      },
-      {}
-    );
+      return counts;
+    }, {});
   }, [candidates]);
 
   const applicationStatuses = useMemo(() => {
     return [
       ...new Set(
         candidates
-          .map(
-            (candidate) =>
-              candidate.application_status
-          )
+          .map((candidate) => candidate.application_status)
           .filter(Boolean)
       )
     ];
   }, [candidates]);
+
+  const formatStatus = (status) => {
+    return (
+      text.statuses[status] ??
+      text.statuses.unknown
+    );
+  };
 
   return (
     <div className="admin-candidates-page">
       <div className="admin-candidates-header">
         <div>
           <span className="admin-page-eyebrow">
-            Administration
+            {text.eyebrow}
           </span>
 
-          <h1>Candidates</h1>
+          <h1>{text.title}</h1>
 
-          <p>
-            Review candidate accounts and application
-            information.
-          </p>
+          <p>{text.description}</p>
         </div>
 
+        {/* Chưa có modal thêm ứng viên nên tạm khóa nút */}
         <button
           type="button"
           className="admin-primary-button"
-          onClick={() => {
-            // Add candidate modal will be added later.
-          }}
+          disabled
         >
-          <UserPlus size={17} />
-          Add candidate
+          <UserPlus size={17} aria-hidden="true" />
+          {text.addCandidate}
         </button>
       </div>
 
       <div className="candidate-stat-grid">
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon">
-            <UserRoundSearch size={20} />
+            <UserRoundSearch size={20} aria-hidden="true" />
           </div>
 
           <div>
-            <span>Total candidates</span>
+            <span>{text.totalCandidates}</span>
             <strong>{candidates.length}</strong>
           </div>
         </div>
 
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon is-review">
-            <UserRoundSearch size={20} />
+            <UserRoundSearch size={20} aria-hidden="true" />
           </div>
 
           <div>
-            <span>Under review</span>
+            <span>{text.underReview}</span>
             <strong>
               {statusCounts.under_review || 0}
             </strong>
@@ -179,11 +194,11 @@ const AdminCandidates = () => {
 
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon is-approved">
-            <UserRoundSearch size={20} />
+            <UserRoundSearch size={20} aria-hidden="true" />
           </div>
 
           <div>
-            <span>Approved</span>
+            <span>{text.approved}</span>
             <strong>
               {statusCounts.approved || 0}
             </strong>
@@ -194,7 +209,7 @@ const AdminCandidates = () => {
       <section className="candidate-table-card">
         <div className="candidate-toolbar">
           <div className="candidate-search-box">
-            <Search size={18} />
+            <Search size={18} aria-hidden="true" />
 
             <input
               type="search"
@@ -202,7 +217,8 @@ const AdminCandidates = () => {
               onChange={(event) =>
                 setSearchTerm(event.target.value)
               }
-              placeholder="Search candidates..."
+              placeholder={text.searchPlaceholder}
+              aria-label={text.searchPlaceholder}
             />
           </div>
 
@@ -212,8 +228,11 @@ const AdminCandidates = () => {
               setStatusFilter(event.target.value)
             }
             className="candidate-status-filter"
+            aria-label={text.allStatuses}
           >
-            <option value="all">All statuses</option>
+            <option value="all">
+              {text.allStatuses}
+            </option>
 
             {applicationStatuses.map((status) => (
               <option
@@ -237,100 +256,112 @@ const AdminCandidates = () => {
 
         {loading ? (
           <div className="candidate-empty-state">
-            Loading candidates...
+            {text.loading}
           </div>
-        ) : filteredCandidates.length === 0 ? (
+        ) : error ? null : filteredCandidates.length === 0 ? (
           <div className="candidate-empty-state">
-            <UserRoundSearch size={32} />
+            <UserRoundSearch
+              size={32}
+              aria-hidden="true"
+            />
 
-            <h3>No candidates found</h3>
+            <h3>{text.emptyTitle}</h3>
 
-            <p>
-              Try changing your search or status filter.
-            </p>
+            <p>{text.emptyDescription}</p>
           </div>
         ) : (
           <div className="candidate-table-wrapper">
             <table className="candidate-table">
               <thead>
                 <tr>
-                  <th>Candidate</th>
-                  <th>Contact</th>
-                  <th>Position</th>
-                  <th>Status</th>
-                  <th aria-label="Actions" />
+                  <th>{text.columns.candidate}</th>
+                  <th>{text.columns.contact}</th>
+                  <th>{text.columns.position}</th>
+                  <th>{text.columns.status}</th>
+                  <th aria-label={text.columns.actions} />
                 </tr>
               </thead>
 
               <tbody>
-                {filteredCandidates.map((candidate) => (
-                  <tr key={candidate.id}>
-                    <td>
-                      <div className="candidate-identity">
-                        <div className="candidate-avatar">
-                          {candidate.full_name
-                            ?.charAt(0)
-                            .toUpperCase() || 'C'}
-                        </div>
+                {filteredCandidates.map((candidate) => {
+                  const candidateName =
+                    candidate.full_name ||
+                    text.unnamedCandidate;
 
-                        <div>
-                          <strong>
-                            {candidate.full_name ||
-                              'Unnamed candidate'}
-                          </strong>
+                  return (
+                    <tr key={candidate.id}>
+                      <td>
+                        <div className="candidate-identity">
+                          <div className="candidate-avatar">
+                            {candidate.full_name
+                              ?.charAt(0)
+                              .toUpperCase() ||
+                              text.candidateInitial}
+                          </div>
+
+                          <div>
+                            <strong>
+                              {candidateName}
+                            </strong>
+
+                            <span>
+                              {candidate.candidate_code ||
+                                text.noCandidateCode}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className="candidate-contact">
+                          <span>
+                            {candidate.email ||
+                              text.noEmail}
+                          </span>
 
                           <span>
-                            {candidate.candidate_code ||
-                              'No candidate code'}
+                            {candidate.phone ||
+                              text.noPhone}
                           </span>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td>
-                      <div className="candidate-contact">
-                        <span>
-                          {candidate.email || 'No email'}
+                      <td>
+                        {candidate.position_id || '—'}
+                      </td>
+
+                      <td>
+                        <span
+                          className={`candidate-status ${getStatusClass(
+                            candidate.application_status
+                          )}`}
+                        >
+                          {formatStatus(
+                            candidate.application_status
+                          )}
                         </span>
+                      </td>
 
-                        <span>
-                          {candidate.phone || 'No phone'}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td>
-                      {candidate.position_id || '—'}
-                    </td>
-
-                    <td>
-                      <span
-                        className={`candidate-status ${getStatusClass(
-                          candidate.application_status
-                        )}`}
-                      >
-                        {formatStatus(
-                          candidate.application_status
-                        )}
-                      </span>
-                    </td>
-
-                    <td>
-                      <button
-                        type="button"
-                        className="candidate-action-button"
-                        aria-label={`Actions for ${
-                          candidate.full_name
-                        }`}
-                        onClick={() => {
-                          // Candidate actions will be added later.
-                        }}
-                      >
-                        <MoreVertical size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      <td>
+                        {/* Chưa có menu thao tác nên tạm khóa nút */}
+                        <button
+                          type="button"
+                          className="candidate-action-button"
+                          aria-label={text.actionsFor.replace(
+                            '{name}',
+                            candidateName
+                          )}
+                          disabled
+                        >
+                          <MoreVertical
+                            size={18}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -338,40 +369,6 @@ const AdminCandidates = () => {
       </section>
     </div>
   );
-};
-
-const formatStatus = (status) => {
-  if (!status) {
-    return 'Unknown';
-  }
-
-  return status
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (character) =>
-      character.toUpperCase()
-    );
-};
-
-const getStatusClass = (status) => {
-  if (status === 'approved') {
-    return 'is-approved';
-  }
-
-  if (
-    status === 'rejected' ||
-    status === 'withdrawn'
-  ) {
-    return 'is-rejected';
-  }
-
-  if (
-    status === 'under_review' ||
-    status === 'pending'
-  ) {
-    return 'is-review';
-  }
-
-  return 'is-default';
 };
 
 export default AdminCandidates;

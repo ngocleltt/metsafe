@@ -8,7 +8,9 @@ import {
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/AdminEmployees.css';
 
-const AdminEmployees = () => {
+const AdminEmployees = ({ t }) => {
+  const text = t.adminEmployees;
+
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -22,45 +24,46 @@ const AdminEmployees = () => {
       setLoading(true);
       setError('');
 
-      const {
-        data,
-        error: queryError
-      } = await supabase
-        .from('employees')
-        .select(`
-          id,
-          employee_code,
-          full_name,
-          email,
-          phone,
-          position_text,
-          experience_years,
-          is_active,
-          created_at
-        `)
-        .order('full_name', {
-          ascending: true
-        });
+      try {
+        const {
+          data,
+          error: queryError
+        } = await supabase
+          .from('employees')
+          .select(`
+            id,
+            employee_code,
+            full_name,
+            email,
+            phone,
+            position_text,
+            experience_years,
+            is_active,
+            created_at
+          `)
+          .order('full_name', {
+            ascending: true
+          });
 
-      if (!mounted) {
-        return;
+        if (queryError) {
+          throw queryError;
+        }
+
+        if (mounted) {
+          setEmployees(data || []);
+        }
+      } catch (queryError) {
+        console.error('Load employees error:', queryError);
+
+        if (mounted) {
+          setError(text.loadError);
+          setEmployees([]);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
-
-      if (queryError) {
-        console.error(
-          'Load employees error:',
-          queryError
-        );
-        setError(
-          queryError.message ||
-            'Unable to load employees.'
-        );
-        setEmployees([]);
-      } else {
-        setEmployees(data || []);
-      }
-
-      setLoading(false);
     };
 
     loadEmployees();
@@ -68,11 +71,10 @@ const AdminEmployees = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [text.loadError]);
 
   const filteredEmployees = useMemo(() => {
-    const normalizedSearch =
-      searchTerm.trim().toLowerCase();
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
     return employees.filter((employee) => {
       const matchesSearch =
@@ -92,10 +94,8 @@ const AdminEmployees = () => {
 
       const matchesStatus =
         statusFilter === 'all' ||
-        (statusFilter === 'active' &&
-          employee.is_active) ||
-        (statusFilter === 'inactive' &&
-          !employee.is_active);
+        (statusFilter === 'active' && employee.is_active) ||
+        (statusFilter === 'inactive' && !employee.is_active);
 
       return matchesSearch && matchesStatus;
     });
@@ -112,59 +112,55 @@ const AdminEmployees = () => {
       <div className="admin-employees-header">
         <div>
           <span className="admin-page-eyebrow">
-            Administration
+            {text.eyebrow}
           </span>
 
-          <h1>Employees</h1>
+          <h1>{text.title}</h1>
 
-          <p>
-            Manage employee records and workplace
-            information.
-          </p>
+          <p>{text.description}</p>
         </div>
 
+        {/* Chưa có modal thêm nhân viên nên tạm khóa nút */}
         <button
           type="button"
           className="admin-primary-button"
-          onClick={() => {
-            // Add employee modal will be added later.
-          }}
+          disabled
         >
-          <UserPlus size={17} />
-          Add employee
+          <UserPlus size={17} aria-hidden="true" />
+          {text.addEmployee}
         </button>
       </div>
 
       <div className="employee-stat-grid">
         <div className="employee-stat-card">
           <div className="employee-stat-icon">
-            <Users size={20} />
+            <Users size={20} aria-hidden="true" />
           </div>
 
           <div>
-            <span>Total employees</span>
+            <span>{text.totalEmployees}</span>
             <strong>{employees.length}</strong>
           </div>
         </div>
 
         <div className="employee-stat-card">
           <div className="employee-stat-icon is-active">
-            <Users size={20} />
+            <Users size={20} aria-hidden="true" />
           </div>
 
           <div>
-            <span>Active employees</span>
+            <span>{text.activeEmployees}</span>
             <strong>{activeCount}</strong>
           </div>
         </div>
 
         <div className="employee-stat-card">
           <div className="employee-stat-icon is-inactive">
-            <Users size={20} />
+            <Users size={20} aria-hidden="true" />
           </div>
 
           <div>
-            <span>Inactive employees</span>
+            <span>{text.inactiveEmployees}</span>
             <strong>{inactiveCount}</strong>
           </div>
         </div>
@@ -173,7 +169,7 @@ const AdminEmployees = () => {
       <section className="employee-table-card">
         <div className="employee-toolbar">
           <div className="employee-search-box">
-            <Search size={18} />
+            <Search size={18} aria-hidden="true" />
 
             <input
               type="search"
@@ -181,7 +177,8 @@ const AdminEmployees = () => {
               onChange={(event) =>
                 setSearchTerm(event.target.value)
               }
-              placeholder="Search employees..."
+              placeholder={text.searchPlaceholder}
+              aria-label={text.searchPlaceholder}
             />
           </div>
 
@@ -191,10 +188,17 @@ const AdminEmployees = () => {
               setStatusFilter(event.target.value)
             }
             className="employee-status-filter"
+            aria-label={text.allStatuses}
           >
-            <option value="all">All statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+            <option value="all">
+              {text.allStatuses}
+            </option>
+            <option value="active">
+              {text.active}
+            </option>
+            <option value="inactive">
+              {text.inactive}
+            </option>
           </select>
         </div>
 
@@ -209,97 +213,104 @@ const AdminEmployees = () => {
 
         {loading ? (
           <div className="employee-empty-state">
-            Loading employees...
+            {text.loading}
           </div>
-        ) : filteredEmployees.length === 0 ? (
+        ) : error ? null : filteredEmployees.length === 0 ? (
           <div className="employee-empty-state">
-            <Users size={30} />
-            <h3>No employees found</h3>
-            <p>
-              Try changing your search or filter.
-            </p>
+            <Users size={30} aria-hidden="true" />
+            <h3>{text.emptyTitle}</h3>
+            <p>{text.emptyDescription}</p>
           </div>
         ) : (
           <div className="employee-table-wrapper">
             <table className="employee-table">
               <thead>
                 <tr>
-                  <th>Employee</th>
-                  <th>Position</th>
-                  <th>Experience</th>
-                  <th>Status</th>
-                  <th aria-label="Actions" />
+                  <th>{text.columns.employee}</th>
+                  <th>{text.columns.position}</th>
+                  <th>{text.columns.experience}</th>
+                  <th>{text.columns.status}</th>
+                  <th aria-label={text.columns.actions} />
                 </tr>
               </thead>
 
               <tbody>
-                {filteredEmployees.map((employee) => (
-                  <tr key={employee.id}>
-                    <td>
-                      <div className="employee-identity">
-                        <div className="employee-avatar">
-                          {employee.full_name
-                            ?.charAt(0)
-                            .toUpperCase() || 'E'}
+                {filteredEmployees.map((employee) => {
+                  const employeeName =
+                    employee.full_name ||
+                    text.unnamedEmployee;
+
+                  const hasExperience =
+                    employee.experience_years !== null &&
+                    employee.experience_years !== undefined;
+
+                  return (
+                    <tr key={employee.id}>
+                      <td>
+                        <div className="employee-identity">
+                          <div className="employee-avatar">
+                            {employee.full_name
+                              ?.charAt(0)
+                              .toUpperCase() ||
+                              text.employeeInitial}
+                          </div>
+
+                          <div>
+                            <strong>{employeeName}</strong>
+
+                            <span>
+                              {employee.employee_code ||
+                                employee.email ||
+                                text.noCode}
+                            </span>
+                          </div>
                         </div>
+                      </td>
 
-                        <div>
-                          <strong>
-                            {employee.full_name ||
-                              'Unnamed employee'}
-                          </strong>
+                      <td>
+                        {employee.position_text || '—'}
+                      </td>
 
-                          <span>
-                            {employee.employee_code ||
-                              employee.email ||
-                              'No code'}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
+                      <td>
+                        {hasExperience
+                          ? `${employee.experience_years} ${text.years}`
+                          : '—'}
+                      </td>
 
-                    <td>
-                      {employee.position_text || '—'}
-                    </td>
+                      <td>
+                        <span
+                          className={`employee-status ${
+                            employee.is_active
+                              ? 'is-active'
+                              : 'is-inactive'
+                          }`}
+                        >
+                          {employee.is_active
+                            ? text.active
+                            : text.inactive}
+                        </span>
+                      </td>
 
-                    <td>
-                      {employee.experience_years ?? '—'}
-                      {employee.experience_years !== null &&
-                        employee.experience_years !==
-                          undefined &&
-                        ' years'}
-                    </td>
-
-                    <td>
-                      <span
-                        className={`employee-status ${
-                          employee.is_active
-                            ? 'is-active'
-                            : 'is-inactive'
-                        }`}
-                      >
-                        {employee.is_active
-                          ? 'Active'
-                          : 'Inactive'}
-                      </span>
-                    </td>
-
-                    <td>
-                      <button
-                        type="button"
-                        className="employee-action-button"
-                        aria-label={`Actions for ${
-                          employee.full_name
-                        }`}
-                        onClick={() => {
-                          // Edit/details menu will be added later.
-                        }}
-                      >
-                        <MoreVertical size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      <td>
+                        {/* tạm khóa nút */}
+                        <button
+                          type="button"
+                          className="employee-action-button"
+                          aria-label={text.actionsFor.replace(
+                            '{name}',
+                            employeeName
+                          )}
+                          disabled
+                        >
+                          <MoreVertical
+                            size={18}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

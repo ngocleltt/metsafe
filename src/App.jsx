@@ -132,7 +132,7 @@ const AppRoutes = () => {
           path="admin"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard/>
+              <AdminDashboard t ={t} currentLang={currentLang}/>
             </ProtectedRoute>
           }
         />
@@ -141,7 +141,7 @@ const AppRoutes = () => {
           path="admin/employees"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
-              <AdminEmployees />
+              <AdminEmployees t ={t}/>
             </ProtectedRoute>
           }
         />
@@ -149,7 +149,7 @@ const AppRoutes = () => {
           path="admin/candidates"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
-              <AdminCandidates />
+              <AdminCandidates t ={t} />
             </ProtectedRoute>
           }
         />
