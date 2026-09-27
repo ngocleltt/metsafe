@@ -9,7 +9,6 @@ import {
   ChevronDown,
   LogOut
 } from 'lucide-react';
-import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
 import './styles/theme.css';
 
@@ -19,11 +18,10 @@ const Navbar = ({
   changeLanguage,
   isSidebarOpen,
   onOpenSidebar,
-  onCloseSidebar
+  onCloseSidebar, 
+  openLoginModal
 }) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState('login');
 
   const { user, profile, logout, loading } = useAuth();
 
@@ -51,10 +49,6 @@ const Navbar = ({
     handleCloseMenus();
   };
 
-  const openLoginModal = () => {
-    setAuthMode('login');
-    setIsAuthOpen(true);
-  };
 
   const displayName =
     profile?.full_name ||
@@ -213,14 +207,6 @@ const Navbar = ({
           )}
         </div>
       </div>
-
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        authMode={authMode}
-        setAuthMode={setAuthMode}
-        t={t}
-      />
     </header>
   );
 };

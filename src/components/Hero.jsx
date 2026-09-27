@@ -5,8 +5,7 @@ import heroImg from '../assets/hero.jpg';
 import './styles/Hero.css';
 import './styles/theme.css';
 
-const Hero = ({ t }) => {
-  const navigate = useNavigate();
+const Hero = ({ t, onStartAssessment}) => {
 
   const handleLearnMore = () => {
     document.getElementById('about')?.scrollIntoView({
@@ -38,7 +37,7 @@ const Hero = ({ t }) => {
               <button
                 type="button"
                 className="cta-button primary"
-                onClick={() => navigate('/assessment')}
+                onClick={onStartAssessment}
               >
                 {t?.hero?.cta}
                 <span className="hero-button-arrow" aria-hidden="true">

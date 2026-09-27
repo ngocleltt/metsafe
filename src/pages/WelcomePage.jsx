@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import Hero from '../components/Hero';
 
-import '../components/styles/WelcomePage.css'; // Đổi đường dẫn nếu cần
+import '../components/styles/WelcomePage.css'; 
 
 const WelcomePage = ({ t }) => {
+  const { openLoginModal } = useOutletContext();
   useEffect(() => {
     const elements = document.querySelectorAll('.welcome-reveal');
 
@@ -30,8 +32,8 @@ const WelcomePage = ({ t }) => {
   }, []);
 
   return (
-    <main className="welcome-page">
-      <Hero t={t} />
+    <div className="welcome-page">
+      <Hero t={t} onStartAssessment={openLoginModal}  />
 
       <div className="welcome-signal" aria-hidden="true">
         <div className="welcome-signal__track">
@@ -109,7 +111,7 @@ const WelcomePage = ({ t }) => {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 };
 
