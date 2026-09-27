@@ -281,4 +281,225 @@ export const vi = {
       updated: "Đã cập nhật hồ sơ."
     }
   },
+  candidateApplication: {
+    loading: "Đang tải hồ sơ ứng tuyển...",
+    errorTitle: "Không thể tải hồ sơ",
+    tryAgain: "Thử lại",
+    errors: {
+      sessionUnavailable: "Phiên đăng nhập không khả dụng.",
+      profileNotLinked: "Tài khoản chưa liên kết với hồ sơ ứng viên.",
+      loadError: "Không thể tải hồ sơ ứng tuyển."
+    },
+
+    eyebrow: "Không gian ứng viên",
+    title: "Hồ sơ ứng tuyển",
+    description: "Theo dõi trạng thái và xem lại thông tin đã nộp.",
+    refreshing: "Đang cập nhật...",
+    refresh: "Cập nhật",
+    currentStatus: "Trạng thái hồ sơ",
+
+    progress: "Tiến độ",
+    journey: "Quá trình ứng tuyển",
+    steps: {
+      submitted: {
+        title: "Đã nộp hồ sơ",
+        description: "Hồ sơ ứng viên đã được tạo."
+      },
+      review: {
+        title: "Xét duyệt hồ sơ",
+        description: "Bộ phận tuyển dụng xem xét thông tin của bạn."
+      },
+      assessment: {
+        title: "Đánh giá năng lực",
+        description: "Bạn có thể được mời tham gia đánh giá năng lực."
+      },
+      decision: {
+        title: "Kết quả cuối cùng",
+        description: "Bộ phận tuyển dụng sẽ thông báo kết quả."
+      }
+    },
+
+    applicationDetails: "Chi tiết hồ sơ",
+    submittedInformation: "Thông tin đã nộp",
+    candidateCode: "Mã ứng viên",
+    emailAddress: "Email",
+    phoneNumber: "Số điện thoại",
+    position: "Vị trí ứng tuyển",
+    submittedOn: "Ngày nộp",
+    notAssigned: "Chưa được cấp",
+    notProvided: "Chưa cung cấp",
+    notSpecified: "Chưa xác định",
+    notAvailable: "Chưa có dữ liệu",
+
+    nextStep: "Bước tiếp theo",
+    reviewProfile: "Xem trang cá nhân",
+
+    statuses: {
+      unknown: "Chưa xác định",
+      pending: "Chờ xử lý",
+      under_review: "Đang xét duyệt",
+      approved: "Đã duyệt",
+      interview: "Phỏng vấn",
+      accepted: "Được chấp nhận",
+      rejected: "Bị từ chối",
+      withdrawn: "Đã rút hồ sơ"
+    },
+
+    statusDescriptions: {
+      unknown: "Chưa có thông tin về trạng thái hồ sơ.",
+      pending: "Hồ sơ đã được nộp và đang chờ xét duyệt.",
+      under_review: "Bộ phận tuyển dụng đang xem xét hồ sơ của bạn.",
+      approved: "Hồ sơ đã qua vòng xét duyệt ban đầu.",
+      interview: "Hồ sơ đã đến giai đoạn phỏng vấn.",
+      accepted: "Chúc mừng! Hồ sơ của bạn đã được chấp nhận.",
+      rejected: "Hồ sơ chưa được chọn ở giai đoạn này.",
+      withdrawn: "Hồ sơ này không còn hiệu lực."
+    },
+
+    nextSteps: {
+      unknown: {
+        title: "Cập nhật trang cá nhân",
+        description: "Kiểm tra và giữ thông tin cá nhân chính xác."
+      },
+      pending: {
+        title: "Chờ xét duyệt hồ sơ",
+        description: "Hiện bạn chưa cần làm gì. Trạng thái sẽ được cập nhật khi bắt đầu xét duyệt."
+      },
+      under_review: {
+        title: "Hồ sơ đang được xét duyệt",
+        description: "Giữ thông tin liên hệ chính xác để bộ phận tuyển dụng có thể liên lạc."
+      },
+      approved: {
+        title: "Chuẩn bị đánh giá năng lực",
+        description: "Bước tiếp theo có thể là bài đánh giá năng lực hoặc an toàn."
+      },
+      interview: {
+        title: "Chuẩn bị phỏng vấn",
+        description: "Giữ thông tin liên hệ cập nhật để nhận thông báo tiếp theo."
+      },
+      accepted: {
+        title: "Theo dõi hướng dẫn tiếp theo",
+        description: "Bộ phận tuyển dụng sẽ thông báo về giai đoạn tiếp theo."
+      },
+      rejected: {
+        title: "Cập nhật trang cá nhân",
+        description: "Bạn có thể cập nhật hồ sơ cho những cơ hội sau."
+      },
+      withdrawn: {
+        title: "Kiểm tra trang cá nhân",
+        description: "Giữ thông tin cá nhân luôn cập nhật."
+      }
+    }
+  },
+  candidateDashboard: {
+  loading: "Đang tải trang ứng viên...",
+  errorTitle: "Không thể tải trang ứng viên",
+  tryAgain: "Thử lại",
+
+  eyebrow: "Không gian ứng viên",
+  welcomeBack: "Chào mừng trở lại,",
+  candidateFallback: "Ứng viên",
+  description: "Theo dõi hồ sơ ứng tuyển và kết quả đánh giá tại một nơi.",
+  refreshing: "Đang cập nhật...",
+  refresh: "Cập nhật",
+
+  applicationStatus: "Trạng thái hồ sơ",
+  candidateCode: "Mã ứng viên",
+  assessment: "Đánh giá",
+  notAssigned: "Chưa được cấp",
+  notStarted: "Chưa bắt đầu",
+
+  applicationJourney: "Quá trình ứng tuyển",
+  applicationProgress: "Tiến độ ứng tuyển",
+  steps: {
+    submitted: "Đã nộp hồ sơ",
+    underReview: "Đang xét duyệt",
+    assessment: "Đánh giá năng lực",
+    finalDecision: "Kết quả cuối cùng"
+  },
+
+  nextStep: "Bước tiếp theo",
+  keepProfileReady: "Cập nhật trang cá nhân",
+  contactReminder: "Hãy kiểm tra thông tin liên hệ để bộ phận tuyển dụng có thể liên lạc với bạn.",
+  reviewProfile: "Xem trang cá nhân",
+
+  competenceAssessment: "Đánh giá năng lực",
+  latestAssessment: "Kết quả đánh giá mới nhất",
+  noAssessment: "Chưa có bài đánh giá",
+  resultPending: "Kết quả sẽ hiển thị tại đây khi có dữ liệu.",
+  assessmentStatus: "Trạng thái đánh giá",
+  totalScore: "Tổng điểm",
+  level: "Cấp độ",
+  notClassified: "Chưa phân loại",
+  viewResults: "Xem kết quả",
+
+  statuses: {
+    unknown: "Chưa xác định",
+    pending: "Chờ xử lý",
+    under_review: "Đang xét duyệt",
+    approved: "Đã duyệt",
+    interview: "Phỏng vấn",
+    accepted: "Được chấp nhận",
+    rejected: "Bị từ chối",
+    withdrawn: "Đã rút hồ sơ",
+    completed: "Đã hoàn thành",
+    cancelled: "Đã hủy",
+    in_progress: "Đang thực hiện"
+  }
+},
+candidateTests: {
+  loading: "Đang tải bài đánh giá...",
+  errorTitle: "Không thể tải bài đánh giá",
+  tryAgain: "Thử lại",
+  eyebrow: "Không gian ứng viên",
+  title: "Bài đánh giá",
+  description: "Thực hiện bài đánh giá được giao và theo dõi kết quả năng lực.",
+  refreshing: "Đang cập nhật...",
+  refresh: "Cập nhật",
+
+  assignedTests: "Bài được giao",
+  inProgress: "Đang thực hiện",
+  completed: "Đã hoàn thành",
+  averageScore: "Điểm trung bình",
+
+  recommendedAction: "Việc nên làm tiếp",
+  continueDescription: "Tiếp tục bài đánh giá bạn đã bắt đầu.",
+  startDescription: "Bài đánh giá này đã sẵn sàng.",
+  continueTest: "Tiếp tục bài",
+  startTest: "Bắt đầu bài",
+
+  assessmentCentre: "Trung tâm đánh giá",
+  availableTests: "Bài đánh giá hiện có",
+  candidateFallback: "Ứng viên",
+  filters: {
+    all: "Tất cả",
+    pending: "Chờ thực hiện",
+    inProgress: "Đang thực hiện",
+    completed: "Đã hoàn thành"
+  },
+  emptyTitle: "Chưa có bài đánh giá",
+  emptyDescription: "Bài được giao sẽ hiển thị ở đây khi có dữ liệu.",
+
+  howItWorks: "Cách đánh giá năng lực",
+  howItWorksDescription: "METSAFE xem xét kiến thức, kỹ năng thực hành, hành vi an toàn, kinh nghiệm, lịch sử an toàn, mức độ sẵn sàng về tâm lý và kết quả đánh giá.",
+  ciExplanation: "Chỉ số năng lực (CI) được tính trên thang 0–100 và phân thành các cấp 0–5.",
+
+  assessmentTitle: "Đánh giá năng lực",
+  defaultAssessmentTitle: "Đánh giá năng lực METSAFE",
+  assessmentCategory: "Đánh giá năng lực và an toàn",
+  assignedAssessment: "Bài được giao",
+  score: "Điểm",
+  viewResult: "Xem kết quả",
+  continue: "Tiếp tục",
+  start: "Bắt đầu",
+
+  statuses: {
+    pending: "Chờ xử lý",
+    assigned: "Đã giao",
+    started: "Đã bắt đầu",
+    in_progress: "Đang thực hiện",
+    completed: "Đã hoàn thành",
+    cancelled: "Đã hủy"
+  }
+},
 };

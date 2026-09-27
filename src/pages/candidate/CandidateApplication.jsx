@@ -16,13 +16,88 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/CandidateApplication.css';
 
-const CandidateApplication = () => {
+const dateLocales = {
+  en: 'en-US',
+  vi: 'vi-VN',
+  ru: 'ru-RU'
+};
+
+const getStatusIcon = (status) => {
+  if (['accepted', 'approved'].includes(status)) {
+    return <CheckCircle2 size={25} aria-hidden="true" />;
+  }
+
+  if (['rejected', 'withdrawn'].includes(status)) {
+    return <XCircle size={25} aria-hidden="true" />;
+  }
+
+  return <Clock3 size={25} aria-hidden="true" />;
+};
+
+const ApplicationStep = ({
+  title,
+  description,
+  isComplete,
+  isCurrent,
+  date,
+  isLast,
+  formatDate
+}) => {
+  return (
+    <div
+      className={`candidate-application-step ${
+        isComplete ? 'is-complete' : ''
+      } ${isCurrent ? 'is-current' : ''}`}
+    >
+      <div className="candidate-application-step-marker">
+        {isComplete ? (
+          <CheckCircle2 size={18} aria-hidden="true" />
+        ) : isCurrent ? (
+          <Clock3 size={17} aria-hidden="true" />
+        ) : (
+          <span />
+        )}
+      </div>
+
+      <div className="candidate-application-step-content">
+        <div className="candidate-application-step-title">
+          <strong>{title}</strong>
+          {date && <small>{formatDate(date)}</small>}
+        </div>
+
+        <p>{description}</p>
+      </div>
+
+      {!isLast && (
+        <div className="candidate-application-step-line" />
+      )}
+    </div>
+  );
+};
+
+const ApplicationDetail = ({ icon, label, value }) => {
+  return (
+    <div className="candidate-application-detail">
+      <div className="candidate-application-detail-icon">
+        {icon}
+      </div>
+
+      <div>
+        <span>{label}</span>
+        <strong>{value}</strong>
+      </div>
+    </div>
+  );
+};
+
+const CandidateApplication = ({ t, currentLang }) => {
   const navigate = useNavigate();
+  const text = t.candidateApplication;
 
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState('');
+  const [errorKey, setErrorKey] = useState('');
 
   const loadApplication = useCallback(
     async ({ isRefresh = false } = {}) => {
@@ -32,7 +107,7 @@ const CandidateApplication = () => {
         setLoading(true);
       }
 
-      setError('');
+      setErrorKey('');
 
       try {
         const {
@@ -47,9 +122,9 @@ const CandidateApplication = () => {
         const currentUser = userData?.user;
 
         if (!currentUser?.id) {
-          throw new Error(
-            'Your user session is not available.'
-          );
+          setErrorKey('sessionUnavailable');
+          setCandidate(null);
+          return;
         }
 
         const {
@@ -57,11 +132,7 @@ const CandidateApplication = () => {
           error: profileError
         } = await supabase
           .from('profiles')
-          .select(`
-            id,
-            role,
-            candidate_id
-          `)
+          .select('id, role, candidate_id')
           .eq('id', currentUser.id)
           .single();
 
@@ -70,12 +141,12 @@ const CandidateApplication = () => {
         }
 
         if (
-          profile.role !== 'candidate' ||
-          !profile.candidate_id
+          profile?.role !== 'candidate' ||
+          !profile?.candidate_id
         ) {
-          throw new Error(
-            'Your candidate profile is not linked yet.'
-          );
+          setErrorKey('profileNotLinked');
+          setCandidate(null);
+          return;
         }
 
         const {
@@ -109,10 +180,7 @@ const CandidateApplication = () => {
         );
 
         setCandidate(null);
-        setError(
-          loadError?.message ||
-            'Unable to load your application.'
-        );
+        setErrorKey('loadError');
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -125,55 +193,80 @@ const CandidateApplication = () => {
     loadApplication();
   }, [loadApplication]);
 
+  const formatDate = (dateValue) => {
+    if (!dateValue) {
+      return text.notAvailable;
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return text.notAvailable;
+    }
+
+    return new Intl.DateTimeFormat(
+      dateLocales[currentLang] || 'en-US',
+      {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }
+    ).format(date);
+  };
+
   if (loading) {
     return (
       <div className="candidate-application-page">
         <div className="candidate-application-loading">
-          Loading your application...
+          {text.loading}
         </div>
       </div>
     );
   }
 
-  if (error && !candidate) {
+  if (errorKey && !candidate) {
     return (
       <div className="candidate-application-page">
         <div className="candidate-application-error-card">
-          <AlertCircle size={30} />
+          <AlertCircle size={30} aria-hidden="true" />
 
-          <h1>Unable to load application</h1>
+          <h1>{text.errorTitle}</h1>
 
-          <p>{error}</p>
+          <p>{text.errors[errorKey]}</p>
 
           <button
             type="button"
             className="candidate-application-primary-button"
             onClick={() => loadApplication()}
           >
-            Try again
+            {text.tryAgain}
           </button>
         </div>
       </div>
     );
   }
 
-  const status =
-    candidate?.application_status || 'pending';
+  const status = candidate?.application_status || 'unknown';
+  const statusLabel =
+    text.statuses[status] || text.statuses.unknown;
+  const statusDescription =
+    text.statusDescriptions[status] ||
+    text.statusDescriptions.unknown;
+  const nextStep =
+    text.nextSteps[status] ||
+    text.nextSteps.unknown;
 
   return (
     <div className="candidate-application-page">
       <header className="candidate-application-header">
         <div>
           <span className="candidate-application-eyebrow">
-            Candidate workspace
+            {text.eyebrow}
           </span>
 
-          <h1>My application</h1>
+          <h1>{text.title}</h1>
 
-          <p>
-            Follow your application status and review your
-            submitted information.
-          </p>
+          <p>{text.description}</p>
         </div>
 
         <button
@@ -186,22 +279,21 @@ const CandidateApplication = () => {
         >
           <RefreshCw
             size={16}
-            className={
-              refreshing ? 'is-spinning' : ''
-            }
+            className={refreshing ? 'is-spinning' : ''}
+            aria-hidden="true"
           />
 
-          {refreshing ? 'Refreshing...' : 'Refresh'}
+          {refreshing ? text.refreshing : text.refresh}
         </button>
       </header>
 
-      {error && (
+      {errorKey && (
         <div
           className="candidate-application-error"
           role="alert"
         >
-          <AlertCircle size={17} />
-          <span>{error}</span>
+          <AlertCircle size={17} aria-hidden="true" />
+          <span>{text.errors[errorKey]}</span>
         </div>
       )}
 
@@ -211,17 +303,15 @@ const CandidateApplication = () => {
         </div>
 
         <div className="candidate-application-status-content">
-          <span>Current application status</span>
-
-          <h2>{formatStatus(status)}</h2>
-
-          <p>{getStatusDescription(status)}</p>
+          <span>{text.currentStatus}</span>
+          <h2>{statusLabel}</h2>
+          <p>{statusDescription}</p>
         </div>
 
         <span
           className={`candidate-application-status-badge status-${status}`}
         >
-          {formatStatus(status)}
+          {statusLabel}
         </span>
       </section>
 
@@ -230,26 +320,27 @@ const CandidateApplication = () => {
           <div className="candidate-application-card-heading">
             <div>
               <span className="candidate-application-card-kicker">
-                Progress
+                {text.progress}
               </span>
 
-              <h2>Application journey</h2>
+              <h2>{text.journey}</h2>
             </div>
 
-            <FileText size={21} />
+            <FileText size={21} aria-hidden="true" />
           </div>
 
           <div className="candidate-application-timeline">
             <ApplicationStep
-              title="Application submitted"
-              description="Your candidate profile was created."
-              isComplete
+              title={text.steps.submitted.title}
+              description={text.steps.submitted.description}
+              isComplete={Boolean(candidate?.created_at)}
               date={candidate?.created_at}
+              formatDate={formatDate}
             />
 
             <ApplicationStep
-              title="Application under review"
-              description="The recruitment team is reviewing your information."
+              title={text.steps.review.title}
+              description={text.steps.review.description}
               isComplete={[
                 'under_review',
                 'approved',
@@ -259,32 +350,34 @@ const CandidateApplication = () => {
               ].includes(status)}
               isCurrent={status === 'pending'}
               date={
-                ['pending'].includes(status)
+                status === 'pending'
                   ? null
                   : candidate?.updated_at
               }
+              formatDate={formatDate}
             />
 
             <ApplicationStep
-              title="Assessment stage"
-              description="You may be invited to complete a competence assessment."
+              title={text.steps.assessment.title}
+              description={text.steps.assessment.description}
               isComplete={[
                 'approved',
                 'interview',
                 'accepted'
               ].includes(status)}
               isCurrent={status === 'approved'}
+              formatDate={formatDate}
             />
 
             <ApplicationStep
-              title="Final decision"
-              description="The recruitment team will communicate the final result."
+              title={text.steps.decision.title}
+              description={text.steps.decision.description}
               isComplete={[
                 'accepted',
                 'rejected'
               ].includes(status)}
-              isCurrent={false}
               isLast
+              formatDate={formatDate}
             />
           </div>
         </section>
@@ -293,53 +386,57 @@ const CandidateApplication = () => {
           <div className="candidate-application-card-heading">
             <div>
               <span className="candidate-application-card-kicker">
-                Application details
+                {text.applicationDetails}
               </span>
 
-              <h2>Submitted information</h2>
+              <h2>{text.submittedInformation}</h2>
             </div>
 
-            <Briefcase size={21} />
+            <Briefcase size={21} aria-hidden="true" />
           </div>
 
           <div className="candidate-application-details">
             <ApplicationDetail
-              icon={<FileText size={16} />}
-              label="Candidate code"
+              icon={<FileText size={16} aria-hidden="true" />}
+              label={text.candidateCode}
               value={
                 candidate?.candidate_code ||
-                'Not assigned'
+                text.notAssigned
               }
             />
 
             <ApplicationDetail
-              icon={<Mail size={16} />}
-              label="Email address"
+              icon={<Mail size={16} aria-hidden="true" />}
+              label={text.emailAddress}
               value={
-                candidate?.email || 'Not provided'
+                candidate?.email ||
+                text.notProvided
               }
             />
 
             <ApplicationDetail
-              icon={<Phone size={16} />}
-              label="Phone number"
+              icon={<Phone size={16} aria-hidden="true" />}
+              label={text.phoneNumber}
               value={
-                candidate?.phone || 'Not provided'
+                candidate?.phone ||
+                text.notProvided
               }
             />
 
             <ApplicationDetail
-              icon={<Briefcase size={16} />}
-              label="Position"
+              icon={<Briefcase size={16} aria-hidden="true" />}
+              label={text.position}
               value={
                 candidate?.position_id ||
-                'Not specified'
+                text.notSpecified
               }
             />
 
             <ApplicationDetail
-              icon={<CalendarDays size={16} />}
-              label="Submitted on"
+              icon={
+                <CalendarDays size={16} aria-hidden="true" />
+              }
+              label={text.submittedOn}
               value={formatDate(candidate?.created_at)}
             />
           </div>
@@ -348,15 +445,13 @@ const CandidateApplication = () => {
 
       <section className="candidate-application-next-step">
         <div className="candidate-application-next-icon">
-          <AlertCircle size={21} />
+          <AlertCircle size={21} aria-hidden="true" />
         </div>
 
         <div>
-          <span>Next step</span>
-
-          <h2>{getNextStepTitle(status)}</h2>
-
-          <p>{getNextStepDescription(status)}</p>
+          <span>{text.nextStep}</span>
+          <h2>{nextStep.title}</h2>
+          <p>{nextStep.description}</p>
         </div>
 
         <button
@@ -366,184 +461,12 @@ const CandidateApplication = () => {
             navigate('/dashboard/profile')
           }
         >
-          Review profile
-          <ArrowRight size={16} />
+          {text.reviewProfile}
+          <ArrowRight size={16} aria-hidden="true" />
         </button>
       </section>
     </div>
   );
-};
-
-const ApplicationStep = ({
-  title,
-  description,
-  isComplete,
-  isCurrent,
-  date,
-  isLast
-}) => {
-  return (
-    <div
-      className={`candidate-application-step ${
-        isComplete ? 'is-complete' : ''
-      } ${isCurrent ? 'is-current' : ''}`}
-    >
-      <div className="candidate-application-step-marker">
-        {isComplete ? (
-          <CheckCircle2 size={18} />
-        ) : isCurrent ? (
-          <Clock3 size={17} />
-        ) : (
-          <span />
-        )}
-      </div>
-
-      <div className="candidate-application-step-content">
-        <div className="candidate-application-step-title">
-          <strong>{title}</strong>
-
-          {date && <small>{formatDate(date)}</small>}
-        </div>
-
-        <p>{description}</p>
-      </div>
-
-      {!isLast && (
-        <div className="candidate-application-step-line" />
-      )}
-    </div>
-  );
-};
-
-const ApplicationDetail = ({
-  icon,
-  label,
-  value
-}) => {
-  return (
-    <div className="candidate-application-detail">
-      <div className="candidate-application-detail-icon">
-        {icon}
-      </div>
-
-      <div>
-        <span>{label}</span>
-        <strong>{value}</strong>
-      </div>
-    </div>
-  );
-};
-
-const formatStatus = (status) => {
-  if (!status) {
-    return 'Unknown';
-  }
-
-  return status
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (character) =>
-      character.toUpperCase()
-    );
-};
-
-const formatDate = (dateValue) => {
-  if (!dateValue) {
-    return 'Not available';
-  }
-
-  return new Intl.DateTimeFormat('en', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }).format(new Date(dateValue));
-};
-
-const getStatusIcon = (status) => {
-  if (
-    ['accepted', 'approved'].includes(status)
-  ) {
-    return <CheckCircle2 size={25} />;
-  }
-
-  if (
-    ['rejected', 'withdrawn'].includes(status)
-  ) {
-    return <XCircle size={25} />;
-  }
-
-  return <Clock3 size={25} />;
-};
-
-const getStatusDescription = (status) => {
-  if (status === 'approved') {
-    return 'Your application has passed the initial review.';
-  }
-
-  if (status === 'accepted') {
-    return 'Congratulations. Your application has been accepted.';
-  }
-
-  if (status === 'rejected') {
-    return 'Your application was not selected at this stage.';
-  }
-
-  if (status === 'withdrawn') {
-    return 'This application is no longer active.';
-  }
-
-  if (status === 'under_review') {
-    return 'The recruitment team is currently reviewing your application.';
-  }
-
-  return 'Your application has been submitted and is waiting for review.';
-};
-
-const getNextStepTitle = (status) => {
-  if (status === 'pending') {
-    return 'Wait for application review';
-  }
-
-  if (status === 'under_review') {
-    return 'Application is being reviewed';
-  }
-
-  if (status === 'approved') {
-    return 'Prepare for the assessment stage';
-  }
-
-  if (status === 'accepted') {
-    return 'Review your next onboarding steps';
-  }
-
-  if (status === 'rejected') {
-    return 'Review your profile for future applications';
-  }
-
-  return 'Keep your profile information up to date';
-};
-
-const getNextStepDescription = (status) => {
-  if (status === 'pending') {
-    return 'No action is required right now. We will update your application when the review begins.';
-  }
-
-  if (status === 'under_review') {
-    return 'Please keep your contact details available in case the recruitment team needs more information.';
-  }
-
-  if (status === 'approved') {
-    return 'Your next step may include a competence or safety assessment.';
-  }
-
-  if (status === 'accepted') {
-    return 'The recruitment team will provide information about the next stage.';
-  }
-
-  if (status === 'rejected') {
-    return 'You can keep your profile updated for future opportunities.';
-  }
-
-  return 'Review your personal information and keep it accurate.';
 };
 
 export default CandidateApplication;

@@ -281,4 +281,225 @@ export const ru = {
       updated: "Профиль обновлён."
     }
   },
+  candidateApplication: {
+    loading: "Загрузка заявки...",
+    errorTitle: "Не удалось загрузить заявку",
+    tryAgain: "Повторить",
+    errors: {
+      sessionUnavailable: "Сеанс пользователя недоступен.",
+      profileNotLinked: "Профиль кандидата ещё не привязан к аккаунту.",
+      loadError: "Не удалось загрузить заявку."
+    },
+
+    eyebrow: "Раздел кандидата",
+    title: "Моя заявка",
+    description: "Следите за статусом заявки и проверяйте отправленные данные.",
+    refreshing: "Обновление...",
+    refresh: "Обновить",
+    currentStatus: "Текущий статус заявки",
+
+    progress: "Этапы",
+    journey: "Рассмотрение заявки",
+    steps: {
+      submitted: {
+        title: "Заявка подана",
+        description: "Ваш профиль кандидата создан."
+      },
+      review: {
+        title: "Рассмотрение заявки",
+        description: "Отдел подбора персонала проверяет ваши данные."
+      },
+      assessment: {
+        title: "Оценка компетентности",
+        description: "Вас могут пригласить пройти оценку компетентности."
+      },
+      decision: {
+        title: "Итоговое решение",
+        description: "Отдел подбора персонала сообщит результат."
+      }
+    },
+
+    applicationDetails: "Данные заявки",
+    submittedInformation: "Отправленные сведения",
+    candidateCode: "Код кандидата",
+    emailAddress: "Электронная почта",
+    phoneNumber: "Номер телефона",
+    position: "Должность",
+    submittedOn: "Дата подачи",
+    notAssigned: "Не присвоен",
+    notProvided: "Не указан",
+    notSpecified: "Не указана",
+    notAvailable: "Нет данных",
+
+    nextStep: "Следующий шаг",
+    reviewProfile: "Открыть профиль",
+
+    statuses: {
+      unknown: "Неизвестно",
+      pending: "Ожидает рассмотрения",
+      under_review: "На рассмотрении",
+      approved: "Одобрена",
+      interview: "Собеседование",
+      accepted: "Принята",
+      rejected: "Отклонена",
+      withdrawn: "Отозвана"
+    },
+
+    statusDescriptions: {
+      unknown: "Статус заявки пока недоступен.",
+      pending: "Заявка подана и ожидает рассмотрения.",
+      under_review: "Отдел подбора персонала рассматривает вашу заявку.",
+      approved: "Заявка прошла первичное рассмотрение.",
+      interview: "Заявка перешла на этап собеседования.",
+      accepted: "Поздравляем! Ваша заявка принята.",
+      rejected: "На этом этапе ваша заявка не прошла отбор.",
+      withdrawn: "Эта заявка больше не активна."
+    },
+
+    nextSteps: {
+      unknown: {
+        title: "Обновите профиль",
+        description: "Проверьте актуальность личных данных."
+      },
+      pending: {
+        title: "Дождитесь рассмотрения",
+        description: "Сейчас действий не требуется. Статус изменится после начала проверки."
+      },
+      under_review: {
+        title: "Заявка рассматривается",
+        description: "Проверьте контактные данные на случай, если понадобятся дополнительные сведения."
+      },
+      approved: {
+        title: "Подготовьтесь к оценке",
+        description: "Следующим этапом может стать оценка компетентности или знаний по безопасности."
+      },
+      interview: {
+        title: "Подготовьтесь к собеседованию",
+        description: "Проверьте контактные данные, чтобы не пропустить дальнейшую информацию."
+      },
+      accepted: {
+        title: "Ожидайте дальнейших инструкций",
+        description: "Отдел подбора персонала сообщит о следующем этапе."
+      },
+      rejected: {
+        title: "Обновите профиль",
+        description: "Поддерживайте данные в актуальном состоянии для будущих вакансий."
+      },
+      withdrawn: {
+        title: "Проверьте профиль",
+        description: "Поддерживайте личные данные в актуальном состоянии."
+      }
+    }
+  },
+  candidateDashboard: {
+  loading: "Загрузка страницы кандидата...",
+  errorTitle: "Не удалось загрузить страницу",
+  tryAgain: "Повторить",
+
+  eyebrow: "Раздел кандидата",
+  welcomeBack: "С возвращением,",
+  candidateFallback: "Кандидат",
+  description: "Отслеживайте заявку и результаты оценки в одном месте.",
+  refreshing: "Обновление...",
+  refresh: "Обновить",
+
+  applicationStatus: "Статус заявки",
+  candidateCode: "Код кандидата",
+  assessment: "Оценка",
+  notAssigned: "Не присвоен",
+  notStarted: "Не начата",
+
+  applicationJourney: "Рассмотрение заявки",
+  applicationProgress: "Этапы заявки",
+  steps: {
+    submitted: "Заявка подана",
+    underReview: "Заявка рассматривается",
+    assessment: "Оценка",
+    finalDecision: "Итоговое решение"
+  },
+
+  nextStep: "Следующий шаг",
+  keepProfileReady: "Проверьте профиль",
+  contactReminder: "Убедитесь, что контактные данные указаны верно и с вами можно связаться.",
+  reviewProfile: "Открыть профиль",
+
+  competenceAssessment: "Оценка компетентности",
+  latestAssessment: "Последний результат оценки",
+  noAssessment: "Оценки пока нет",
+  resultPending: "Результат появится здесь, когда будет готов.",
+  assessmentStatus: "Статус оценки",
+  totalScore: "Общий балл",
+  level: "Уровень",
+  notClassified: "Не определён",
+  viewResults: "Посмотреть результаты",
+
+  statuses: {
+    unknown: "Неизвестно",
+    pending: "Ожидает рассмотрения",
+    under_review: "На рассмотрении",
+    approved: "Одобрена",
+    interview: "Собеседование",
+    accepted: "Принята",
+    rejected: "Отклонена",
+    withdrawn: "Отозвана",
+    completed: "Завершена",
+    cancelled: "Отменена",
+    in_progress: "В процессе"
+  }
+},
+candidateTests: {
+  loading: "Загрузка заданий...",
+  errorTitle: "Не удалось загрузить задания",
+  tryAgain: "Повторить",
+  eyebrow: "Раздел кандидата",
+  title: "Мои задания",
+  description: "Проходите назначенные оценки и отслеживайте результаты.",
+  refreshing: "Обновление...",
+  refresh: "Обновить",
+
+  assignedTests: "Назначено",
+  inProgress: "В процессе",
+  completed: "Завершено",
+  averageScore: "Средний балл",
+
+  recommendedAction: "Следующее действие",
+  continueDescription: "Продолжите начатую оценку.",
+  startDescription: "Эту оценку можно начать.",
+  continueTest: "Продолжить",
+  startTest: "Начать",
+
+  assessmentCentre: "Центр оценки",
+  availableTests: "Доступные задания",
+  candidateFallback: "Кандидат",
+  filters: {
+    all: "Все",
+    pending: "Ожидают",
+    inProgress: "В процессе",
+    completed: "Завершены"
+  },
+  emptyTitle: "Заданий пока нет",
+  emptyDescription: "Назначенные оценки появятся здесь, когда станут доступны.",
+
+  howItWorks: "Как проходит оценка",
+  howItWorksDescription: "METSAFE учитывает знания, практические навыки, соблюдение правил безопасности, опыт, историю происшествий, психологическую готовность и результаты оценки.",
+  ciExplanation: "Индекс компетентности (CI) рассчитывается по шкале 0–100 и соответствует уровням 0–5.",
+
+  assessmentTitle: "Оценка компетентности",
+  defaultAssessmentTitle: "Оценка компетентности METSAFE",
+  assessmentCategory: "Оценка компетентности и безопасности",
+  assignedAssessment: "Назначенная оценка",
+  score: "Балл",
+  viewResult: "Посмотреть результат",
+  continue: "Продолжить",
+  start: "Начать",
+
+  statuses: {
+    pending: "Ожидает",
+    assigned: "Назначена",
+    started: "Начата",
+    in_progress: "В процессе",
+    completed: "Завершена",
+    cancelled: "Отменена"
+  }
+},
 };

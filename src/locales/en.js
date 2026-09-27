@@ -292,4 +292,225 @@ export const en = {
       updated: "Your profile has been updated."
     }
   },
+  candidateApplication: {
+    loading: "Loading your application...",
+    errorTitle: "Unable to load application",
+    tryAgain: "Try again",
+    errors: {
+      sessionUnavailable: "Your session is not available.",
+      profileNotLinked: "Your candidate profile is not linked yet.",
+      loadError: "Unable to load your application."
+    },
+
+    eyebrow: "Candidate workspace",
+    title: "My application",
+    description: "Follow your application status and review your submitted information.",
+    refreshing: "Refreshing...",
+    refresh: "Refresh",
+    currentStatus: "Current application status",
+
+    progress: "Progress",
+    journey: "Application journey",
+    steps: {
+      submitted: {
+        title: "Application submitted",
+        description: "Your candidate profile was created."
+      },
+      review: {
+        title: "Application under review",
+        description: "The recruitment team is reviewing your information."
+      },
+      assessment: {
+        title: "Assessment stage",
+        description: "You may be invited to complete a competence assessment."
+      },
+      decision: {
+        title: "Final decision",
+        description: "The recruitment team will communicate the final result."
+      }
+    },
+
+    applicationDetails: "Application details",
+    submittedInformation: "Submitted information",
+    candidateCode: "Candidate code",
+    emailAddress: "Email address",
+    phoneNumber: "Phone number",
+    position: "Position",
+    submittedOn: "Submitted on",
+    notAssigned: "Not assigned",
+    notProvided: "Not provided",
+    notSpecified: "Not specified",
+    notAvailable: "Not available",
+
+    nextStep: "Next step",
+    reviewProfile: "Review profile",
+
+    statuses: {
+      unknown: "Unknown",
+      pending: "Pending",
+      under_review: "Under review",
+      approved: "Approved",
+      interview: "Interview",
+      accepted: "Accepted",
+      rejected: "Rejected",
+      withdrawn: "Withdrawn"
+    },
+
+    statusDescriptions: {
+      unknown: "Your application status is not available yet.",
+      pending: "Your application has been submitted and is waiting for review.",
+      under_review: "The recruitment team is reviewing your application.",
+      approved: "Your application has passed the initial review.",
+      interview: "Your application has reached the interview stage.",
+      accepted: "Congratulations. Your application has been accepted.",
+      rejected: "Your application was not selected at this stage.",
+      withdrawn: "This application is no longer active."
+    },
+
+    nextSteps: {
+      unknown: {
+        title: "Keep your profile up to date",
+        description: "Review your personal information and keep it accurate."
+      },
+      pending: {
+        title: "Wait for application review",
+        description: "No action is required now. We will update your application when the review begins."
+      },
+      under_review: {
+        title: "Application under review",
+        description: "Keep your contact details available in case the recruitment team needs more information."
+      },
+      approved: {
+        title: "Prepare for assessment",
+        description: "Your next step may include a competence or safety assessment."
+      },
+      interview: {
+        title: "Prepare for the interview",
+        description: "Keep your contact details up to date for further information."
+      },
+      accepted: {
+        title: "Review your next steps",
+        description: "The recruitment team will provide information about the next stage."
+      },
+      rejected: {
+        title: "Keep your profile updated",
+        description: "You can update your profile for future opportunities."
+      },
+      withdrawn: {
+        title: "Review your profile",
+        description: "Keep your personal information up to date."
+      }
+    }
+  },
+  candidateDashboard: {
+  loading: "Loading your dashboard...",
+  errorTitle: "Unable to load dashboard",
+  tryAgain: "Try again",
+
+  eyebrow: "Candidate workspace",
+  welcomeBack: "Welcome back,",
+  candidateFallback: "Candidate",
+  description: "Track your application and assessment progress from one place.",
+  refreshing: "Refreshing...",
+  refresh: "Refresh",
+
+  applicationStatus: "Application status",
+  candidateCode: "Candidate code",
+  assessment: "Assessment",
+  notAssigned: "Not assigned",
+  notStarted: "Not started",
+
+  applicationJourney: "Application journey",
+  applicationProgress: "Application progress",
+  steps: {
+    submitted: "Application submitted",
+    underReview: "Application under review",
+    assessment: "Assessment",
+    finalDecision: "Final decision"
+  },
+
+  nextStep: "Next step",
+  keepProfileReady: "Keep your profile ready",
+  contactReminder: "Make sure your contact information is complete so the recruitment team can reach you.",
+  reviewProfile: "Review my profile",
+
+  competenceAssessment: "Competence assessment",
+  latestAssessment: "Latest assessment result",
+  noAssessment: "No assessment available yet",
+  resultPending: "Your assessment result will appear here when it is ready.",
+  assessmentStatus: "Assessment status",
+  totalScore: "Total score",
+  level: "Level",
+  notClassified: "Not classified",
+  viewResults: "View results",
+
+  statuses: {
+    unknown: "Unknown",
+    pending: "Pending",
+    under_review: "Under review",
+    approved: "Approved",
+    interview: "Interview",
+    accepted: "Accepted",
+    rejected: "Rejected",
+    withdrawn: "Withdrawn",
+    completed: "Completed",
+    cancelled: "Cancelled",
+    in_progress: "In progress"
+  }
+},
+candidateTests: {
+  loading: "Loading your tests...",
+  errorTitle: "Unable to load tests",
+  tryAgain: "Try again",
+  eyebrow: "Candidate workspace",
+  title: "My tests",
+  description: "Complete your assigned assessments and track your competence results.",
+  refreshing: "Refreshing...",
+  refresh: "Refresh",
+
+  assignedTests: "Assigned tests",
+  inProgress: "In progress",
+  completed: "Completed",
+  averageScore: "Average score",
+
+  recommendedAction: "Recommended next action",
+  continueDescription: "Continue the assessment you already started.",
+  startDescription: "This assessment is ready for you to begin.",
+  continueTest: "Continue test",
+  startTest: "Start test",
+
+  assessmentCentre: "Assessment centre",
+  availableTests: "Available tests",
+  candidateFallback: "Candidate",
+  filters: {
+    all: "All",
+    pending: "Pending",
+    inProgress: "In progress",
+    completed: "Completed"
+  },
+  emptyTitle: "No tests available",
+  emptyDescription: "Your assigned assessments will appear here when they are available.",
+
+  howItWorks: "How your assessment works",
+  howItWorksDescription: "METSAFE evaluates competence groups such as knowledge, practical skills, safety behaviour, experience, safety record, psychological readiness and assessment results.",
+  ciExplanation: "Your Competence Index (CI) is calculated on a 0–100 scale and classified into Levels 0–5.",
+
+  assessmentTitle: "Competence Assessment",
+  defaultAssessmentTitle: "METSAFE Competence Assessment",
+  assessmentCategory: "Competence and safety assessment",
+  assignedAssessment: "Assigned assessment",
+  score: "Score",
+  viewResult: "View result",
+  continue: "Continue",
+  start: "Start",
+
+  statuses: {
+    pending: "Pending",
+    assigned: "Assigned",
+    started: "Started",
+    in_progress: "In progress",
+    completed: "Completed",
+    cancelled: "Cancelled"
+  }
+},
 };

@@ -176,7 +176,7 @@ const AppRoutes = () => {
           path="candidate"
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
-              <CandidateDashboard  />
+              <CandidateDashboard  t={t} currentLang={currentLang}/>
             </ProtectedRoute>
           }
         />
@@ -184,7 +184,7 @@ const AppRoutes = () => {
           path="candidate/application"
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
-              <CandidateApplication />
+              <CandidateApplication t={t} currentLang={currentLang}/>
             </ProtectedRoute>
           }
         />
@@ -192,7 +192,7 @@ const AppRoutes = () => {
           path="candidate/tests"
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
-              <CandidateTests />
+              <CandidateTests t={t} currentLang={currentLang}/>
             </ProtectedRoute>
           }
         />
@@ -200,7 +200,7 @@ const AppRoutes = () => {
           path="candidate/tests/:id"
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
-              <CandidateTestDetail />
+              <CandidateTestDetail t={t} currentLang={currentLang}/>
             </ProtectedRoute>
           }
         />

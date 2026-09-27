@@ -14,8 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/CandidateDashboard.css';
 
-const CandidateDashboard = () => {
+const CandidateDashboard = ({ t }) => {
   const navigate = useNavigate();
+  const text = t.candidateDashboard;
 
   const [candidate, setCandidate] = useState(null);
   const [assessment, setAssessment] = useState(null);
@@ -161,11 +162,26 @@ const CandidateDashboard = () => {
     loadDashboard();
   }, [loadDashboard]);
 
+  const formatStatus = (status) => {
+    if (!status) {
+      return text.statuses.unknown;
+    }
+
+    return (
+      text.statuses[status] ||
+      status
+        .replaceAll('_', ' ')
+        .replace(/\b\w/g, (character) =>
+          character.toUpperCase()
+        )
+    );
+  };
+
   if (loading) {
     return (
       <div className="candidate-dashboard-page">
         <div className="candidate-dashboard-loading">
-          Loading your dashboard...
+          {text.loading}
         </div>
       </div>
     );
@@ -177,7 +193,7 @@ const CandidateDashboard = () => {
         <div className="candidate-dashboard-error-card">
           <AlertCircle size={30} />
 
-          <h1>Unable to load dashboard</h1>
+          <h1>{text.errorTitle}</h1>
 
           <p>{error}</p>
 
@@ -186,7 +202,7 @@ const CandidateDashboard = () => {
             className="candidate-primary-button"
             onClick={() => loadDashboard()}
           >
-            Try again
+            {text.tryAgain}
           </button>
         </div>
       </div>
@@ -199,25 +215,22 @@ const CandidateDashboard = () => {
   const statusLabel = formatStatus(applicationStatus);
   const assessmentLabel = assessment
     ? formatStatus(assessment.status)
-    : 'Not started';
+    : text.notStarted;
 
   return (
     <div className="candidate-dashboard-page">
       <header className="candidate-dashboard-header">
         <div>
           <span className="candidate-dashboard-eyebrow">
-            Candidate workspace
+            {text.eyebrow}
           </span>
 
           <h1>
-            Welcome back,{' '}
-            {candidate?.full_name || 'Candidate'}
+            {text.welcomeBack}{' '}
+            {candidate?.full_name || text.candidateFallback}
           </h1>
 
-          <p>
-            Track your application and assessment progress
-            from one place.
-          </p>
+          <p>{text.description}</p>
         </div>
 
         <button
@@ -235,7 +248,7 @@ const CandidateDashboard = () => {
             }
           />
 
-          {refreshing ? 'Refreshing...' : 'Refresh'}
+          {refreshing ? text.refreshing : text.refresh}
         </button>
       </header>
 
@@ -255,7 +268,7 @@ const CandidateDashboard = () => {
             <FileText size={20} />
           </div>
 
-          <span>Application status</span>
+          <span>{text.applicationStatus}</span>
           <strong>{statusLabel}</strong>
         </div>
 
@@ -264,9 +277,9 @@ const CandidateDashboard = () => {
             <UserRound size={20} />
           </div>
 
-          <span>Candidate code</span>
+          <span>{text.candidateCode}</span>
           <strong>
-            {candidate?.candidate_code || 'Not assigned'}
+            {candidate?.candidate_code || text.notAssigned}
           </strong>
         </div>
 
@@ -275,7 +288,7 @@ const CandidateDashboard = () => {
             <ClipboardCheck size={20} />
           </div>
 
-          <span>Assessment</span>
+          <span>{text.assessment}</span>
           <strong>{assessmentLabel}</strong>
         </div>
       </section>
@@ -285,10 +298,10 @@ const CandidateDashboard = () => {
           <div className="candidate-panel-heading">
             <div>
               <span className="candidate-panel-kicker">
-                Application journey
+                {text.applicationJourney}
               </span>
 
-              <h2>Application progress</h2>
+              <h2>{text.applicationProgress}</h2>
             </div>
 
             <FileText size={20} />
@@ -296,12 +309,12 @@ const CandidateDashboard = () => {
 
           <div className="candidate-progress-track">
             <ProgressStep
-              label="Application submitted"
+              label={text.steps.submitted}
               isComplete
             />
 
             <ProgressStep
-              label="Application under review"
+              label={text.steps.underReview}
               isComplete={[
                 'under_review',
                 'approved',
@@ -312,7 +325,7 @@ const CandidateDashboard = () => {
             />
 
             <ProgressStep
-              label="Assessment"
+              label={text.steps.assessment}
               isComplete={
                 assessment?.status === 'completed'
               }
@@ -323,7 +336,7 @@ const CandidateDashboard = () => {
             />
 
             <ProgressStep
-              label="Final decision"
+              label={text.steps.finalDecision}
               isComplete={[
                 'accepted',
                 'rejected'
@@ -338,20 +351,16 @@ const CandidateDashboard = () => {
           <div className="candidate-panel-heading">
             <div>
               <span className="candidate-panel-kicker">
-                Next step
+                {text.nextStep}
               </span>
 
-              <h2>Keep your profile ready</h2>
+              <h2>{text.keepProfileReady}</h2>
             </div>
 
             <Clock3 size={20} />
           </div>
 
-          <p>
-            Make sure your contact information is
-            complete so the recruitment team can reach
-            you.
-          </p>
+          <p>{text.contactReminder}</p>
 
           <button
             type="button"
@@ -360,7 +369,7 @@ const CandidateDashboard = () => {
               navigate('/dashboard/profile')
             }
           >
-            Review my profile
+            {text.reviewProfile}
             <ArrowRight size={16} />
           </button>
         </div>
@@ -370,10 +379,10 @@ const CandidateDashboard = () => {
         <div className="candidate-panel-heading">
           <div>
             <span className="candidate-panel-kicker">
-              Competence assessment
+              {text.competenceAssessment}
             </span>
 
-            <h2>Latest assessment result</h2>
+            <h2>{text.latestAssessment}</h2>
           </div>
 
           <Award size={21} />
@@ -383,33 +392,30 @@ const CandidateDashboard = () => {
           <div className="candidate-empty-state">
             <ClipboardCheck size={30} />
 
-            <strong>No assessment available yet</strong>
+            <strong>{text.noAssessment}</strong>
 
-            <span>
-              Your assessment result will appear here
-              when it is ready.
-            </span>
+            <span>{text.resultPending}</span>
           </div>
         ) : (
           <div className="candidate-result-row">
             <div>
-              <span>Assessment status</span>
+              <span>{text.assessmentStatus}</span>
               <strong>
                 {formatStatus(assessment.status)}
               </strong>
             </div>
 
             <div>
-              <span>Total score</span>
+              <span>{text.totalScore}</span>
               <strong>
                 {formatScore(assessment.total_score)}
               </strong>
             </div>
 
             <div>
-              <span>Level</span>
+              <span>{text.level}</span>
               <strong>
-                {assessment.level || 'Not classified'}
+                {assessment.level || text.notClassified}
               </strong>
             </div>
 
@@ -420,7 +426,7 @@ const CandidateDashboard = () => {
                 navigate('/dashboard/candidate/results')
               }
             >
-              View results
+              {text.viewResults}
               <ArrowRight size={16} />
             </button>
           </div>
@@ -457,18 +463,6 @@ const ProgressStep = ({
       )}
     </div>
   );
-};
-
-const formatStatus = (status) => {
-  if (!status) {
-    return 'Unknown';
-  }
-
-  return status
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (character) =>
-      character.toUpperCase()
-    );
 };
 
 const formatScore = (score) => {
