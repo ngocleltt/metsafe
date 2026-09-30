@@ -685,13 +685,31 @@ const CompletedState = ({ assessment, onBack, text }) => (
 );
 
 const loadAssessmentQuestions = async (assessmentId) => {
-  const { data, error } = await supabase
-    .from('assessment_questions')
-    .select(`
-      assessment_id,
-      question_id,
-      sort_order,
-      questions (
+    const { data: links, error: linksError } = await supabase
+      .from('assessment_questions')
+      .select('assessment_id, question_id, sort_order')
+      .eq('assessment_id', assessmentId)
+      .order('sort_order', { ascending: true });
+
+    if (linksError) {
+      console.error('Cannot load assessment-question links:', linksError);
+      throw linksError;
+    }
+
+    console.log('Assessment ID:', assessmentId);
+    console.log('Visible links:', links);
+
+    if (!links?.length) {
+      throw new Error(
+        'Không thấy liên kết câu hỏi cho assessment này. Kiểm tra ID trên URL và quyền đọc assessment_questions.'
+      );
+    }
+
+    const questionIds = links.map((link) => link.question_id);
+
+    const { data: questionRows, error: questionsError } = await supabase
+      .from('questions')
+      .select(`
         id,
         question_code,
         question_type,
@@ -701,21 +719,45 @@ const loadAssessmentQuestions = async (assessmentId) => {
         options,
         options_vi,
         options_ru
-      )
-    `)
-    .eq('assessment_id', assessmentId)
-    .order('sort_order', { ascending: true });
+      `)
+      .in('id', questionIds);
 
-  if (error) throw error;
+    if (questionsError) {
+      console.error('Cannot load questions:', questionsError);
+      throw questionsError;
+    }
 
-  return (data || [])
-    .filter((row) => row.questions)
-    .map((row) => ({
-      ...row.questions,
-      assessment_id: row.assessment_id,
-      assessment_sort_order: row.sort_order
-    }));
-};
+    console.log('Visible questions:', questionRows);
+
+    const questionsById = new Map(
+      (questionRows || []).map((question) => [
+        question.id,
+        question
+      ])
+    );
+
+    const result = links
+      .map((link) => {
+        const question = questionsById.get(link.question_id);
+
+        if (!question) return null;
+
+        return {
+          ...question,
+          assessment_id: link.assessment_id,
+          assessment_sort_order: link.sort_order
+        };
+      })
+      .filter(Boolean);
+
+    if (result.length !== links.length) {
+      throw new Error(
+        'Có liên kết câu hỏi nhưng tài khoản hiện tại không đọc được nội dung questions.'
+      );
+    }
+
+    return result;
+  };
 
 const localizeQuestion = (question, language) => {
   if (language === 'en') return question;
