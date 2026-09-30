@@ -10,91 +10,231 @@ import {
   Send,
   ShieldAlert
 } from 'lucide-react';
-import {
-  useNavigate,
-  useParams
-} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/CandidateTestDetail.css';
 
-const CandidateTestDetail = () => {
+const copy = {
+  en: {
+    loading: 'Loading assessment...',
+    unavailable: 'Assessment unavailable',
+    backToTests: 'Back to my tests',
+    myTests: 'My tests',
+    question: 'Question',
+    of: 'of',
+    answered: 'answered',
+    competence: 'Competence assessment',
+    previous: 'Previous',
+    next: 'Next',
+    submitTest: 'Submission is not ready',
+    emptyTitle: 'No questions available',
+    emptyBody: 'This assessment has not been configured yet.',
+    notReady:
+      'Answers are not saved yet. Submission is disabled so your answers cannot be lost.',
+    assessmentEyebrow: 'METSAFE assessment',
+    assessmentTitle: 'Competence and safety assessment',
+    assessmentDescription:
+      'This assessment helps evaluate your knowledge and safety decisions.',
+    questions: 'Questions',
+    format: 'Format',
+    formatValue: 'Knowledge and safety',
+    result: 'Result',
+    resultValue: 'Pending implementation',
+    assessmentId: 'Assessment ID',
+    beforeBegin: 'Before you begin',
+    rules: [
+      'Read every question carefully before answering.',
+      'Choose the answer that best reflects safe and correct behaviour.',
+      'Answers are not saved if you close or reload this page.',
+      'Submission will be enabled after answer saving is implemented.'
+    ],
+    back: 'Back',
+    startAssessment: 'Start assessment',
+    completedEyebrow: 'Assessment completed',
+    completedTitle: 'Assessment completed',
+    completedBody:
+      'This assessment is marked as completed. The current page does not retrieve saved answers.',
+    status: 'Status',
+    completed: 'Completed',
+    score: 'Score',
+    level: 'Level',
+    pending: 'Pending',
+    textPlaceholder: 'Write your answer...',
+    sessionUnavailable: 'Your user session is not available.',
+    profileUnavailable: 'Your candidate profile is not linked yet.',
+    assessmentUnavailable: 'This assessment is not available.',
+    loadFailed: 'Unable to load this assessment.',
+    cancelled: 'This assessment was cancelled.',
+    noQuestions: 'This assessment has no questions yet.'
+  },
+  vi: {
+    loading: 'Đang tải bài đánh giá...',
+    unavailable: 'Không thể mở bài đánh giá',
+    backToTests: 'Quay lại danh sách bài test',
+    myTests: 'Bài test của tôi',
+    question: 'Câu',
+    of: 'trên',
+    answered: 'đã trả lời',
+    competence: 'Đánh giá năng lực',
+    previous: 'Câu trước',
+    next: 'Câu tiếp',
+    submitTest: 'Chưa thể nộp bài',
+    emptyTitle: 'Chưa có câu hỏi',
+    emptyBody: 'Bài đánh giá này chưa được cấu hình câu hỏi.',
+    notReady:
+      'Đáp án chưa được lưu. Chức năng nộp bài đang bị khóa để tránh mất câu trả lời.',
+    assessmentEyebrow: 'Bài đánh giá METSAFE',
+    assessmentTitle: 'Đánh giá năng lực và an toàn',
+    assessmentDescription:
+      'Bài đánh giá giúp xem xét kiến thức và quyết định về an toàn của bạn.',
+    questions: 'Câu hỏi',
+    format: 'Hình thức',
+    formatValue: 'Kiến thức và an toàn',
+    result: 'Kết quả',
+    resultValue: 'Chưa triển khai',
+    assessmentId: 'Mã bài đánh giá',
+    beforeBegin: 'Trước khi bắt đầu',
+    rules: [
+      'Đọc kỹ từng câu hỏi trước khi trả lời.',
+      'Chọn phương án phản ánh hành vi an toàn và phù hợp nhất.',
+      'Đáp án sẽ mất nếu bạn đóng hoặc tải lại trang.',
+      'Chức năng nộp bài sẽ mở sau khi có tính năng lưu đáp án.'
+    ],
+    back: 'Quay lại',
+    startAssessment: 'Bắt đầu',
+    completedEyebrow: 'Bài đánh giá đã hoàn thành',
+    completedTitle: 'Bài đánh giá đã hoàn thành',
+    completedBody:
+      'Bài này có trạng thái hoàn thành. Trang hiện chưa tải lại các đáp án đã lưu.',
+    status: 'Trạng thái',
+    completed: 'Hoàn thành',
+    score: 'Điểm',
+    level: 'Cấp độ',
+    pending: 'Chưa có',
+    textPlaceholder: 'Nhập câu trả lời...',
+    sessionUnavailable: 'Không tìm thấy phiên đăng nhập.',
+    profileUnavailable: 'Hồ sơ ứng viên của bạn chưa được liên kết.',
+    assessmentUnavailable: 'Bạn không thể truy cập bài đánh giá này.',
+    loadFailed: 'Không thể tải bài đánh giá.',
+    cancelled: 'Bài đánh giá này đã bị hủy.',
+    noQuestions: 'Bài đánh giá này chưa có câu hỏi.'
+  },
+  ru: {
+    loading: 'Загрузка оценки...',
+    unavailable: 'Оценка недоступна',
+    backToTests: 'Вернуться к тестам',
+    myTests: 'Мои тесты',
+    question: 'Вопрос',
+    of: 'из',
+    answered: 'отвечено',
+    competence: 'Оценка компетенций',
+    previous: 'Назад',
+    next: 'Далее',
+    submitTest: 'Отправка пока недоступна',
+    emptyTitle: 'Нет вопросов',
+    emptyBody: 'Вопросы для этой оценки ещё не настроены.',
+    notReady:
+      'Ответы пока не сохраняются. Отправка отключена, чтобы не потерять ваши ответы.',
+    assessmentEyebrow: 'Оценка METSAFE',
+    assessmentTitle: 'Оценка компетенций и безопасности',
+    assessmentDescription:
+      'Эта оценка помогает оценить знания и решения в области безопасности.',
+    questions: 'Вопросы',
+    format: 'Формат',
+    formatValue: 'Знания и безопасность',
+    result: 'Результат',
+    resultValue: 'Пока не реализовано',
+    assessmentId: 'ID оценки',
+    beforeBegin: 'Перед началом',
+    rules: [
+      'Внимательно прочитайте каждый вопрос перед ответом.',
+      'Выберите вариант, наиболее соответствующий безопасным действиям.',
+      'Ответы не сохраняются при закрытии или перезагрузке страницы.',
+      'Отправка станет доступна после реализации сохранения ответов.'
+    ],
+    back: 'Назад',
+    startAssessment: 'Начать оценку',
+    completedEyebrow: 'Оценка завершена',
+    completedTitle: 'Оценка завершена',
+    completedBody:
+      'Эта оценка имеет статус «Завершена». На этой странице пока нельзя загрузить сохранённые ответы.',
+    status: 'Статус',
+    completed: 'Завершена',
+    score: 'Балл',
+    level: 'Уровень',
+    pending: 'Нет данных',
+    textPlaceholder: 'Введите ответ...',
+    sessionUnavailable: 'Сеанс пользователя недоступен.',
+    profileUnavailable: 'Профиль кандидата ещё не привязан.',
+    assessmentUnavailable: 'Эта оценка недоступна.',
+    loadFailed: 'Не удалось загрузить оценку.',
+    cancelled: 'Эта оценка отменена.',
+    noQuestions: 'В этой оценке пока нет вопросов.'
+  }
+};
+
+const CandidateTestDetail = ({ currentLang = 'en' }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const language = copy[currentLang] ? currentLang : 'en';
+  const text = copy[language];
 
   const [assessment, setAssessment] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
-  const [currentQuestionIndex, setCurrentQuestionIndex] =
-    useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [pageState, setPageState] = useState('loading');
   const [error, setError] = useState('');
-  const [showSubmitConfirm, setShowSubmitConfirm] =
-    useState(false);
 
   const loadTest = useCallback(async () => {
     setPageState('loading');
     setError('');
+    setAssessment(null);
+    setQuestions([]);
+    setAnswers({});
+    setCurrentQuestionIndex(0);
 
     try {
-      const {
-        data: userData,
-        error: userError
-      } = await supabase.auth.getUser();
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
 
       if (userError) throw userError;
-
-      const currentUser = userData?.user;
-
-      if (!currentUser?.id) {
-        throw new Error(
-          'Your user session is not available.'
-        );
+      if (!userData?.user?.id) {
+        throw new Error('SESSION_UNAVAILABLE');
       }
 
-      const {
-        data: profile,
-        error: profileError
-      } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('id, role, candidate_id')
-        .eq('id', currentUser.id)
+        .eq('id', userData.user.id)
         .single();
 
       if (profileError) throw profileError;
 
-      if (
-        profile.role !== 'candidate' ||
-        !profile.candidate_id
-      ) {
-        throw new Error(
-          'Your candidate profile is not linked yet.'
-        );
+      if (profile.role !== 'candidate' || !profile.candidate_id) {
+        throw new Error('PROFILE_UNAVAILABLE');
       }
 
-      const {
-        data: assessmentData,
-        error: assessmentError
-      } = await supabase
-        .from('assessments')
-        .select(`
-          id,
-          candidate_id,
-          assessment_date,
-          total_score,
-          level,
-          status,
-          model_version_id
-        `)
-        .eq('id', id)
-        .eq('candidate_id', profile.candidate_id)
-        .maybeSingle();
+      const { data: assessmentData, error: assessmentError } =
+        await supabase
+          .from('assessments')
+          .select(`
+            id,
+            candidate_id,
+            assessment_date,
+            total_score,
+            level,
+            status,
+            model_version_id
+          `)
+          .eq('id', id)
+          .eq('candidate_id', profile.candidate_id)
+          .maybeSingle();
 
       if (assessmentError) throw assessmentError;
-
       if (!assessmentData) {
-        throw new Error(
-          'This assessment is not available.'
-        );
+        throw new Error('ASSESSMENT_UNAVAILABLE');
       }
 
       setAssessment(assessmentData);
@@ -104,28 +244,16 @@ const CandidateTestDetail = () => {
         return;
       }
 
-      const loadedQuestions =
-        await loadAssessmentQuestions(id);
-
-      setQuestions(loadedQuestions);
-
-      if (
-        assessmentData.status === 'in_progress' ||
-        assessmentData.status === 'started'
-      ) {
-        setPageState('testing');
-      } else {
-        setPageState('instructions');
+      if (assessmentData.status === 'cancelled') {
+        throw new Error('CANCELLED');
       }
+
+      const loadedQuestions = await loadAssessmentQuestions(id);
+      setQuestions(loadedQuestions);
+      setPageState('instructions');
     } catch (loadError) {
-      console.error(
-        'Candidate test loading error:',
-        loadError
-      );
-      setError(
-        loadError?.message ||
-          'Unable to load this assessment.'
-      );
+      console.error('Candidate test loading error:', loadError);
+      setError(loadError?.message || 'LOAD_FAILED');
       setPageState('error');
     }
   }, [id]);
@@ -134,99 +262,68 @@ const CandidateTestDetail = () => {
     loadTest();
   }, [loadTest]);
 
-  const currentQuestion =
-    questions[currentQuestionIndex];
-
-  const answeredCount = useMemo(
-    () => Object.keys(answers).length,
-    [answers]
+  const displayedQuestions = useMemo(
+    () => questions.map((question) =>
+      localizeQuestion(question, language)
+    ),
+    [questions, language]
   );
 
-  const handleStart = async () => {
-    if (!assessment?.id) return;
+  const currentQuestion = displayedQuestions[currentQuestionIndex];
 
-    setError('');
+  const answeredCount = useMemo(
+    () => questions.filter((question) => {
+      const answer = answers[question.id];
 
-    const { error: updateError } = await supabase
-      .from('assessments')
-      .update({ status: 'in_progress' })
-      .eq('id', assessment.id);
-
-    if (updateError) {
-      console.error(
-        'Start assessment error:',
-        updateError
+      return (
+        answer !== undefined &&
+        answer !== null &&
+        String(answer).trim() !== ''
       );
-      setError(updateError.message);
+    }).length,
+    [answers, questions]
+  );
+
+  const getErrorMessage = (value) => {
+    const knownErrors = {
+      SESSION_UNAVAILABLE: text.sessionUnavailable,
+      PROFILE_UNAVAILABLE: text.profileUnavailable,
+      ASSESSMENT_UNAVAILABLE: text.assessmentUnavailable,
+      CANCELLED: text.cancelled,
+      LOAD_FAILED: text.loadFailed
+    };
+
+    return knownErrors[value] || value || text.loadFailed;
+  };
+
+  const backToTests = () => {
+    navigate('/dashboard/candidate/tests');
+  };
+
+  const handleStart = () => {
+    if (questions.length === 0) {
+      setError(text.noQuestions);
       return;
     }
 
-    setAssessment((currentAssessment) => ({
-      ...currentAssessment,
-      status: 'in_progress'
-    }));
+    // Status vẫn là draft: enum hiện chưa có in_progress.
+    setError('');
     setPageState('testing');
   };
 
   const handleAnswerChange = (questionId, value) => {
-    setAnswers((currentAnswers) => ({
-      ...currentAnswers,
+    // Chỉ lưu tạm trong React state để thử giao diện.
+    setAnswers((current) => ({
+      ...current,
       [questionId]: value
     }));
-  };
-
-  const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(
-        (currentIndex) => currentIndex + 1
-      );
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(
-        (currentIndex) => currentIndex - 1
-      );
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!assessment?.id) return;
-
-    setError('');
-
-    try {
-      const { error: submitError } = await supabase
-        .from('assessments')
-        .update({ status: 'completed' })
-        .eq('id', assessment.id);
-
-      if (submitError) throw submitError;
-
-      setAssessment((currentAssessment) => ({
-        ...currentAssessment,
-        status: 'completed'
-      }));
-      setPageState('completed');
-      setShowSubmitConfirm(false);
-    } catch (submitError) {
-      console.error(
-        'Submit assessment error:',
-        submitError
-      );
-      setError(
-        submitError?.message ||
-          'Unable to submit this assessment.'
-      );
-    }
   };
 
   if (pageState === 'loading') {
     return (
       <div className="candidate-test-detail-page">
         <div className="candidate-test-loading">
-          Loading assessment...
+          {text.loading}
         </div>
       </div>
     );
@@ -237,16 +334,14 @@ const CandidateTestDetail = () => {
       <div className="candidate-test-detail-page">
         <div className="candidate-test-error-card">
           <ShieldAlert size={32} />
-          <h1>Assessment unavailable</h1>
-          <p>{error}</p>
+          <h1>{text.unavailable}</h1>
+          <p>{getErrorMessage(error)}</p>
           <button
             type="button"
             className="candidate-test-primary-button"
-            onClick={() =>
-              navigate('/dashboard/candidate/tests')
-            }
+            onClick={backToTests}
           >
-            Back to my tests
+            {text.backToTests}
           </button>
         </div>
       </div>
@@ -257,7 +352,8 @@ const CandidateTestDetail = () => {
     return (
       <CompletedState
         assessment={assessment}
-        navigate={navigate}
+        onBack={backToTests}
+        text={text}
       />
     );
   }
@@ -266,11 +362,11 @@ const CandidateTestDetail = () => {
     return (
       <InstructionsState
         assessment={assessment}
-        questions={questions}
+        questionCount={questions.length}
         onStart={handleStart}
-        onBack={() =>
-          navigate('/dashboard/candidate/tests')
-        }
+        onBack={backToTests}
+        text={text}
+        error={error}
       />
     );
   }
@@ -281,40 +377,29 @@ const CandidateTestDetail = () => {
         <button
           type="button"
           className="candidate-test-back-button"
-          onClick={() =>
-            navigate('/dashboard/candidate/tests')
-          }
+          onClick={backToTests}
         >
           <ArrowLeft size={17} />
-          My tests
+          {text.myTests}
         </button>
 
         <div className="candidate-test-progress-summary">
           <span>
-            Question {currentQuestionIndex + 1} of{' '}
-            {questions.length}
+            {text.question} {currentQuestionIndex + 1}{' '}
+            {text.of} {questions.length}
           </span>
           <strong>
-            {answeredCount}/{questions.length} answered
+            {answeredCount}/{questions.length} {text.answered}
           </strong>
         </div>
       </header>
-
-      {error && (
-        <div className="candidate-test-error" role="alert">
-          <ShieldAlert size={17} />
-          <span>{error}</span>
-        </div>
-      )}
 
       <div className="candidate-test-progress-bar">
         <div
           style={{
             width: `${
               questions.length
-                ? ((currentQuestionIndex + 1) /
-                    questions.length) *
-                  100
+                ? ((currentQuestionIndex + 1) / questions.length) * 100
                 : 0
             }%`
           }}
@@ -325,119 +410,78 @@ const CandidateTestDetail = () => {
         <section className="candidate-test-question-card">
           <div className="candidate-question-meta">
             <span>
-              {currentQuestion.code ||
+              {currentQuestion.question_code ||
                 `Q${currentQuestionIndex + 1}`}
             </span>
-            <span>
-              {currentQuestion.category ||
-                'Competence assessment'}
-            </span>
+            <span>{text.competence}</span>
           </div>
 
           <h1>{currentQuestion.question_text}</h1>
-
-          {currentQuestion.description && (
-            <p className="candidate-question-description">
-              {currentQuestion.description}
-            </p>
-          )}
 
           <QuestionInput
             question={currentQuestion}
             value={answers[currentQuestion.id]}
             onChange={(value) =>
-              handleAnswerChange(
-                currentQuestion.id,
-                value
-              )
+              handleAnswerChange(currentQuestion.id, value)
             }
+            placeholder={text.textPlaceholder}
           />
 
           <div className="candidate-test-question-actions">
             <button
               type="button"
               className="candidate-test-secondary-button"
-              onClick={handlePrevious}
               disabled={currentQuestionIndex === 0}
+              onClick={() =>
+                setCurrentQuestionIndex((index) =>
+                  Math.max(0, index - 1)
+                )
+              }
             >
               <ArrowLeft size={16} />
-              Previous
+              {text.previous}
             </button>
 
-            {currentQuestionIndex <
-            questions.length - 1 ? (
+            {currentQuestionIndex < questions.length - 1 ? (
               <button
                 type="button"
                 className="candidate-test-primary-button"
-                onClick={handleNext}
+                onClick={() =>
+                  setCurrentQuestionIndex((index) =>
+                    Math.min(questions.length - 1, index + 1)
+                  )
+                }
               >
-                Next
+                {text.next}
                 <ArrowRight size={16} />
               </button>
             ) : (
               <button
                 type="button"
                 className="candidate-test-submit-button"
-                onClick={() =>
-                  setShowSubmitConfirm(true)
-                }
+                disabled
+                title={text.notReady}
               >
                 <Send size={16} />
-                Submit test
+                {text.submitTest}
               </button>
             )}
           </div>
+
+          <p role="status">{text.notReady}</p>
         </section>
       ) : (
         <div className="candidate-test-empty">
           <ClipboardCheck size={32} />
-          <h2>No questions available</h2>
-          <p>
-            This assessment has not been configured yet.
-          </p>
+          <h2>{text.emptyTitle}</h2>
+          <p>{text.emptyBody}</p>
           <button
             type="button"
             className="candidate-test-secondary-button"
-            onClick={() =>
-              navigate('/dashboard/candidate/tests')
-            }
+            onClick={backToTests}
           >
-            Back to my tests
+            {text.backToTests}
           </button>
-        </div>
-      )}
-
-      {showSubmitConfirm && (
-        <div className="candidate-test-modal-overlay">
-          <div className="candidate-test-confirm-modal">
-            <div className="candidate-test-confirm-icon">
-              <Send size={22} />
-            </div>
-            <h2>Submit this assessment?</h2>
-            <p>
-              You have answered {answeredCount} of{' '}
-              {questions.length} questions. After submission,
-              you may not be able to edit your answers.
-            </p>
-            <div className="candidate-test-modal-actions">
-              <button
-                type="button"
-                className="candidate-test-secondary-button"
-                onClick={() =>
-                  setShowSubmitConfirm(false)
-                }
-              >
-                Continue testing
-              </button>
-              <button
-                type="button"
-                className="candidate-test-submit-button"
-                onClick={handleSubmit}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>
@@ -446,9 +490,11 @@ const CandidateTestDetail = () => {
 
 const InstructionsState = ({
   assessment,
-  questions,
+  questionCount,
   onStart,
-  onBack
+  onBack,
+  text,
+  error
 }) => (
   <div className="candidate-test-detail-page">
     <button
@@ -457,8 +503,15 @@ const InstructionsState = ({
       onClick={onBack}
     >
       <ArrowLeft size={17} />
-      My tests
+      {text.myTests}
     </button>
+
+    {error && (
+      <div className="candidate-test-error" role="alert">
+        <ShieldAlert size={17} />
+        <span>{error}</span>
+      </div>
+    )}
 
     <section className="candidate-test-instructions-card">
       <div className="candidate-test-instructions-icon">
@@ -466,46 +519,41 @@ const InstructionsState = ({
       </div>
 
       <span className="candidate-test-eyebrow">
-        METSAFE assessment
+        {text.assessmentEyebrow}
       </span>
 
-      <h1>Competence and safety assessment</h1>
-
-      <p>
-        This assessment helps evaluate your knowledge,
-        practical skills and safety behaviour.
-      </p>
+      <h1>{text.assessmentTitle}</h1>
+      <p>{text.assessmentDescription}</p>
 
       <div className="candidate-test-instructions-grid">
         <InstructionItem
           icon={<ClipboardCheck size={18} />}
-          label="Questions"
-          value={`${questions.length} questions`}
+          label={text.questions}
+          value={String(questionCount)}
         />
         <InstructionItem
           icon={<Clock3 size={18} />}
-          label="Format"
-          value="Knowledge and safety"
+          label={text.format}
+          value={text.formatValue}
         />
         <InstructionItem
           icon={<Award size={18} />}
-          label="Result"
-          value="CI and Level 0–5"
+          label={text.result}
+          value={text.resultValue}
         />
         <InstructionItem
           icon={<Info size={18} />}
-          label="Assessment ID"
+          label={text.assessmentId}
           value={assessment?.id || '—'}
         />
       </div>
 
       <div className="candidate-test-rules">
-        <h2>Before you begin</h2>
+        <h2>{text.beforeBegin}</h2>
         <ul>
-          <li>Read every question carefully before answering.</li>
-          <li>Choose the answer that best reflects safe and correct behaviour.</li>
-          <li>Do not close the page while completing the assessment.</li>
-          <li>Your result may contribute to your Competence Index.</li>
+          {text.rules.map((rule) => (
+            <li key={rule}>{rule}</li>
+          ))}
         </ul>
       </div>
 
@@ -515,14 +563,15 @@ const InstructionsState = ({
           className="candidate-test-secondary-button"
           onClick={onBack}
         >
-          Back
+          {text.back}
         </button>
         <button
           type="button"
           className="candidate-test-primary-button"
           onClick={onStart}
+          disabled={questionCount === 0}
         >
-          Start assessment
+          {text.startAssessment}
           <ArrowRight size={16} />
         </button>
       </div>
@@ -538,16 +587,21 @@ const InstructionItem = ({ icon, label, value }) => (
   </div>
 );
 
-const QuestionInput = ({ question, value, onChange }) => {
+const QuestionInput = ({
+  question,
+  value,
+  onChange,
+  placeholder
+}) => {
   const options = getQuestionOptions(question);
 
   if (question.question_type === 'text' || options.length === 0) {
     return (
       <textarea
         className="candidate-question-textarea"
-        value={value || ''}
+        value={value ?? ''}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Write your answer..."
+        placeholder={placeholder}
         rows={6}
       />
     );
@@ -559,18 +613,19 @@ const QuestionInput = ({ question, value, onChange }) => {
         const optionValue =
           typeof option === 'string'
             ? option
-            : option.value || option.label;
+            : option?.value ?? option?.label ?? '';
+
         const optionLabel =
           typeof option === 'string'
             ? option
-            : option.label || option.value;
+            : option?.label ?? option?.value ?? '';
 
         return (
           <label
             className={`candidate-question-option ${
               value === optionValue ? 'selected' : ''
             }`}
-            key={`${optionValue}-${index}`}
+            key={`${String(optionValue)}-${index}`}
           >
             <input
               type="radio"
@@ -588,40 +643,41 @@ const QuestionInput = ({ question, value, onChange }) => {
   );
 };
 
-const CompletedState = ({ assessment, navigate }) => (
+const CompletedState = ({ assessment, onBack, text }) => (
   <div className="candidate-test-detail-page">
     <section className="candidate-test-completed-card">
       <div className="candidate-test-completed-icon">
         <CheckCircle2 size={38} />
       </div>
+
       <span className="candidate-test-eyebrow">
-        Assessment completed
+        {text.completedEyebrow}
       </span>
-      <h1>Your assessment was submitted</h1>
-      <p>
-        Your answers have been recorded. The result will be
-        reflected in your candidate workspace after processing.
-      </p>
+
+      <h1>{text.completedTitle}</h1>
+      <p>{text.completedBody}</p>
+
       <div className="candidate-test-completed-summary">
         <div>
-          <span>Status</span>
-          <strong>Completed</strong>
+          <span>{text.status}</span>
+          <strong>{text.completed}</strong>
         </div>
         <div>
-          <span>Score</span>
+          <span>{text.score}</span>
           <strong>{formatScore(assessment?.total_score)}</strong>
         </div>
         <div>
-          <span>Level</span>
-          <strong>{assessment?.level || 'Pending'}</strong>
+          <span>{text.level}</span>
+          <strong>{assessment?.level ?? text.pending}</strong>
         </div>
       </div>
+
       <button
         type="button"
         className="candidate-test-primary-button"
-        onClick={() => navigate('/dashboard/candidate/tests')}
+        onClick={onBack}
       >
-        Back to my tests
+        {text.backToTests}
         <ArrowRight size={16} />
       </button>
     </section>
@@ -632,33 +688,61 @@ const loadAssessmentQuestions = async (assessmentId) => {
   const { data, error } = await supabase
     .from('assessment_questions')
     .select(`
-      id,
       assessment_id,
-      question_text,
-      description,
-      question_type,
-      options,
-      code,
-      category,
-      sort_order
+      question_id,
+      sort_order,
+      questions (
+        id,
+        question_code,
+        question_type,
+        question_text,
+        question_text_vi,
+        question_text_ru,
+        options,
+        options_vi,
+        options_ru
+      )
     `)
     .eq('assessment_id', assessmentId)
     .order('sort_order', { ascending: true });
 
-  if (error) {
-    console.error('Load assessment questions error:', error);
-    throw error;
-  }
-  console.log('Assessment:', assessmentId, 'Questions:', data);
-  return data ?? [];
+  if (error) throw error;
+
+  return (data || [])
+    .filter((row) => row.questions)
+    .map((row) => ({
+      ...row.questions,
+      assessment_id: row.assessment_id,
+      assessment_sort_order: row.sort_order
+    }));
+};
+
+const localizeQuestion = (question, language) => {
+  if (language === 'en') return question;
+
+  const suffix = `_${language}`;
+  const translatedOptions = getQuestionOptions({
+    options: question[`options${suffix}`]
+  });
+
+  return {
+    ...question,
+    question_text:
+      question[`question_text${suffix}`]?.trim() ||
+      question.question_text,
+    options:
+      translatedOptions.length > 0
+        ? translatedOptions
+        : question.options
+  };
 };
 
 const getQuestionOptions = (question) => {
-  if (Array.isArray(question.options)) {
+  if (Array.isArray(question?.options)) {
     return question.options;
   }
 
-  if (typeof question.options === 'string') {
+  if (typeof question?.options === 'string') {
     try {
       const parsed = JSON.parse(question.options);
       return Array.isArray(parsed) ? parsed : [];
@@ -671,7 +755,12 @@ const getQuestionOptions = (question) => {
 };
 
 const formatScore = (score) => {
+  if (score === null || score === undefined || score === '') {
+    return '—';
+  }
+
   const numericScore = Number(score);
+
   return Number.isFinite(numericScore)
     ? numericScore.toFixed(1)
     : '—';
