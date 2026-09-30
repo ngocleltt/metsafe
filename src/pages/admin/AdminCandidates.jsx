@@ -1,27 +1,40 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  ClipboardList,
   Search,
-  UserRoundSearch,
   UserPlus,
-  MoreVertical
+  UserRoundSearch
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/AdminCandidates.css';
 
 const getStatusClass = (status) => {
-  if (status === 'approved') {
-    return 'is-approved';
-  }
-
-  if (status === 'rejected' || status === 'withdrawn') {
-    return 'is-rejected';
-  }
-
-  if (status === 'under_review' || status === 'pending') {
-    return 'is-review';
-  }
-
+  if (status === 'approved') return 'is-approved';
+  if (status === 'rejected' || status === 'withdrawn') return 'is-rejected';
+  if (status === 'under_review' || status === 'pending') return 'is-review';
   return 'is-default';
+};
+
+const dialogOverlayStyle = {
+  position: 'fixed',
+  inset: 0,
+  zIndex: 1000,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 20,
+  background: 'rgba(15, 23, 42, 0.65)'
+};
+
+const dialogPanelStyle = {
+  width: '100%',
+  maxWidth: 480,
+  maxHeight: '90vh',
+  overflowY: 'auto',
+  padding: 24,
+  borderRadius: 16,
+  background: '#fff',
+  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)'
 };
 
 const AdminCandidates = ({ t }) => {
@@ -33,6 +46,16 @@ const AdminCandidates = ({ t }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  const [tests, setTests] = useState([]);
+  const [testsLoading, setTestsLoading] = useState(true);
+  const [testsError, setTestsError] = useState('');
+
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [selectedTestId, setSelectedTestId] = useState('');
+  const [assigning, setAssigning] = useState(false);
+  const [assignError, setAssignError] = useState('');
+  const [success, setSuccess] = useState('');
+
   useEffect(() => {
     let mounted = true;
 
@@ -41,10 +64,7 @@ const AdminCandidates = ({ t }) => {
       setError('');
 
       try {
-        const {
-          data,
-          error: queryError
-        } = await supabase
+        const { data, error: queryError } = await supabase
           .from('candidates')
           .select(`
             id,
@@ -56,13 +76,9 @@ const AdminCandidates = ({ t }) => {
             position_id,
             created_at
           `)
-          .order('created_at', {
-            ascending: false
-          });
+          .order('created_at', { ascending: false });
 
-        if (queryError) {
-          throw queryError;
-        }
+        if (queryError) throw queryError;
 
         if (mounted) {
           setCandidates(data || []);
@@ -87,6 +103,52 @@ const AdminCandidates = ({ t }) => {
       mounted = false;
     };
   }, [text.loadError]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadTests = async () => {
+      setTestsLoading(true);
+      setTestsError('');
+
+      try {
+        const { data, error: queryError } = await supabase
+          .from('tests')
+          .select(`
+            id,
+            code,
+            title,
+            model_version_id,
+            questions(count)
+          `)
+          .eq('is_active', true)
+          .order('title', { ascending: true });
+
+        if (queryError) throw queryError;
+
+        if (mounted) {
+          setTests(data || []);
+        }
+      } catch (queryError) {
+        console.error('Load tests error:', queryError);
+
+        if (mounted) {
+          setTestsError(text.testsError);
+          setTests([]);
+        }
+      } finally {
+        if (mounted) {
+          setTestsLoading(false);
+        }
+      }
+    };
+
+    loadTests();
+
+    return () => {
+      mounted = false;
+    };
+  }, [text.testsError]);
 
   const filteredCandidates = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -117,11 +179,8 @@ const AdminCandidates = ({ t }) => {
 
   const statusCounts = useMemo(() => {
     return candidates.reduce((counts, candidate) => {
-      const status =
-        candidate.application_status || 'unknown';
-
+      const status = candidate.application_status || 'unknown';
       counts[status] = (counts[status] || 0) + 1;
-
       return counts;
     }, {});
   }, [candidates]);
@@ -137,10 +196,81 @@ const AdminCandidates = ({ t }) => {
   }, [candidates]);
 
   const formatStatus = (status) => {
-    return (
-      text.statuses[status] ??
-      text.statuses.unknown
-    );
+    return text.statuses[status] ?? text.statuses.unknown;
+  };
+
+  const getQuestionCount = (test) => {
+    return Number(test.questions?.[0]?.count || 0);
+  };
+
+  const selectedTest = tests.find(
+    (test) => test.id === selectedTestId
+  );
+
+  const canAssign = Boolean(
+    selectedCandidate &&
+    selectedTest &&
+    selectedTest.model_version_id &&
+    getQuestionCount(selectedTest) > 0 &&
+    !assigning &&
+    !testsLoading
+  );
+
+  const openAssignDialog = (candidate) => {
+    setSelectedCandidate(candidate);
+    setSelectedTestId('');
+    setAssignError('');
+    setSuccess('');
+  };
+
+  const closeAssignDialog = () => {
+    if (assigning) return;
+
+    setSelectedCandidate(null);
+    setSelectedTestId('');
+    setAssignError('');
+  };
+
+  const handleAssign = async () => {
+    if (!canAssign) return;
+
+    setAssigning(true);
+    setAssignError('');
+    setSuccess('');
+
+    try {
+      const { data: assessmentId, error: rpcError } =
+        await supabase.rpc('assign_candidate_test', {
+          p_test_id: selectedTest.id,
+          p_candidate_id: selectedCandidate.id
+        });
+
+      if (rpcError) throw rpcError;
+      if (!assessmentId) throw new Error(text.assignError);
+
+      const candidateName =
+        selectedCandidate.full_name || text.unnamedCandidate;
+
+      const testTitle =
+        selectedTest.title || selectedTest.code;
+
+      setSuccess(
+        text.assignSuccess
+          .replace('{name}', candidateName)
+          .replace('{test}', testTitle)
+      );
+
+      setSelectedCandidate(null);
+      setSelectedTestId('');
+    } catch (rpcError) {
+      console.error('Assign candidate test error:', rpcError);
+
+      setAssignError(
+        rpcError?.message || text.assignError
+      );
+    } finally {
+      setAssigning(false);
+    }
   };
 
   return (
@@ -152,7 +282,6 @@ const AdminCandidates = ({ t }) => {
           </span>
 
           <h1>{text.title}</h1>
-
           <p>{text.description}</p>
         </div>
 
@@ -166,6 +295,22 @@ const AdminCandidates = ({ t }) => {
           {text.addCandidate}
         </button>
       </div>
+
+      {success && (
+        <div
+          className="admin-page-success"
+          role="status"
+          style={{
+            padding: 12,
+            marginBottom: 16,
+            background: '#dcfce7',
+            color: '#166534',
+            borderRadius: 8
+          }}
+        >
+          {success}
+        </div>
+      )}
 
       <div className="candidate-stat-grid">
         <div className="candidate-stat-card">
@@ -186,9 +331,7 @@ const AdminCandidates = ({ t }) => {
 
           <div>
             <span>{text.underReview}</span>
-            <strong>
-              {statusCounts.under_review || 0}
-            </strong>
+            <strong>{statusCounts.under_review || 0}</strong>
           </div>
         </div>
 
@@ -199,9 +342,7 @@ const AdminCandidates = ({ t }) => {
 
           <div>
             <span>{text.approved}</span>
-            <strong>
-              {statusCounts.approved || 0}
-            </strong>
+            <strong>{statusCounts.approved || 0}</strong>
           </div>
         </div>
       </div>
@@ -235,10 +376,7 @@ const AdminCandidates = ({ t }) => {
             </option>
 
             {applicationStatuses.map((status) => (
-              <option
-                value={status}
-                key={status}
-              >
+              <option value={status} key={status}>
                 {formatStatus(status)}
               </option>
             ))}
@@ -246,10 +384,7 @@ const AdminCandidates = ({ t }) => {
         </div>
 
         {error && (
-          <div
-            className="admin-page-error"
-            role="alert"
-          >
+          <div className="admin-page-error" role="alert">
             {error}
           </div>
         )}
@@ -266,7 +401,6 @@ const AdminCandidates = ({ t }) => {
             />
 
             <h3>{text.emptyTitle}</h3>
-
             <p>{text.emptyDescription}</p>
           </div>
         ) : (
@@ -278,7 +412,7 @@ const AdminCandidates = ({ t }) => {
                   <th>{text.columns.contact}</th>
                   <th>{text.columns.position}</th>
                   <th>{text.columns.status}</th>
-                  <th aria-label={text.columns.actions} />
+                  <th>{text.assignTest}</th>
                 </tr>
               </thead>
 
@@ -300,10 +434,7 @@ const AdminCandidates = ({ t }) => {
                           </div>
 
                           <div>
-                            <strong>
-                              {candidateName}
-                            </strong>
-
+                            <strong>{candidateName}</strong>
                             <span>
                               {candidate.candidate_code ||
                                 text.noCandidateCode}
@@ -315,13 +446,10 @@ const AdminCandidates = ({ t }) => {
                       <td>
                         <div className="candidate-contact">
                           <span>
-                            {candidate.email ||
-                              text.noEmail}
+                            {candidate.email || text.noEmail}
                           </span>
-
                           <span>
-                            {candidate.phone ||
-                              text.noPhone}
+                            {candidate.phone || text.noPhone}
                           </span>
                         </div>
                       </td>
@@ -343,17 +471,16 @@ const AdminCandidates = ({ t }) => {
                       </td>
 
                       <td>
-                        {/* Chưa có menu thao tác nên tạm khóa nút */}
                         <button
                           type="button"
                           className="candidate-action-button"
-                          aria-label={text.actionsFor.replace(
-                            '{name}',
-                            candidateName
-                          )}
-                          disabled
+                          onClick={() =>
+                            openAssignDialog(candidate)
+                          }
+                          aria-label={`${text.assignTest}: ${candidateName}`}
+                          title={`${text.assignTest}: ${candidateName}`}
                         >
-                          <MoreVertical
+                          <ClipboardList
                             size={18}
                             aria-hidden="true"
                           />
@@ -367,6 +494,149 @@ const AdminCandidates = ({ t }) => {
           </div>
         )}
       </section>
+
+      {selectedCandidate && (
+        <div style={dialogOverlayStyle}>
+          <div
+            style={dialogPanelStyle}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="assign-test-heading"
+          >
+            <h2
+              id="assign-test-heading"
+              style={{ marginTop: 0 }}
+            >
+              {text.assignTitle}
+            </h2>
+
+            <p>
+              <strong>
+                {selectedCandidate.full_name ||
+                  text.unnamedCandidate}
+              </strong>
+              {' · '}
+              {selectedCandidate.candidate_code ||
+                text.noCandidateCode}
+            </p>
+
+            <label
+              htmlFor="admin-assign-test-select"
+              style={{
+                display: 'block',
+                marginBottom: 8
+              }}
+            >
+              {text.chooseTest}
+            </label>
+
+            {testsLoading ? (
+              <p>{text.loadingTests}</p>
+            ) : (
+              <select
+                id="admin-assign-test-select"
+                className="candidate-status-filter"
+                style={{
+                  width: '100%',
+                  maxWidth: '100%'
+                }}
+                value={selectedTestId}
+                onChange={(event) => {
+                  setSelectedTestId(event.target.value);
+                  setAssignError('');
+                }}
+              >
+                <option value="">
+                  {text.choosePlaceholder}
+                </option>
+
+                {tests.map((test) => {
+                  const count = getQuestionCount(test);
+
+                  const unavailable =
+                    !test.model_version_id ||
+                    count === 0;
+
+                  const reason = !test.model_version_id
+                    ? text.noModel
+                    : text.noQuestions;
+
+                  return (
+                    <option
+                      key={test.id}
+                      value={test.id}
+                      disabled={unavailable}
+                    >
+                      {test.title} ({test.code})
+                      {' · '}
+                      {count} {text.questionCount}
+                      {unavailable
+                        ? ` — ${reason}`
+                        : ''}
+                    </option>
+                  );
+                })}
+              </select>
+            )}
+
+            {!testsLoading &&
+              !testsError &&
+              tests.length === 0 && (
+                <p>{text.noTests}</p>
+              )}
+
+            {testsError && (
+              <div
+                className="admin-page-error"
+                role="alert"
+                style={{ marginTop: 12 }}
+              >
+                {testsError}
+              </div>
+            )}
+
+            {assignError && (
+              <div
+                className="admin-page-error"
+                role="alert"
+                style={{ marginTop: 12 }}
+              >
+                {assignError}
+              </div>
+            )}
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                flexWrap: 'wrap',
+                gap: 12,
+                marginTop: 24
+              }}
+            >
+              <button
+                type="button"
+                className="candidate-action-button"
+                disabled={assigning}
+                onClick={closeAssignDialog}
+              >
+                {text.cancelAssign}
+              </button>
+
+              <button
+                type="button"
+                className="admin-primary-button"
+                disabled={!canAssign}
+                onClick={handleAssign}
+              >
+                {assigning
+                  ? text.assigning
+                  : text.confirmAssign}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
