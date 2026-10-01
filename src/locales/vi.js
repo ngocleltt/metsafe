@@ -39,7 +39,23 @@ export const vi = {
     questionCount: "câu trong ngân hàng", randomTenQuestions: "lấy ngẫu nhiên 10 câu", notEnoughQuestions: "Ít hơn 10 câu hỏi",
     cancelAssign: "Hủy", confirmAssign: "Xác nhận giao bài", assigning: "Đang giao bài...", loadingTests: "Đang tải bài đánh giá...",
     noTests: "Chưa có bài đánh giá đang hoạt động.", noModel: "Thiếu phiên bản mô hình", noQuestions: "Chưa có câu hỏi", testsError: "Không tải được danh sách bài đánh giá.", assignError: "Không giao được bài. Vui lòng thử lại.", assignSuccess: "Đã giao bài {test} cho {name}.",
-    statuses: { unknown: "Chưa xác định", applied: "Đã nộp hồ sơ", screening: "Đang sàng lọc", testing: "Đang kiểm tra", interview: "Phỏng vấn", accepted: "Đã chấp nhận", rejected: "Từ chối", hired: "Đã tuyển", under_review: "Đang xét duyệt", approved: "Đã duyệt", withdrawn: "Đã rút hồ sơ", pending: "Chờ xử lý" }
+    statuses: { unknown: "Chưa xác định", applied: "Đã nộp hồ sơ", screening: "Đang sàng lọc", testing: "Đang kiểm tra", interview: "Phỏng vấn", accepted: "Đã chấp nhận", rejected: "Từ chối", hired: "Đã tuyển", under_review: "Đang xét duyệt", approved: "Đã duyệt", withdrawn: "Đã rút hồ sơ", pending: "Chờ xử lý" },
+    trackColumn: "Nhóm bài nghề",
+    selectTrack: "Nhóm bài nghề của ứng viên",
+    trackUnassigned: "Chưa phân nhóm",
+    saveTrack: "Lưu nhóm",
+    savingTrack: "Đang lưu...",
+    trackSaved: "Đã lưu nhóm bài nghề.",
+    trackSaveError: "Không lưu được nhóm bài nghề.",
+    noAvailableTests: "Chưa có bài đánh giá đang mở phù hợp với ứng viên.",
+    trackNames: {
+      ACC: "Kế toán",
+      HR: "Nhân sự",
+      OFF: "Khối văn phòng",
+      WRK: "Sản xuất",
+      ENG: "Kỹ thuật",
+      HSE: "An toàn lao động"
+    },
   },
   adminDashboard: {
     loading: "Đang tải trang tổng quan...", loadError: "Không thể tải dữ liệu trang tổng quan.", eyebrow: "Quản trị", title: "Tổng quan quản trị", description: "Theo dõi nhân sự, hoạt động đánh giá và những việc cần xử lý trên METSAFE.", refreshing: "Đang cập nhật...", refresh: "Cập nhật dữ liệu", totalEmployees: "Tổng nhân viên", active: "đang làm việc", totalCandidates: "Tổng ứng viên", needReview: "cần xét duyệt", completedAssessments: "Đánh giá đã hoàn thành", inProgress: "đang thực hiện", pendingActions: "Việc cần xử lý", candidateApplications: "Hồ sơ ứng tuyển", needsAttention: "Cần chú ý", viewAll: "Xem tất cả", nothingNeedsAttention: "Không có việc cần xử lý", noPendingApplications: "Không có hồ sơ ứng tuyển nào đang chờ xét duyệt.", shortcuts: "Lối tắt", quickActions: "Thao tác nhanh", manageEmployees: "Quản lý nhân viên", reviewCandidates: "Xét duyệt ứng viên", openAssessments: "Mở trang đánh giá", unnamedCandidate: "Chưa có tên", noCandidateCode: "Chưa có mã ứng viên", candidateInitial: "Ư",

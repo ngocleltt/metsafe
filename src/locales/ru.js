@@ -43,7 +43,23 @@ export const ru = {
     noTests: "Нет активных тестов.", noModel: "Не указана версия модели", noQuestions: "Нет вопросов",
     testsError: "Не удалось загрузить тесты.", assignError: "Не удалось назначить оценку. Попробуйте ещё раз.",
     assignSuccess: "Оценка {test} назначена кандидату {name}.",
-    statuses: { unknown: "Неизвестно", applied: "Подана", screening: "Рассмотрение", testing: "Тестирование", interview: "Собеседование", accepted: "Принята", rejected: "Отклонено", hired: "Принят на работу", under_review: "На рассмотрении", approved: "Одобрено", withdrawn: "Заявка отозвана", pending: "Ожидает обработки" }
+    statuses: { unknown: "Неизвестно", applied: "Подана", screening: "Рассмотрение", testing: "Тестирование", interview: "Собеседование", accepted: "Принята", rejected: "Отклонено", hired: "Принят на работу", under_review: "На рассмотрении", approved: "Одобрено", withdrawn: "Заявка отозвана", pending: "Ожидает обработки" },
+    trackColumn: "Направление оценки",
+    selectTrack: "Направление оценки кандидата",
+    trackUnassigned: "Не назначено",
+    saveTrack: "Сохранить",
+    savingTrack: "Сохранение...",
+    trackSaved: "Направление оценки сохранено.",
+    trackSaveError: "Не удалось сохранить направление оценки.",
+    noAvailableTests: "Для кандидата пока нет доступных оценок.",
+    trackNames: {
+      ACC: "Бухгалтерия",
+      HR: "Кадры",
+      OFF: "Офис",
+      WRK: "Производство",
+      ENG: "Инженерный персонал",
+      HSE: "Охрана труда"
+    },
   },
   adminDashboard: {
     loading: "Загрузка панели администратора...", loadError: "Не удалось загрузить данные панели администратора.", eyebrow: "Администрирование", title: "Обзор для администратора", description: "Обзор персонала, оценок и задач, требующих внимания, в METSAFE.", refreshing: "Обновление...", refresh: "Обновить данные",

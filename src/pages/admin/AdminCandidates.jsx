@@ -8,6 +8,9 @@ import {
 import { supabase } from '../../lib/supabase';
 import '../../components/styles/AdminCandidates.css';
 
+const TRACK_CODES = ['ACC', 'HR', 'OFF', 'WRK', 'ENG', 'HSE'];
+const CORE_TEST_CODE = 'CORE_SAFETY_V1';
+
 const getStatusClass = (status) => {
   if (status === 'approved') return 'is-approved';
 
@@ -58,6 +61,11 @@ const AdminCandidates = ({ t }) => {
   const [testsError, setTestsError] = useState('');
 
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [trackChoice, setTrackChoice] = useState('');
+  const [savingTrack, setSavingTrack] = useState(false);
+  const [trackError, setTrackError] = useState('');
+  const [trackMessage, setTrackMessage] = useState('');
+
   const [selectedTestId, setSelectedTestId] = useState('');
   const [assigning, setAssigning] = useState(false);
   const [assignError, setAssignError] = useState('');
@@ -81,6 +89,7 @@ const AdminCandidates = ({ t }) => {
             phone,
             application_status,
             position_id,
+            assessment_track,
             created_at
           `)
           .order('created_at', { ascending: false });
@@ -186,9 +195,7 @@ const AdminCandidates = ({ t }) => {
   const statusCounts = useMemo(() => {
     return candidates.reduce((counts, candidate) => {
       const status = candidate.application_status || 'unknown';
-
       counts[status] = (counts[status] || 0) + 1;
-
       return counts;
     }, {});
   }, [candidates]);
@@ -207,7 +214,19 @@ const AdminCandidates = ({ t }) => {
     return text.statuses[status] ?? text.statuses.unknown;
   };
 
-  const selectedTest = tests.find(
+  const availableTests = useMemo(() => {
+    return tests.filter((test) => {
+      if (test.code === CORE_TEST_CODE) return true;
+
+      return (
+        selectedCandidate?.assessment_track &&
+        test.code ===
+          `${selectedCandidate.assessment_track}_SAFETY_V1`
+      );
+    });
+  }, [tests, selectedCandidate?.assessment_track]);
+
+  const selectedTest = availableTests.find(
     (test) => test.id === selectedTestId
   );
 
@@ -216,22 +235,95 @@ const AdminCandidates = ({ t }) => {
     selectedTest &&
     selectedTest.model_version_id &&
     !assigning &&
+    !savingTrack &&
     !testsLoading
+  );
+
+  const canSaveTrack = Boolean(
+    selectedCandidate &&
+    TRACK_CODES.includes(trackChoice) &&
+    trackChoice !== selectedCandidate.assessment_track &&
+    !savingTrack &&
+    !assigning
   );
 
   const openAssignDialog = (candidate) => {
     setSelectedCandidate(candidate);
+    setTrackChoice(candidate.assessment_track || '');
     setSelectedTestId('');
+    setTrackError('');
+    setTrackMessage('');
     setAssignError('');
     setSuccess('');
   };
 
   const closeAssignDialog = () => {
-    if (assigning) return;
+    if (assigning || savingTrack) return;
 
     setSelectedCandidate(null);
+    setTrackChoice('');
     setSelectedTestId('');
+    setTrackError('');
+    setTrackMessage('');
     setAssignError('');
+  };
+
+  const handleSaveTrack = async () => {
+    if (!canSaveTrack) return;
+
+    setSavingTrack(true);
+    setTrackError('');
+    setTrackMessage('');
+    setAssignError('');
+
+    try {
+      const candidateId = selectedCandidate.id;
+
+      const { data: savedTrack, error: rpcError } =
+        await supabase.rpc(
+          'set_candidate_assessment_track',
+          {
+            p_candidate_id: candidateId,
+            p_track: trackChoice
+          }
+        );
+
+      if (rpcError) throw rpcError;
+      if (savedTrack !== trackChoice) {
+        throw new Error(text.trackSaveError);
+      }
+
+      setCandidates((current) =>
+        current.map((candidate) =>
+          candidate.id === candidateId
+            ? {
+                ...candidate,
+                assessment_track: savedTrack
+              }
+            : candidate
+        )
+      );
+
+      setSelectedCandidate((current) =>
+        current?.id === candidateId
+          ? {
+              ...current,
+              assessment_track: savedTrack
+            }
+          : current
+      );
+
+      setSelectedTestId('');
+      setTrackMessage(text.trackSaved);
+    } catch (rpcError) {
+      console.error('Save candidate assessment track error:', rpcError);
+
+      setTrackError(
+        rpcError?.message || text.trackSaveError
+      );
+    } finally {
+      setSavingTrack(false);
+    }
   };
 
   const handleAssign = async () => {
@@ -271,8 +363,7 @@ const AdminCandidates = ({ t }) => {
       console.error('Assign candidate test error:', rpcError);
 
       setAssignError(
-        rpcError?.message ||
-        text.assignError
+        rpcError?.message || text.assignError
       );
     } finally {
       setAssigning(false);
@@ -297,10 +388,7 @@ const AdminCandidates = ({ t }) => {
           className="admin-primary-button"
           disabled
         >
-          <UserPlus
-            size={17}
-            aria-hidden="true"
-          />
+          <UserPlus size={17} aria-hidden="true" />
           {text.addCandidate}
         </button>
       </div>
@@ -324,10 +412,7 @@ const AdminCandidates = ({ t }) => {
       <div className="candidate-stat-grid">
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon">
-            <UserRoundSearch
-              size={20}
-              aria-hidden="true"
-            />
+            <UserRoundSearch size={20} aria-hidden="true" />
           </div>
 
           <div>
@@ -338,10 +423,7 @@ const AdminCandidates = ({ t }) => {
 
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon is-review">
-            <UserRoundSearch
-              size={20}
-              aria-hidden="true"
-            />
+            <UserRoundSearch size={20} aria-hidden="true" />
           </div>
 
           <div>
@@ -354,10 +436,7 @@ const AdminCandidates = ({ t }) => {
 
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon is-approved">
-            <UserRoundSearch
-              size={20}
-              aria-hidden="true"
-            />
+            <UserRoundSearch size={20} aria-hidden="true" />
           </div>
 
           <div>
@@ -372,10 +451,7 @@ const AdminCandidates = ({ t }) => {
       <section className="candidate-table-card">
         <div className="candidate-toolbar">
           <div className="candidate-search-box">
-            <Search
-              size={18}
-              aria-hidden="true"
-            />
+            <Search size={18} aria-hidden="true" />
 
             <input
               type="search"
@@ -401,10 +477,7 @@ const AdminCandidates = ({ t }) => {
             </option>
 
             {applicationStatuses.map((status) => (
-              <option
-                value={status}
-                key={status}
-              >
+              <option value={status} key={status}>
                 {formatStatus(status)}
               </option>
             ))}
@@ -430,7 +503,6 @@ const AdminCandidates = ({ t }) => {
               size={32}
               aria-hidden="true"
             />
-
             <h3>{text.emptyTitle}</h3>
             <p>{text.emptyDescription}</p>
           </div>
@@ -441,7 +513,7 @@ const AdminCandidates = ({ t }) => {
                 <tr>
                   <th>{text.columns.candidate}</th>
                   <th>{text.columns.contact}</th>
-                  <th>{text.columns.position}</th>
+                  <th>{text.trackColumn}</th>
                   <th>{text.columns.status}</th>
                   <th>{text.assignTest}</th>
                 </tr>
@@ -465,10 +537,7 @@ const AdminCandidates = ({ t }) => {
                           </div>
 
                           <div>
-                            <strong>
-                              {candidateName}
-                            </strong>
-
+                            <strong>{candidateName}</strong>
                             <span>
                               {candidate.candidate_code ||
                                 text.noCandidateCode}
@@ -480,19 +549,20 @@ const AdminCandidates = ({ t }) => {
                       <td>
                         <div className="candidate-contact">
                           <span>
-                            {candidate.email ||
-                              text.noEmail}
+                            {candidate.email || text.noEmail}
                           </span>
-
                           <span>
-                            {candidate.phone ||
-                              text.noPhone}
+                            {candidate.phone || text.noPhone}
                           </span>
                         </div>
                       </td>
 
                       <td>
-                        {candidate.position_id || '—'}
+                        {candidate.assessment_track
+                          ? text.trackNames[
+                              candidate.assessment_track
+                            ]
+                          : text.trackUnassigned}
                       </td>
 
                       <td>
@@ -558,6 +628,74 @@ const AdminCandidates = ({ t }) => {
             </p>
 
             <label
+              htmlFor="admin-candidate-track-select"
+              style={{
+                display: 'block',
+                marginBottom: 8
+              }}
+            >
+              {text.selectTrack}
+            </label>
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: 10,
+                marginBottom: 20
+              }}
+            >
+              <select
+                id="admin-candidate-track-select"
+                className="candidate-status-filter"
+                style={{ flex: '1 1 230px' }}
+                value={trackChoice}
+                disabled={savingTrack || assigning}
+                onChange={(event) => {
+                  setTrackChoice(event.target.value);
+                  setTrackError('');
+                  setTrackMessage('');
+                }}
+              >
+                <option value="">
+                  {text.trackUnassigned}
+                </option>
+
+                {TRACK_CODES.map((code) => (
+                  <option key={code} value={code}>
+                    {text.trackNames[code]}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                className="admin-primary-button"
+                disabled={!canSaveTrack}
+                onClick={handleSaveTrack}
+              >
+                {savingTrack
+                  ? text.savingTrack
+                  : text.saveTrack}
+              </button>
+            </div>
+
+            {trackMessage && (
+              <p role="status">{trackMessage}</p>
+            )}
+
+            {trackError && (
+              <div
+                className="admin-page-error"
+                role="alert"
+                style={{ marginBottom: 16 }}
+              >
+                {trackError}
+              </div>
+            )}
+
+            <label
               htmlFor="admin-assign-test-select"
               style={{
                 display: 'block',
@@ -578,10 +716,9 @@ const AdminCandidates = ({ t }) => {
                   maxWidth: '100%'
                 }}
                 value={selectedTestId}
+                disabled={savingTrack || assigning}
                 onChange={(event) => {
-                  setSelectedTestId(
-                    event.target.value
-                  );
+                  setSelectedTestId(event.target.value);
                   setAssignError('');
                 }}
               >
@@ -589,7 +726,7 @@ const AdminCandidates = ({ t }) => {
                   {text.choosePlaceholder}
                 </option>
 
-                {tests.map((test) => {
+                {availableTests.map((test) => {
                   const unavailable =
                     !test.model_version_id;
 
@@ -613,8 +750,8 @@ const AdminCandidates = ({ t }) => {
 
             {!testsLoading &&
               !testsError &&
-              tests.length === 0 && (
-                <p>{text.noTests}</p>
+              availableTests.length === 0 && (
+                <p>{text.noAvailableTests}</p>
               )}
 
             {testsError && (
@@ -649,7 +786,7 @@ const AdminCandidates = ({ t }) => {
               <button
                 type="button"
                 className="candidate-action-button"
-                disabled={assigning}
+                disabled={assigning || savingTrack}
                 onClick={closeAssignDialog}
               >
                 {text.cancelAssign}

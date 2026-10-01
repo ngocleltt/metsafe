@@ -50,7 +50,23 @@ export const en = {
     noTests: "No active tests available.", noModel: "Missing model version", noQuestions: "No questions",
     testsError: "Unable to load tests.", assignError: "Unable to assign the assessment. Please try again.",
     assignSuccess: "Successfully assigned {test} to {name}.",
-    statuses: { unknown: "Unknown", applied: "Applied", screening: "Screening", testing: "Assessment", interview: "Interview", accepted: "Accepted", rejected: "Rejected", hired: "Hired", under_review: "Under review", approved: "Approved", withdrawn: "Withdrawn", pending: "Pending" }
+    statuses: { unknown: "Unknown", applied: "Applied", screening: "Screening", testing: "Assessment", interview: "Interview", accepted: "Accepted", rejected: "Rejected", hired: "Hired", under_review: "Under review", approved: "Approved", withdrawn: "Withdrawn", pending: "Pending" },
+    trackColumn: "Assessment track",
+    selectTrack: "Candidate's assessment track",
+    trackUnassigned: "Not assigned",
+    saveTrack: "Save track",
+    savingTrack: "Saving...",
+    trackSaved: "Assessment track saved.",
+    trackSaveError: "Unable to save the assessment track.",
+    noAvailableTests: "No active assessments are available for this candidate.",
+    trackNames: {
+      ACC: "Accounting",
+      HR: "Human resources",
+      OFF: "Office staff",
+      WRK: "Production",
+      ENG: "Engineering",
+      HSE: "Health and safety"
+    },
   },
   adminDashboard: {
     loading: "Loading admin dashboard...", loadError: "Unable to load admin dashboard data.", eyebrow: "Administration", title: "Admin overview",
