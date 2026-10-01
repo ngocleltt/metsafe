@@ -10,8 +10,15 @@ import '../../components/styles/AdminCandidates.css';
 
 const getStatusClass = (status) => {
   if (status === 'approved') return 'is-approved';
-  if (status === 'rejected' || status === 'withdrawn') return 'is-rejected';
-  if (status === 'under_review' || status === 'pending') return 'is-review';
+
+  if (status === 'rejected' || status === 'withdrawn') {
+    return 'is-rejected';
+  }
+
+  if (status === 'under_review' || status === 'pending') {
+    return 'is-review';
+  }
+
   return 'is-default';
 };
 
@@ -118,8 +125,7 @@ const AdminCandidates = ({ t }) => {
             id,
             code,
             title,
-            model_version_id,
-            questions(count)
+            model_version_id
           `)
           .eq('is_active', true)
           .order('title', { ascending: true });
@@ -180,7 +186,9 @@ const AdminCandidates = ({ t }) => {
   const statusCounts = useMemo(() => {
     return candidates.reduce((counts, candidate) => {
       const status = candidate.application_status || 'unknown';
+
       counts[status] = (counts[status] || 0) + 1;
+
       return counts;
     }, {});
   }, [candidates]);
@@ -199,10 +207,6 @@ const AdminCandidates = ({ t }) => {
     return text.statuses[status] ?? text.statuses.unknown;
   };
 
-  const getQuestionCount = (test) => {
-    return Number(test.questions?.[0]?.count || 0);
-  };
-
   const selectedTest = tests.find(
     (test) => test.id === selectedTestId
   );
@@ -211,7 +215,6 @@ const AdminCandidates = ({ t }) => {
     selectedCandidate &&
     selectedTest &&
     selectedTest.model_version_id &&
-    getQuestionCount(selectedTest) > 0 &&
     !assigning &&
     !testsLoading
   );
@@ -249,10 +252,12 @@ const AdminCandidates = ({ t }) => {
       if (!assessmentId) throw new Error(text.assignError);
 
       const candidateName =
-        selectedCandidate.full_name || text.unnamedCandidate;
+        selectedCandidate.full_name ||
+        text.unnamedCandidate;
 
       const testTitle =
-        selectedTest.title || selectedTest.code;
+        selectedTest.title ||
+        selectedTest.code;
 
       setSuccess(
         text.assignSuccess
@@ -266,7 +271,8 @@ const AdminCandidates = ({ t }) => {
       console.error('Assign candidate test error:', rpcError);
 
       setAssignError(
-        rpcError?.message || text.assignError
+        rpcError?.message ||
+        text.assignError
       );
     } finally {
       setAssigning(false);
@@ -291,7 +297,10 @@ const AdminCandidates = ({ t }) => {
           className="admin-primary-button"
           disabled
         >
-          <UserPlus size={17} aria-hidden="true" />
+          <UserPlus
+            size={17}
+            aria-hidden="true"
+          />
           {text.addCandidate}
         </button>
       </div>
@@ -315,7 +324,10 @@ const AdminCandidates = ({ t }) => {
       <div className="candidate-stat-grid">
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon">
-            <UserRoundSearch size={20} aria-hidden="true" />
+            <UserRoundSearch
+              size={20}
+              aria-hidden="true"
+            />
           </div>
 
           <div>
@@ -326,23 +338,33 @@ const AdminCandidates = ({ t }) => {
 
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon is-review">
-            <UserRoundSearch size={20} aria-hidden="true" />
+            <UserRoundSearch
+              size={20}
+              aria-hidden="true"
+            />
           </div>
 
           <div>
             <span>{text.underReview}</span>
-            <strong>{statusCounts.under_review || 0}</strong>
+            <strong>
+              {statusCounts.under_review || 0}
+            </strong>
           </div>
         </div>
 
         <div className="candidate-stat-card">
           <div className="candidate-stat-icon is-approved">
-            <UserRoundSearch size={20} aria-hidden="true" />
+            <UserRoundSearch
+              size={20}
+              aria-hidden="true"
+            />
           </div>
 
           <div>
             <span>{text.approved}</span>
-            <strong>{statusCounts.approved || 0}</strong>
+            <strong>
+              {statusCounts.approved || 0}
+            </strong>
           </div>
         </div>
       </div>
@@ -350,7 +372,10 @@ const AdminCandidates = ({ t }) => {
       <section className="candidate-table-card">
         <div className="candidate-toolbar">
           <div className="candidate-search-box">
-            <Search size={18} aria-hidden="true" />
+            <Search
+              size={18}
+              aria-hidden="true"
+            />
 
             <input
               type="search"
@@ -376,7 +401,10 @@ const AdminCandidates = ({ t }) => {
             </option>
 
             {applicationStatuses.map((status) => (
-              <option value={status} key={status}>
+              <option
+                value={status}
+                key={status}
+              >
                 {formatStatus(status)}
               </option>
             ))}
@@ -384,7 +412,10 @@ const AdminCandidates = ({ t }) => {
         </div>
 
         {error && (
-          <div className="admin-page-error" role="alert">
+          <div
+            className="admin-page-error"
+            role="alert"
+          >
             {error}
           </div>
         )}
@@ -434,7 +465,10 @@ const AdminCandidates = ({ t }) => {
                           </div>
 
                           <div>
-                            <strong>{candidateName}</strong>
+                            <strong>
+                              {candidateName}
+                            </strong>
+
                             <span>
                               {candidate.candidate_code ||
                                 text.noCandidateCode}
@@ -446,10 +480,13 @@ const AdminCandidates = ({ t }) => {
                       <td>
                         <div className="candidate-contact">
                           <span>
-                            {candidate.email || text.noEmail}
+                            {candidate.email ||
+                              text.noEmail}
                           </span>
+
                           <span>
-                            {candidate.phone || text.noPhone}
+                            {candidate.phone ||
+                              text.noPhone}
                           </span>
                         </div>
                       </td>
@@ -542,7 +579,9 @@ const AdminCandidates = ({ t }) => {
                 }}
                 value={selectedTestId}
                 onChange={(event) => {
-                  setSelectedTestId(event.target.value);
+                  setSelectedTestId(
+                    event.target.value
+                  );
                   setAssignError('');
                 }}
               >
@@ -551,15 +590,8 @@ const AdminCandidates = ({ t }) => {
                 </option>
 
                 {tests.map((test) => {
-                  const count = getQuestionCount(test);
-
                   const unavailable =
-                    !test.model_version_id ||
-                    count === 0;
-
-                  const reason = !test.model_version_id
-                    ? text.noModel
-                    : text.noQuestions;
+                    !test.model_version_id;
 
                   return (
                     <option
@@ -569,9 +601,9 @@ const AdminCandidates = ({ t }) => {
                     >
                       {test.title} ({test.code})
                       {' · '}
-                      {count} {text.questionCount}
+                      {text.randomTenQuestions}
                       {unavailable
-                        ? ` — ${reason}`
+                        ? ` — ${text.noModel}`
                         : ''}
                     </option>
                   );
