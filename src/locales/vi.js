@@ -106,5 +106,13 @@ export const vi = {
     loading: "Đang tải bài đánh giá...", errorTitle: "Không thể tải bài đánh giá", tryAgain: "Thử lại", eyebrow: "Không gian ứng viên", title: "Bài đánh giá", description: "Thực hiện bài đánh giá được giao và theo dõi kết quả năng lực.", refreshing: "Đang cập nhật...", refresh: "Cập nhật", assignedTests: "Bài được giao", inProgress: "Đang thực hiện", completed: "Đã hoàn thành", averageScore: "Điểm trung bình", recommendedAction: "Việc nên làm tiếp", continueDescription: "Tiếp tục bài đánh giá bạn đã bắt đầu.", startDescription: "Bài đánh giá này đã sẵn sàng.", continueTest: "Tiếp tục bài", startTest: "Bắt đầu bài", assessmentCentre: "Trung tâm đánh giá", availableTests: "Bài đánh giá hiện có", candidateFallback: "Ứng viên",
     filters: { all: "Tất cả", pending: "Chờ thực hiện", inProgress: "Đang thực hiện", completed: "Đã hoàn thành" }, emptyTitle: "Chưa có bài đánh giá", emptyDescription: "Bài được giao sẽ hiển thị ở đây khi có dữ liệu.", howItWorks: "Cách đánh giá năng lực", howItWorksDescription: "METSAFE xem xét kiến thức, kỹ năng thực hành, hành vi an toàn, kinh nghiệm, lịch sử an toàn, mức độ sẵn sàng về tâm lý và kết quả đánh giá.", ciExplanation: "Chỉ số năng lực (CI) được tính trên thang 0–100 và phân thành các cấp 0–5.", assessmentTitle: "Đánh giá năng lực", defaultAssessmentTitle: "Đánh giá năng lực METSAFE", assessmentCategory: "Đánh giá năng lực và an toàn", assignedAssessment: "Bài được giao", score: "Điểm", viewResult: "Xem kết quả", continue: "Tiếp tục", start: "Bắt đầu",
     statuses: { pending: "Chờ xử lý", assigned: "Đã giao", started: "Đã bắt đầu", in_progress: "Đang thực hiện", completed: "Đã hoàn thành", cancelled: "Đã hủy" }
+  },
+  riskPrediction: {
+    eyebrow: "Dự án trước đây",
+    title: "RiskPrediction",
+    description:
+      "RiskPrediction là ứng dụng web hỗ trợ báo cáo các rủi ro về an toàn lao động trong doanh nghiệp và nhà máy.",
+    button: "Truy cập RiskPrediction",
+    externalLinkLabel: "Mở trong tab mới"
   }
 };

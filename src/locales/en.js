@@ -137,5 +137,13 @@ export const en = {
     howItWorks: "How your assessment works", howItWorksDescription: "METSAFE evaluates competence groups such as knowledge, practical skills, safety behaviour, experience, safety record, psychological readiness and assessment results.", ciExplanation: "Your Competence Index (CI) is calculated on a 0–100 scale and classified into Levels 0–5.",
     assessmentTitle: "Competence Assessment", defaultAssessmentTitle: "METSAFE Competence Assessment", assessmentCategory: "Competence and safety assessment", assignedAssessment: "Assigned assessment", score: "Score", viewResult: "View result", continue: "Continue", start: "Start",
     statuses: { pending: "Pending", assigned: "Assigned", started: "Started", in_progress: "In progress", completed: "Completed", cancelled: "Cancelled" }
-  }
+  },
+riskPrediction: {
+  eyebrow: "Previous Project",
+  title: "RiskPrediction",
+  description:
+    "RiskPrediction is a web application for reporting occupational safety risks in enterprises and factories.",
+  button: "Visit RiskPrediction",
+  externalLinkLabel: "Opens in a new tab"
+}
 };

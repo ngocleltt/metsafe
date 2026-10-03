@@ -115,5 +115,13 @@ export const ru = {
     filters: { all: "Все", pending: "Ожидают", inProgress: "В процессе", completed: "Завершены" }, emptyTitle: "Заданий пока нет", emptyDescription: "Назначенные оценки появятся здесь, когда станут доступны.",
     howItWorks: "Как проходит оценка", howItWorksDescription: "METSAFE учитывает знания, практические навыки, соблюдение правил безопасности, опыт, историю происшествий, психологическую готовность и результаты оценки.", ciExplanation: "Индекс компетентности (CI) рассчитывается по шкале 0–100 и соответствует уровням 0–5.", assessmentTitle: "Оценка компетентности", defaultAssessmentTitle: "Оценка компетентности METSAFE", assessmentCategory: "Оценка компетентности и безопасности", assignedAssessment: "Назначенная оценка", score: "Балл", viewResult: "Посмотреть результат", continue: "Продолжить", start: "Начать",
     statuses: { pending: "Ожидает", assigned: "Назначена", started: "Начата", in_progress: "В процессе", completed: "Завершена", cancelled: "Отменена" }
+  },
+  riskPrediction: {
+    eyebrow: "Предыдущий проект",
+    title: "RiskPrediction",
+    description:
+      "RiskPrediction — веб-приложение для отчётности по рискам охраны труда на предприятиях и заводах.",
+    button: "Перейти к RiskPrediction",
+    externalLinkLabel: "Открывается в новой вкладке"
   }
 };

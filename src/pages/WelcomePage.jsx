@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Hero from '../components/Hero';
 
-import '../components/styles/WelcomePage.css'; 
+import image1 from '../assets/1.jpg';
+
+import '../components/styles/WelcomePage.css';
 
 const WelcomePage = ({ t }) => {
   const { openLoginModal } = useOutletContext();
+
   useEffect(() => {
     const elements = document.querySelectorAll('.welcome-reveal');
 
@@ -33,7 +36,7 @@ const WelcomePage = ({ t }) => {
 
   return (
     <div className="welcome-page">
-      <Hero t={t} onStartAssessment={openLoginModal}  />
+      <Hero t={t} onStartAssessment={openLoginModal} />
 
       <div className="welcome-signal" aria-hidden="true">
         <div className="welcome-signal__track">
@@ -41,6 +44,55 @@ const WelcomePage = ({ t }) => {
         </div>
       </div>
 
+      {/* RiskPrediction */}
+      <section
+        className="welcome-riskprediction"
+        id="riskprediction"
+        aria-labelledby="riskprediction-title"
+      >
+        <div className="welcome-container">
+          <div className="welcome-riskprediction__grid">
+            {/* Left: Content */}
+            <div className="welcome-riskprediction__body welcome-reveal">
+              <div className="welcome-section-label">
+                <span className="welcome-section-label__line" />
+                <span>{t?.riskPrediction?.eyebrow}</span>
+              </div>
+
+              <h2 id="riskprediction-title">
+                {t?.riskPrediction?.title}
+              </h2>
+
+              <p className="welcome-riskprediction__lead">
+                {t?.riskPrediction?.description}
+              </p>
+
+              <a
+                href="https://riskprediction2024.web.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="riskprediction-link"
+                aria-label={`${t?.riskPrediction?.button} — ${t?.riskPrediction?.externalLinkLabel}`}
+              >
+                {t?.riskPrediction?.button} ↗
+              </a>
+            </div>
+
+            {/* Right: Single Image */}
+            <div className="welcome-riskprediction__visual welcome-reveal">
+              <div className="welcome-riskprediction__image-wrapper">
+                <img
+                  src={image1}
+                  alt="RiskPrediction interface preview"
+                  className="welcome-riskprediction__image"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About METSAFE */}
       <section
         className="welcome-about"
         id="about"
