@@ -7,10 +7,38 @@ export const vi = {
   },
   hero: { title: "METSAFE", subtitle: "Ứng dụng mô hình số để nâng cao an toàn và giảm tai nạn lao động trong ngành luyện kim", cta: "Bắt đầu đánh giá", learnMore: "Tìm hiểu thêm" },
   news: {
-    title: "Tin tức & Hội thảo", readMore: "Đọc thêm",
-    card1: { category: "Nghiên cứu", date: "28/05/2026", title: "Năng lực và an toàn lao động", desc: "Phân tích mối liên hệ giữa mức độ sẵn sàng về chuyên môn và tần suất sự cố trong sản xuất." },
-    card2: { category: "Đổi mới", date: "15/05/2026", title: "Chuyển đổi số trong luyện kim", desc: "Ứng dụng công nghệ số tiên tiến thay cho các phương pháp đào tạo và kiểm tra truyền thống." },
-    card3: { category: "Công nghệ", date: "02/05/2026", title: "AI dự báo rủi ro", desc: "Dùng học máy để nhận diện nhân sự có nguy cơ cao và phòng ngừa tai nạn." }
+    title: "Tin tức & Hội thảo",
+    readMore: "Đọc thêm",
+    card1: {
+      category: "Nghiên cứu",
+      date: "12 Thg 9, 2026",
+      title: "Mối liên hệ giữa năng lực và an toàn",
+      desc: "Phân tích mối quan hệ giữa mức độ sẵn sàng nghề nghiệp và tỷ lệ sự cố trong sản xuất."
+    },
+    card2: {
+      category: "Đổi mới",
+      date: "28 Thg 9, 2026",
+      title: "Số hóa trong luyện kim",
+      desc: "Thay thế các phương pháp đào tạo và kiểm tra truyền thống bằng công nghệ số tiên tiến."
+    },
+    card3: {
+      category: "Công nghệ",
+      date: "01 Thg 10, 2026",
+      title: "AI trong dự báo rủi ro",
+      desc: "Ứng dụng máy học để nhận diện nhân sự có nguy cơ cao và ngăn ngừa tai nạn.",
+      link : "https://riskprediction2024.web.app/",
+      linkLabel: "Trang chủ Risk Prediction",
+      
+    },
+    card4: {
+      category: "Sự kiện",
+      date: "03 Thg 10, 2026",
+      title: "Tuần lễ An toàn Lao động Nga 2026",
+      desc:
+        "7–10 tháng 10 năm 2026, Lãnh thổ Liên bang Sirius, Đại học Sirius. Cùng các chuyên gia hàng đầu thảo luận về tương lai của an toàn lao động tại Nga.",
+      link: "https://rusafetyweek.com/en/",
+      linkLabel: "Tìm hiểu thêm"
+    }
   },
   aboutProject: {
     tag: "Về dự án", title: "Hiểu rõ yếu tố con người để ngành luyện kim an toàn hơn",

@@ -8,10 +8,38 @@ export const en = {
   },
   hero: { title: "METSAFE", subtitle: "Digital model application for safety optimization and labor accident reduction in metallurgy", cta: "Start Assessment", learnMore: "Learn More" },
   news: {
-    title: "News & Seminars", readMore: "Read More",
-    card1: { category: "Research", date: "May 28, 2026", title: "Competency & Safety Correlation", desc: "Analysis of the relationship between professional readiness and production incident rates." },
-    card2: { category: "Innovation", date: "May 15, 2026", title: "Digitalization in Metallurgy", desc: "Replacing traditional training and testing methods with advanced digital technologies." },
-    card3: { category: "Technology", date: "May 02, 2026", title: "AI in Risk Prediction", desc: "Leveraging machine learning to identify high-risk personnel and prevent accidents." }
+    title: "News & Seminars",
+    readMore: "Read More",
+    card1: {
+      category: "Research",
+      date: "Sep 12, 2026",
+      title: "Competency & Safety Correlation",
+      desc: "Analysis of the relationship between professional readiness and production incident rates."
+    },
+    card2: {
+      category: "Innovation",
+      date: "Sep 28, 2026",
+      title: "Digitalization in Metallurgy",
+      desc: "Replacing traditional training and testing methods with advanced digital technologies."
+    },
+    card3: {
+      category: "Technology",
+      date: "Oct 01, 2026",
+      title: "AI in Risk Prediction",
+      desc: 
+      "Leveraging machine learning to identify high-risk personnel and prevent accidents.",
+      link: "https://riskprediction2024.web.app/",
+      linkLabel: "Risk Prediction",
+    },
+    card4: {
+      category: "Event",
+      date: "Oct 03, 2026",
+      title: "Russian Labour Safety Week 2026",
+      desc:
+        "7–10 October 2026, Sirius Federal Territory, Sirius University. Join leading experts to discuss the future of occupational safety in Russia.",
+      link: "https://rusafetyweek.com/en/",
+      linkLabel: "Learn more"
+    }
   },
   aboutProject: {
     tag: "About the Project", title: "Safer metallurgy starts with clearer human insight",
