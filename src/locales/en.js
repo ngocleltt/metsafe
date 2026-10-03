@@ -119,7 +119,28 @@ export const en = {
     fullName: "Full name", emailAddress: "Email address", emailConfirmation: "Email changes require confirmation.", phoneNumber: "Phone number", phonePlaceholder: "Enter a phone number",
     accountRole: "Account role", accountStatus: "Account status", active: "Active", inactive: "Inactive", notAvailable: "Not available", notProvided: "Not provided",
     roleInformation: "Role information", roleDescription: "Information specific to your METSAFE role.", candidateCode: "Candidate code", applicationStatus: "Application status", employeeCode: "Employee code", department: "Department", accessLevel: "Access level", systemAdministrator: "System administrator", notAvailableYet: "Not available yet",
-    messages: { nameRequired: "Please enter your full name.", sessionUnavailable: "User session is not available.", updateFailed: "Unable to update your profile.", updated: "Your profile has been updated." }
+    messages: { nameRequired: "Please enter your full name.", sessionUnavailable: "User session is not available.", updateFailed: "Unable to update your profile.", updated: "Your profile has been updated." },
+
+    // New keys for enriched candidate profile
+    candidateInformation: "Candidate information",
+    candidateDescription: "Application and assessment details.",
+    desiredPosition: "Desired position",
+    cv: "CV",
+    viewCv: "View CV",
+    notes: "Notes",
+    assessmentsTitle: "Tests & assessments",
+    assessmentsDescription: "Overview of assigned tests and latest results.",
+    loading: "Loading additional information...",
+    totalTests: "Total tests",
+    draftTests: "Not started",
+    completedTests: "Completed",
+    cancelledTests: "Cancelled",
+    noAssessments: "No assessments available.",
+    latestAssessment: "Latest assessment",
+    type: "Type",
+    status: "Status",
+    score: "Score",
+    level: "Level"
   },
   candidateApplication: {
     loading: "Loading your application...", errorTitle: "Unable to load application", tryAgain: "Try again",
@@ -166,12 +187,27 @@ export const en = {
     assessmentTitle: "Competence Assessment", defaultAssessmentTitle: "METSAFE Competence Assessment", assessmentCategory: "Competence and safety assessment", assignedAssessment: "Assigned assessment", score: "Score", viewResult: "View result", continue: "Continue", start: "Start",
     statuses: { pending: "Pending", assigned: "Assigned", started: "Started", in_progress: "In progress", completed: "Completed", cancelled: "Cancelled" }
   },
-riskPrediction: {
-  eyebrow: "Previous Project",
-  title: "RiskPrediction",
-  description:
-    "RiskPrediction is a web application for reporting occupational safety risks in enterprises and factories.",
-  button: "Visit RiskPrediction",
-  externalLinkLabel: "Opens in a new tab"
-}
+  candidate: {
+    status: {
+      applied: "Applied",
+      screening: "Screening",
+      testing: "Assessment",
+      interview: "Interview",
+      accepted: "Accepted",
+      rejected: "Rejected",
+      hired: "Hired",
+      under_review: "Under review",
+      approved: "Approved",
+      withdrawn: "Withdrawn",
+      pending: "Pending"
+    }
+  },
+  riskPrediction: {
+    eyebrow: "Previous Project",
+    title: "RiskPrediction",
+    description:
+      "RiskPrediction is a web application for reporting occupational safety risks in enterprises and factories.",
+    button: "Visit RiskPrediction",
+    externalLinkLabel: "Opens in a new tab"
+  }
 };

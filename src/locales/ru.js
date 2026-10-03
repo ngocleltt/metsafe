@@ -102,7 +102,28 @@ export const ru = {
   profile: {
     userFallback: "Пользователь", eyebrow: "Профиль", description: "Управление данными учётной записи METSAFE.", editProfile: "Изменить профиль", accountInformation: "Данные учётной записи", accountDescription: "Обновите данные, отображаемые в профиле.", cancel: "Отмена", saving: "Сохранение...", saveChanges: "Сохранить",
     fullName: "ФИО", emailAddress: "Электронная почта", emailConfirmation: "Смена адреса требует подтверждения.", phoneNumber: "Номер телефона", phonePlaceholder: "Введите номер телефона", accountRole: "Роль", accountStatus: "Статус учётной записи", active: "Активна", inactive: "Неактивна", notAvailable: "Нет данных", notProvided: "Не указан", roleInformation: "Данные по роли", roleDescription: "Информация, связанная с вашей ролью в METSAFE.", candidateCode: "Код кандидата", applicationStatus: "Статус заявки", employeeCode: "Код сотрудника", department: "Отдел", accessLevel: "Уровень доступа", systemAdministrator: "Системный администратор", notAvailableYet: "Пока нет данных",
-    messages: { nameRequired: "Укажите ФИО.", sessionUnavailable: "Сеанс пользователя недоступен.", updateFailed: "Не удалось обновить профиль.", updated: "Профиль обновлён." }
+    messages: { nameRequired: "Укажите ФИО.", sessionUnavailable: "Сеанс пользователя недоступен.", updateFailed: "Не удалось обновить профиль.", updated: "Профиль обновлён." },
+
+    // Новые ключи для расширенного профиля кандидата
+    candidateInformation: "Информация о кандидате",
+    candidateDescription: "Данные заявки и оценок.",
+    desiredPosition: "Желаемая должность",
+    cv: "Резюме",
+    viewCv: "Посмотреть резюме",
+    notes: "Примечания",
+    assessmentsTitle: "Тесты и оценки",
+    assessmentsDescription: "Обзор назначенных тестов и последних результатов.",
+    loading: "Загрузка дополнительной информации...",
+    totalTests: "Всего тестов",
+    draftTests: "Не начаты",
+    completedTests: "Завершены",
+    cancelledTests: "Отменены",
+    noAssessments: "Оценок пока нет.",
+    latestAssessment: "Последняя оценка",
+    type: "Тип",
+    status: "Статус",
+    score: "Балл",
+    level: "Уровень"
   },
   candidateApplication: {
     loading: "Загрузка заявки...", errorTitle: "Не удалось загрузить заявку", tryAgain: "Повторить",
@@ -142,6 +163,21 @@ export const ru = {
     filters: { all: "Все", pending: "Ожидают", inProgress: "В процессе", completed: "Завершены" }, emptyTitle: "Заданий пока нет", emptyDescription: "Назначенные оценки появятся здесь, когда станут доступны.",
     howItWorks: "Как проходит оценка", howItWorksDescription: "METSAFE учитывает знания, практические навыки, соблюдение правил безопасности, опыт, историю происшествий, психологическую готовность и результаты оценки.", ciExplanation: "Индекс компетентности (CI) рассчитывается по шкале 0–100 и соответствует уровням 0–5.", assessmentTitle: "Оценка компетентности", defaultAssessmentTitle: "Оценка компетентности METSAFE", assessmentCategory: "Оценка компетентности и безопасности", assignedAssessment: "Назначенная оценка", score: "Балл", viewResult: "Посмотреть результат", continue: "Продолжить", start: "Начать",
     statuses: { pending: "Ожидает", assigned: "Назначена", started: "Начата", in_progress: "В процессе", completed: "Завершена", cancelled: "Отменена" }
+  },
+  candidate: {
+    status: {
+      applied: "Подана",
+      screening: "Рассмотрение",
+      testing: "Тестирование",
+      interview: "Собеседование",
+      accepted: "Принята",
+      rejected: "Отклонена",
+      hired: "Принят на работу",
+      under_review: "На рассмотрении",
+      approved: "Одобрено",
+      withdrawn: "Отозвана",
+      pending: "Ожидает обработки"
+    }
   },
   riskPrediction: {
     eyebrow: "Предыдущий проект",
