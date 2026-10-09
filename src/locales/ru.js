@@ -12,9 +12,11 @@ export const ru = {
     readMore: "Подробнее",
     card1: {
       category: "Исследования",
-      date: "12 сен. 2026",
-      title: "Взаимосвязь компетентности и безопасности",
-      desc: "Анализ связи между профессиональной готовностью и уровнем производственного травматизма."
+      date: "15 сен. 2026",
+      title: "Компетентность, осведомленность и информированность в охране труда",
+      desc: "Анализ связи между профессиональной готовностью и уровнем производственного травматизма.",
+      link: "https://journal.ecostandard.ru/ot/skills/kompetentnost-osvedomlennost-i-informirovannost-v-okhrane-truda/",
+      linkLabel: "Read more",
     },
     card2: {
       category: "Инновации",

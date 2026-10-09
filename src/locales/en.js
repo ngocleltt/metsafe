@@ -12,9 +12,11 @@ export const en = {
     readMore: "Read More",
     card1: {
       category: "Research",
-      date: "Sep 12, 2026",
-      title: "Competency & Safety Correlation",
-      desc: "Analysis of the relationship between professional readiness and production incident rates."
+      date: "Sep 15, 2026",
+      title: "Competence, awareness, and knowledge regarding occupational health and safety",
+      desc: "Analysis of the relationship between professional readiness and production incident rates.",
+      link: "https://journal.ecostandard.ru/ot/skills/kompetentnost-osvedomlennost-i-informirovannost-v-okhrane-truda/",
+      linkLabel: "Read more",
     },
     card2: {
       category: "Innovation",

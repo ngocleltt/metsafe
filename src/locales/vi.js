@@ -11,9 +11,11 @@ export const vi = {
     readMore: "Đọc thêm",
     card1: {
       category: "Nghiên cứu",
-      date: "12 Thg 9, 2026",
-      title: "Mối liên hệ giữa năng lực và an toàn",
-      desc: "Phân tích mối quan hệ giữa mức độ sẵn sàng nghề nghiệp và tỷ lệ sự cố trong sản xuất."
+      date: "15 Thg 9, 2026",
+      title: "Năng lực, nhận thức và kiến thức về an toàn lao động",
+      desc: "Phân tích năng lực, nhận thức và kiến thức về an toàn lao động",
+      link: "https://journal.ecostandard.ru/ot/skills/kompetentnost-osvedomlennost-i-informirovannost-v-okhrane-truda/",
+      linkLabel: "TTìm hiểu thêm",
     },
     card2: {
       category: "Đổi mới",
