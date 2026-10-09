@@ -17,7 +17,7 @@ import { pdf } from '@react-pdf/renderer';
 import CandidateCV from '../components/CandidateCV';
 import './styles/Profile.css';
 
-const Profile = ({ t }) => {
+const Profile = ({ t, locale }) => {
   const { user, profile, refreshProfile } = useAuth();
   const navigate = useNavigate();
 
@@ -266,6 +266,7 @@ const Profile = ({ t }) => {
           testStats={testStats}
           latestAssessment={latestAssessment}
           t={t}
+          locale={locale}
         />
       );
 
