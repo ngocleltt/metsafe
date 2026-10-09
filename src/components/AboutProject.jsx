@@ -2,6 +2,9 @@ import React from 'react';
 import './styles/AboutProject.css';
 import './styles/theme.css';
 import aboutImage from '../assets/about-project.jpg';
+import aboutImage2 from '../assets/about-project-2.jpg';
+import aboutImage3 from '../assets/about-project-3.jpg';
+import aboutImage4 from '../assets/about-project-4.jpg';
 
 const AboutProject = ({ t }) => {
   return (
@@ -26,7 +29,7 @@ const AboutProject = ({ t }) => {
 
           <div className="about-image-panel">
             <img
-              src={aboutImage}
+              src={aboutImage3}
               alt={t?.aboutProject?.imageAlt || 'Industrial team working in a metallurgy environment'}
             />
           </div>
