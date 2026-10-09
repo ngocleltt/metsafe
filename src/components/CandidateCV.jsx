@@ -300,12 +300,23 @@ const styles = StyleSheet.create({
 });
 
 const formatDate = (locale) =>
-  new Date().toLocaleDateString(locale || 'en-GB', {
+  new Date().toLocaleDateString(locale, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'
   });
 
+const normalizeLocale = (locale) => {
+  if (locale === 'vi' || locale === 'vi-VN') {
+    return 'vi-VN';
+  }
+
+  if (locale === 'ru' || locale === 'ru-RU') {
+    return 'ru-RU';
+  }
+
+  return 'en-GB';
+};
 
 const translate = (map, value) =>
   map?.[value] || value || '—';
@@ -396,12 +407,7 @@ const CandidateCV = ({
   locale
 }) => {
   const profileText = t?.profile || {};
-  const pdfLocale =
-  locale === 'vi' || locale === 'vi-VN'
-    ? 'vi-VN'
-    : locale === 'ru' || locale === 'ru-RU'
-    ? 'ru-RU'
-    : 'en-GB';
+  const pdfLocale = normalizeLocale(locale);
 
   const fullName =
     candidate?.full_name ||
@@ -447,7 +453,8 @@ const CandidateCV = ({
   );
 
   const latestScore =
-    latestAssessment?.total_score != null
+    latestAssessment?.total_score != null &&
+    Number.isFinite(Number(latestAssessment.total_score))
       ? Number(latestAssessment.total_score)
       : null;
 
@@ -491,29 +498,33 @@ const CandidateCV = ({
 
             <View style={styles.headerMeta}>
               <Text style={styles.documentTitle}>
-                {locale === 'vi-VN'
+                {pdfLocale === 'vi-VN'
                   ? 'Hồ sơ năng lực ứng viên'
-                  : locale === 'ru-RU'
+                  : pdfLocale === 'ru-RU'
                   ? 'Профиль компетенций кандидата'
                   : 'Candidate competence profile'}
               </Text>
 
               <Text style={styles.documentSubtitle}>
-                METSAFE digital competence assessment
+                {pdfLocale === 'vi-VN'
+                  ? 'Đánh giá năng lực số METSAFE'
+                  : pdfLocale === 'ru-RU'
+                  ? 'Цифровая оценка компетенций METSAFE'
+                  : 'METSAFE digital competence assessment'}
               </Text>
             </View>
 
             <View style={styles.dateBox}>
               <Text style={styles.dateLabel}>
-                {locale === 'vi-VN'
+                {pdfLocale === 'vi-VN'
                   ? 'Ngày tạo'
-                  : locale === 'ru-RU'
+                  : pdfLocale === 'ru-RU'
                   ? 'Дата'
                   : 'Issued'}
               </Text>
 
               <Text style={styles.dateValue}>
-                {formatDate(locale)}
+                {formatDate(pdfLocale)}
               </Text>
             </View>
           </View>
@@ -521,7 +532,7 @@ const CandidateCV = ({
           <View style={styles.identityRow}>
             <Image
               style={styles.avatar}
-              src="/assets/ava.png"
+              src="ava.png"
             />
 
             <View style={styles.identityText}>
@@ -542,9 +553,9 @@ const CandidateCV = ({
               <View style={styles.sectionHeading}>
                 <View style={styles.sectionMarker} />
                 <Text style={styles.sectionTitle}>
-                  {locale === 'vi-VN'
+                  {pdfLocale === 'vi-VN'
                     ? 'Liên hệ'
-                    : locale === 'ru-RU'
+                    : pdfLocale === 'ru-RU'
                     ? 'Контакты'
                     : 'Contact'}
                 </Text>
@@ -554,6 +565,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.emailAddress || 'Email'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {email}
                 </Text>
@@ -563,6 +575,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.phoneNumber || 'Phone'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {phone}
                 </Text>
@@ -572,10 +585,11 @@ const CandidateCV = ({
             <View style={styles.section}>
               <View style={styles.sectionHeading}>
                 <View style={styles.sectionMarker} />
+
                 <Text style={styles.sectionTitle}>
-                  {locale === 'vi-VN'
+                  {pdfLocale === 'vi-VN'
                     ? 'Hồ sơ ứng viên'
-                    : locale === 'ru-RU'
+                    : pdfLocale === 'ru-RU'
                     ? 'Данные кандидата'
                     : 'Candidate record'}
                 </Text>
@@ -585,6 +599,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.candidateCode || 'Candidate code'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {candidateCode}
                 </Text>
@@ -594,6 +609,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.applicationStatus || 'Application status'}
                 </Text>
+
                 <Text style={styles.statusBadge}>
                   {applicationStatus}
                 </Text>
@@ -603,10 +619,11 @@ const CandidateCV = ({
             <View style={styles.section}>
               <View style={styles.sectionHeading}>
                 <View style={styles.sectionMarker} />
+
                 <Text style={styles.sectionTitle}>
-                  {locale === 'vi-VN'
+                  {pdfLocale === 'vi-VN'
                     ? 'Hoạt động đánh giá'
-                    : locale === 'ru-RU'
+                    : pdfLocale === 'ru-RU'
                     ? 'Оценочная активность'
                     : 'Assessment activity'}
                 </Text>
@@ -616,6 +633,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.totalTests || 'Total tests'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {totalTests}
                 </Text>
@@ -625,6 +643,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.completedTests || 'Completed'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {completedTests}
                 </Text>
@@ -634,6 +653,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.draftTests || 'Not started'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {draftTests}
                 </Text>
@@ -643,6 +663,7 @@ const CandidateCV = ({
                 <Text style={styles.sideLabel}>
                   {profileText.cancelledTests || 'Cancelled'}
                 </Text>
+
                 <Text style={styles.sideValue}>
                   {cancelledTests}
                 </Text>
@@ -653,6 +674,7 @@ const CandidateCV = ({
               <View style={styles.section}>
                 <View style={styles.sectionHeading}>
                   <View style={styles.sectionMarker} />
+
                   <Text style={styles.sectionTitle}>
                     {profileText.cv || 'CV'}
                   </Text>
@@ -669,6 +691,7 @@ const CandidateCV = ({
             <View style={styles.section}>
               <View style={styles.sectionHeading}>
                 <View style={styles.sectionMarker} />
+
                 <Text style={styles.sectionTitle}>
                   {profileText.summary || 'Summary'}
                 </Text>
@@ -684,10 +707,11 @@ const CandidateCV = ({
             <View style={styles.section}>
               <View style={styles.sectionHeading}>
                 <View style={styles.sectionMarker} />
+
                 <Text style={styles.sectionTitle}>
-                  {locale === 'vi-VN'
+                  {pdfLocale === 'vi-VN'
                     ? 'Thông tin chi tiết'
-                    : locale === 'ru-RU'
+                    : pdfLocale === 'ru-RU'
                     ? 'Профиль кандидата'
                     : 'Candidate profile'}
                 </Text>
@@ -698,6 +722,7 @@ const CandidateCV = ({
                   <Text style={styles.infoLabel}>
                     {profileText.fullName || 'Full name'}
                   </Text>
+
                   <Text style={styles.infoValue}>
                     {fullName}
                   </Text>
@@ -707,6 +732,7 @@ const CandidateCV = ({
                   <Text style={styles.infoLabel}>
                     {profileText.desiredPosition || 'Desired position'}
                   </Text>
+
                   <Text style={styles.infoValue}>
                     {desiredPosition}
                   </Text>
@@ -716,6 +742,7 @@ const CandidateCV = ({
                   <Text style={styles.infoLabel}>
                     {profileText.candidateCode || 'Candidate code'}
                   </Text>
+
                   <Text style={styles.infoValue}>
                     {candidateCode}
                   </Text>
@@ -725,6 +752,7 @@ const CandidateCV = ({
                   <Text style={styles.infoLabel}>
                     {profileText.applicationStatus || 'Application status'}
                   </Text>
+
                   <Text style={styles.infoValue}>
                     {applicationStatus}
                   </Text>
@@ -734,6 +762,7 @@ const CandidateCV = ({
                   <Text style={styles.infoLabel}>
                     {profileText.emailAddress || 'Email'}
                   </Text>
+
                   <Text style={styles.infoValue}>
                     {email}
                   </Text>
@@ -743,6 +772,7 @@ const CandidateCV = ({
                   <Text style={styles.infoLabel}>
                     {profileText.phoneNumber || 'Phone'}
                   </Text>
+
                   <Text style={styles.infoValue}>
                     {phone}
                   </Text>
@@ -753,6 +783,7 @@ const CandidateCV = ({
             <View style={styles.section}>
               <View style={styles.sectionHeading}>
                 <View style={styles.sectionMarker} />
+
                 <Text style={styles.sectionTitle}>
                   {profileText.latestAssessment || 'Latest assessment'}
                 </Text>
@@ -793,9 +824,9 @@ const CandidateCV = ({
               </View>
 
               <Text style={styles.note}>
-                {locale === 'vi-VN'
+                {pdfLocale === 'vi-VN'
                   ? 'Điểm số và phân loại được lấy từ kết quả đánh giá METSAFE gần nhất.'
-                  : locale === 'ru-RU'
+                  : pdfLocale === 'ru-RU'
                   ? 'Баллы и классификация основаны на последней доступной оценке METSAFE.'
                   : 'Scores and classification are based on the latest available METSAFE assessment.'}
               </Text>
@@ -805,6 +836,7 @@ const CandidateCV = ({
               <View style={styles.section}>
                 <View style={styles.sectionHeading}>
                   <View style={styles.sectionMarker} />
+
                   <Text style={styles.sectionTitle}>
                     {profileText.notes || 'Notes'}
                   </Text>
